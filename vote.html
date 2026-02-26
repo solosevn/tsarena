@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enter the Arena â The Safety Arena</title>
+<title>Enter the Arena Ã¢ÂÂ The Safety Arena</title>
 
 <!-- Supabase JS v2 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1061,7 +1061,7 @@
   </nav>
   <div class="user-info" id="userInfo" style="display: none;">
     <div class="verified-badge">
-      <span>â</span>
+      <span>Ã¢ÂÂ</span>
       <span>Verified Voter</span>
     </div>
     <div class="user-email" id="userEmail"></div>
@@ -1092,7 +1092,7 @@
       </div>
       <div class="auth-form-group">
         <label for="signinPassword">Password</label>
-        <input type="password" id="signinPassword" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" required>
+        <input type="password" id="signinPassword" placeholder="Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢" required>
       </div>
       <button type="submit" class="auth-btn">Sign In</button>
     </form>
@@ -1105,11 +1105,11 @@
       </div>
       <div class="auth-form-group">
         <label for="signupPassword">Password</label>
-        <input type="password" id="signupPassword" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" required>
+        <input type="password" id="signupPassword" placeholder="Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢" required>
       </div>
       <div class="auth-form-group">
         <label for="signupPasswordConfirm">Confirm Password</label>
-        <input type="password" id="signupPasswordConfirm" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" required>
+        <input type="password" id="signupPasswordConfirm" placeholder="Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢Ã¢ÂÂ¢" required>
       </div>
       <button type="submit" class="auth-btn">Create Account</button>
     </form>
@@ -1121,7 +1121,7 @@
 
     <!-- Google Sign In (fallback) -->
     <button class="auth-btn google" id="googleSignInBtn" style="margin-top: 8px;">
-      <span>ð</span> Continue with Google
+      <span>Ã°ÂÂÂ</span> Continue with Google
     </button>
   </div>
 </div>
@@ -1375,7 +1375,7 @@
 
     // Show user info
     document.getElementById('userInfo').style.display = 'flex';
-    document.getElementById('userEmail').textContent = currentUser.email;
+    document.getElementById('userEmail').textContent = currentUser?.email;
 
     // Initialize fingerprint
     const fp = await fpPromise;
@@ -1454,7 +1454,7 @@
           'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ user_id: currentUser.id })
+        body: JSON.stringify({ user_id: currentUser?.id })
       });
 
       if (response.ok) {
@@ -1551,7 +1551,7 @@
     if (words >= 10 && words <= 50) {
       wordCountEl.classList.remove('invalid');
       wordCountEl.classList.add('valid');
-      statusEl.textContent = 'â Ready';
+      statusEl.textContent = 'Ã¢ÂÂ Ready';
       statusEl.style.color = 'var(--green)';
       submitBtn.disabled = false;
     } else {
@@ -1581,7 +1581,7 @@
 
     const votePayload = {
       battle_id: currentBattle.id,
-      user_id: currentUser.id,
+      user_id: currentUser?.id,
       vote_choice: selectedVote,
       vote_explanation: explanation,
       time_on_page: metrics.time_on_page,
@@ -1689,7 +1689,7 @@
       const { data, error } = await supabase
         .from('rate_limits')
         .select('votes_today, current_limit')
-        .eq('user_id', currentUser.id)
+        .eq('user_id', currentUser?.id)
         .single();
 
       if (data) {
@@ -1698,7 +1698,7 @@
         // First time user, create rate limit entry with default 10 votes/day
         votesRemainingToday = 10;
         await supabase.from('rate_limits').insert([{
-          user_id: currentUser.id,
+          user_id: currentUser?.id,
           votes_today: 0,
           current_limit: 10
         }]);
