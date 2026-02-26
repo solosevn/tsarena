@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enter the Arena ÃÂ¢ÃÂÃÂ The Safety Arena</title>
+<title>Enter the Arena ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ The Safety Arena</title>
 
 <!-- Supabase JS v2 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1061,7 +1061,7 @@
   </nav>
   <div class="user-info" id="userInfo" style="display: none;">
     <div class="verified-badge">
-      <span>ÃÂ¢ÃÂÃÂ</span>
+      <span>ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</span>
       <span>Verified Voter</span>
     </div>
     <div class="user-email" id="userEmail"></div>
@@ -1092,7 +1092,7 @@
       </div>
       <div class="auth-form-group">
         <label for="signinPassword">Password</label>
-        <input type="password" id="signinPassword" placeholder="ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢" required>
+        <input type="password" id="signinPassword" placeholder="ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢" required>
       </div>
       <button type="submit" class="auth-btn">Sign In</button>
     </form>
@@ -1105,11 +1105,11 @@
       </div>
       <div class="auth-form-group">
         <label for="signupPassword">Password</label>
-        <input type="password" id="signupPassword" placeholder="ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢" required>
+        <input type="password" id="signupPassword" placeholder="ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢" required>
       </div>
       <div class="auth-form-group">
         <label for="signupPasswordConfirm">Confirm Password</label>
-        <input type="password" id="signupPasswordConfirm" placeholder="ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢ÃÂ¢ÃÂÃÂ¢" required>
+        <input type="password" id="signupPasswordConfirm" placeholder="ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢" required>
       </div>
       <button type="submit" class="auth-btn">Create Account</button>
     </form>
@@ -1121,7 +1121,7 @@
 
     <!-- Google Sign In (fallback) -->
     <button class="auth-btn google" id="googleSignInBtn" style="margin-top: 8px;">
-      <span>ÃÂ°ÃÂÃÂÃÂ</span> Continue with Google
+      <span>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ</span> Continue with Google
     </button>
   </div>
 </div>
@@ -1551,7 +1551,7 @@
     if (words >= 10 && words <= 50) {
       wordCountEl.classList.remove('invalid');
       wordCountEl.classList.add('valid');
-      statusEl.textContent = 'ÃÂ¢ÃÂÃÂ Ready';
+      statusEl.textContent = 'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Ready';
       statusEl.style.color = 'var(--green)';
       submitBtn.disabled = false;
     } else {
@@ -1733,9 +1733,9 @@
   }
 
   function disableVoteButtons() {
-    document.getElementById('voteA').disabled = true;
-    document.getElementById('voteB').disabled = true;
-    document.getElementById('voteTie').disabled = true;
+    { let _b = document.getElementById('voteA'); if (_b) _b.disabled = true; }
+    { let _b = document.getElementById('voteB'); if (_b) _b.disabled = true; }
+    { let _b = document.getElementById('voteTie'); if (_b) _b.disabled = true; }
   }
 
   function updateProgressBar() {
