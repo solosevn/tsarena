@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Safety Arena — tsarena.ai</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-dark: #060d1a;
+    --bg-card: #0c1829;
+    --bg-card-hover: #111f35;
+    --cyan: #00e5ff;
+    --cyan-dim: #00acc1;
+    --cyan-glow: rgba(0, 229, 255, 0.15);
+    --orange: #ff6d00;
+    --red: #ff1744;
+    --green: #00e676;
+    --text-primary: #e8eaed;
+    --text-secondary: #90a4ae;
+    --text-dim: #546e7a;
+    --border: #1a2a3a;
+  }
+
+  body {
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ===== TICKER BARS ===== */
+  .ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    height: 36px;
+    background: linear-gradient(90deg, rgba(0,229,255,0.08), rgba(0,229,255,0.03), rgba(0,229,255,0.08));
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
+  .ticker-wrap.arena-ticker {
+    background: linear-gradient(90deg, rgba(255,109,0,0.08), rgba(255,109,0,0.03), rgba(255,109,0,0.08));
+  }
+  .ticker-label {
+    flex-shrink: 0;
+    padding: 0 16px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-right: 1px solid var(--border);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background: rgba(0,0,0,0.3);
+  }
+  .ticker-label.trs { color: var(--cyan); }
+  .ticker-label.arena { color: var(--orange); }
+
+  .ticker-track {
+    display: flex;
+    animation: scroll-left 40s linear infinite;
+    white-space: nowrap;
+  }
+  .arena-ticker .ticker-track { animation-duration: 35s; }
+
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 24px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .ticker-item .rank { color: var(--text-dim); font-size: 10px; }
+  .ticker-item .model { color: var(--text-primary); font-weight: 600; }
+  .ticker-item .score { color: var(--cyan); font-weight: 700; font-family: 'Space Grotesk', monospace; }
+  .arena-ticker .ticker-item .score { color: var(--orange); }
+  .ticker-item .change-up { color: var(--green); font-size: 11px; }
+  .ticker-item .change-down { color: var(--red); font-size: 11px; }
+  .ticker-item .sep { color: var(--border); margin: 0 4px; }
+
+  /* ===== HEADER ===== */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-dark);
+    backdrop-filter: blur(12px);
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .logo-mark {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+  }
+  .logo-text .brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+  .logo-text .brand span { color: var(--cyan); }
+  .logo-text .sub {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .logo-text .sub a {
+    color: var(--cyan-dim);
+    text-decoration: none;
+  }
+  .logo-text .sub a:hover { text-decoration: underline; }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .header-nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .header-nav a:hover { color: var(--cyan); }
+  .header-nav .btn-vote {
+    background: var(--cyan);
+    color: var(--bg-dark);
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .header-nav .btn-vote:hover {
+    background: #33ecff;
+    box-shadow: 0 0 20px rgba(0,229,255,0.3);
+    color: var(--bg-dark);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    text-align: center;
+    padding: clamp(28px, 4vw, 56px) clamp(20px, 3vw, 40px) clamp(20px, 3vw, 40px);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.2);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cyan);
+    margin-bottom: 32px;
+    letter-spacing: 0.5px;
+  }
+  .hero-badge .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: clamp(12px, 2vw, 24px);
+    letter-spacing: -1.5px;
+  }
+  .hero h1 .highlight { color: var(--cyan); }
+  .hero h1 .for-world { display: inline; }
+
+  .hero .subtitle {
+    font-size: clamp(15px, 1.5vw, 20px);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 680px;
+    margin: 0 auto clamp(20px, 3vw, 40px);
+    font-weight: 400;
+  }
+  .hero .subtitle-mobile { display: none; }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--cyan);
+    color: var(--bg-dark);
+    padding: 16px 40px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary:hover {
+    background: #33ecff;
+    box-shadow: 0 0 30px rgba(0,229,255,0.3);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-primary);
+    padding: 16px 40px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover {
+    border-color: var(--cyan-dim);
+    background: rgba(0,229,255,0.05);
+  }
+
+  /* ===== HOW IT WORKS ===== */
+  .section { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(22px, 2.8vw, 36px);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: clamp(24px, 4vw, 56px);
+    letter-spacing: -0.5px;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px 32px;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .step:hover {
+    border-color: rgba(0,229,255,0.3);
+    background: var(--bg-card-hover);
+    transform: translateY(-4px);
+  }
+  .step-num {
+    width: 48px;
+    height: 48px;
+    background: rgba(0,229,255,0.1);
+    border: 2px solid var(--cyan);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cyan);
+    margin: 0 auto 20px;
+  }
+  .step h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .step p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ===== LIVE LEADERBOARD PREVIEW ===== */
+  .leaderboard-preview {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .lb-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .lb-header h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .lb-header .live-dot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 600;
+  }
+  .lb-header .live-dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  .lb-table { width: 100%; border-collapse: collapse; }
+  .lb-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 16px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .lb-table th:last-child { text-align: right; }
+  .lb-table td {
+    padding: 16px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(26,42,58,0.5);
+  }
+  .lb-table td:last-child { text-align: right; }
+  .lb-table tr:hover td { background: rgba(0,229,255,0.03); }
+  .lb-rank {
+    font-family: 'Space Grotesk', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-dim);
+    width: 40px;
+  }
+  .lb-rank.gold { color: #ffd700; }
+  .lb-rank.silver { color: #c0c0c0; }
+  .lb-rank.bronze { color: #cd7f32; }
+  .lb-model { font-weight: 600; color: var(--text-primary); }
+  .lb-lab { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+  .lb-score {
+    font-family: 'Space Grotesk', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--cyan);
+  }
+  .lb-votes {
+    font-family: 'Space Grotesk', monospace;
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+
+  /* ===== DIFFERENTIATOR ===== */
+  .diff-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .diff-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    transition: all 0.3s;
+  }
+  .diff-card:hover {
+    border-color: rgba(0,229,255,0.2);
+    transform: translateY(-2px);
+  }
+  .diff-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(0,229,255,0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 22px;
+  }
+  .diff-card h4 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .diff-card p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ===== CTA BOTTOM ===== */
+  .cta-bottom {
+    text-align: center;
+    padding: 80px 40px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .cta-bottom h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .cta-bottom p {
+    color: var(--text-secondary);
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .footer-left {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .footer-left a { color: var(--cyan-dim); text-decoration: none; }
+  .footer-left a:hover { text-decoration: underline; }
+  .footer-right {
+    display: flex;
+    gap: 24px;
+  }
+  .footer-right a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .footer-right a:hover { color: var(--cyan); }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ===== RESPONSIVE: TABLET ===== */
+  @media (max-width: 1024px) {
+    .header { padding: 16px 24px; }
+    .header-nav { gap: 20px; }
+    .header-nav a { font-size: 13px; }
+    .header-nav .btn-vote { padding: 8px 18px; font-size: 13px; }
+    .logo-text .brand { font-size: 22px; }
+    .logo-mark { width: 44px; height: 44px; }
+
+    .hero { padding: 40px 28px 32px; }
+    .hero-badge { margin-bottom: 24px; }
+
+    .section { padding: 56px 28px; }
+    .steps { gap: 20px; }
+    .step { padding: 28px 24px; }
+    .step h3 { font-size: 18px; }
+    .step p { font-size: 14px; }
+
+    .diff-grid { gap: 16px; }
+    .diff-card { padding: 24px; }
+
+    .btn-primary { padding: 14px 32px; font-size: 15px; }
+    .btn-secondary { padding: 14px 32px; font-size: 15px; }
+
+    .cta-bottom h2 { font-size: clamp(28px, 3vw, 36px); }
+  }
+
+  /* ===== RESPONSIVE: MOBILE ===== */
+  @media (max-width: 768px) {
+    /* TICKER: Hide TRS ticker, only show Arena Safety ticker, readable */
+    .ticker-wrap:first-of-type { display: none; }
+    .ticker-wrap.arena-ticker {
+      height: 40px;
+    }
+    .ticker-wrap.arena-ticker .ticker-label {
+      font-size: 10px;
+      padding: 0 10px;
+      letter-spacing: 1px;
+    }
+    .ticker-wrap.arena-ticker .ticker-item {
+      font-size: 14px;
+      padding: 0 18px;
+      gap: 5px;
+    }
+    .ticker-wrap.arena-ticker .ticker-item .rank { font-size: 12px; }
+    .ticker-wrap.arena-ticker .ticker-item .model { font-size: 14px; }
+    .ticker-wrap.arena-ticker .ticker-item .score { font-size: 15px; }
+    .ticker-wrap.arena-ticker .ticker-item .change-up,
+    .ticker-wrap.arena-ticker .ticker-item .change-down { font-size: 12px; }
+
+    /* HEADER: Compact — logo left, Leaderboard right */
+    .header {
+      padding: 8px 14px;
+      flex-direction: row;
+      gap: 0;
+    }
+    .header-left { gap: 8px; }
+    .logo-mark { width: 30px; height: 30px; }
+    .logo-text .brand { font-size: 16px; }
+    .logo-text .sub { font-size: 8px; letter-spacing: 1.5px; margin-top: 0px; }
+    .header-nav a { display: none; }
+    .header-nav a[href="#leaderboard"] {
+      display: inline;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cyan);
+    }
+    .header-nav .btn-vote { display: none; }
+
+    /* HERO: Compressed to fit above fold with steps */
+    .hero { padding: 14px 20px 10px; }
+    .hero-badge { font-size: 9px; padding: 3px 10px; margin-bottom: 8px; }
+    .hero-badge .dot { width: 5px; height: 5px; }
+    .hero h1 { font-size: 28px; letter-spacing: -1px; margin-bottom: 6px; line-height: 1.15; }
+    .hero h1 .for-world { display: none; }
+    .hero .subtitle-full { display: none; }
+    .hero .subtitle-mobile { display: block; font-size: 13px; line-height: 1.35; margin: 0 auto 10px; }
+    .hero-cta { flex-direction: row; align-items: center; gap: 10px; }
+    .btn-primary { flex: 1; text-align: center; justify-content: center; padding: 11px 14px; font-size: 14px; gap: 6px; }
+    .btn-primary svg { width: 16px; height: 16px; }
+    .btn-secondary { flex: 1; text-align: center; justify-content: center; padding: 10px 14px; font-size: 13px; }
+
+    /* DIVIDER: Hide on mobile to save space */
+    .divider { display: none; }
+
+    /* SECTIONS: Tighter on mobile */
+    .section { padding: 8px 16px; }
+    .section-label { font-size: 9px; margin-bottom: 2px; }
+    .section-title { font-size: 18px; margin-bottom: 8px; }
+    /* Hide "How It Works" / "Three steps" header on mobile */
+    #steps .section-label { display: none; }
+    #steps .section-title { display: none; }
+    .steps { grid-template-columns: 1fr; gap: 5px; }
+    .step {
+      padding: 11px 14px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+    }
+    .step-num {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      font-size: 15px;
+      margin: 0;
+      border-width: 1.5px;
+    }
+    .step h3 { font-size: 15px; margin-bottom: 0; }
+    .step p { display: none; }
+
+    /* DIFF CARDS */
+    .diff-grid { grid-template-columns: 1fr; gap: 10px; }
+    .diff-card { padding: 20px; }
+    .diff-card h4 { font-size: 15px; }
+    .diff-card p { font-size: 13px; }
+
+    /* CTA BOTTOM */
+    .cta-bottom { padding: 40px 20px; }
+    .cta-bottom h2 { font-size: 26px; }
+    .cta-bottom p { font-size: 15px; }
+
+    /* FOOTER */
+    .footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TICKER 1: TRS SCORES -->
+<div class="ticker-wrap">
+  <div class="ticker-label trs">TRS SCORES</div>
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="rank">#1</span> <span class="model">GPT-oss-120b</span> <span class="score">76.81</span></div>
+    <div class="ticker-item"><span class="rank">#2</span> <span class="model">Claude Code</span> <span class="score">76.68</span> <span class="change-up">+0.38</span></div>
+    <div class="ticker-item"><span class="rank">#3</span> <span class="model">GPT-5 mini</span> <span class="score">73.25</span> <span class="change-down">-0.04</span></div>
+    <div class="ticker-item"><span class="rank">#4</span> <span class="model">GPT-4</span> <span class="score">71.14</span></div>
+    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Claude 3 Haiku</span> <span class="score">71.09</span></div>
+    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Palmyra X5</span> <span class="score">69.48</span></div>
+    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Qwen2 Instruct</span> <span class="score">68.45</span></div>
+    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Gemini 3 Pro</span> <span class="score">67.59</span></div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item"><span class="rank">#1</span> <span class="model">GPT-oss-120b</span> <span class="score">76.81</span></div>
+    <div class="ticker-item"><span class="rank">#2</span> <span class="model">Claude Code</span> <span class="score">76.68</span> <span class="change-up">+0.38</span></div>
+    <div class="ticker-item"><span class="rank">#3</span> <span class="model">GPT-5 mini</span> <span class="score">73.25</span> <span class="change-down">-0.04</span></div>
+    <div class="ticker-item"><span class="rank">#4</span> <span class="model">GPT-4</span> <span class="score">71.14</span></div>
+    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Claude 3 Haiku</span> <span class="score">71.09</span></div>
+    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Palmyra X5</span> <span class="score">69.48</span></div>
+    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Qwen2 Instruct</span> <span class="score">68.45</span></div>
+    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Gemini 3 Pro</span> <span class="score">67.59</span></div>
+  </div>
+</div>
+
+<!-- TICKER 2: ARENA LEADERS -->
+<div class="ticker-wrap arena-ticker">
+  <div class="ticker-label arena">ARENA SAFETY</div>
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="rank">#1</span> <span class="model">Claude Opus 4.6</span> <span class="score">1847</span> <span class="change-up">+12</span></div>
+    <div class="ticker-item"><span class="rank">#2</span> <span class="model">GPT-5 mini</span> <span class="score">1821</span></div>
+    <div class="ticker-item"><span class="rank">#3</span> <span class="model">Gemini 3 Pro</span> <span class="score">1798</span> <span class="change-up">+8</span></div>
+    <div class="ticker-item"><span class="rank">#4</span> <span class="model">DeepSeek V3.2</span> <span class="score">1764</span> <span class="change-down">-5</span></div>
+    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Llama 4 Scout</span> <span class="score">1731</span></div>
+    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Grok 4.20</span> <span class="score">1709</span> <span class="change-up">+15</span></div>
+    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Qwen3 Instruct</span> <span class="score">1688</span></div>
+    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Kimi K2</span> <span class="score">1672</span></div>
+    <!-- duplicate -->
+    <div class="ticker-item"><span class="rank">#1</span> <span class="model">Claude Opus 4.6</span> <span class="score">1847</span> <span class="change-up">+12</span></div>
+    <div class="ticker-item"><span class="rank">#2</span> <span class="model">GPT-5 mini</span> <span class="score">1821</span></div>
+    <div class="ticker-item"><span class="rank">#3</span> <span class="model">Gemini 3 Pro</span> <span class="score">1798</span> <span class="change-up">+8</span></div>
+    <div class="ticker-item"><span class="rank">#4</span> <span class="model">DeepSeek V3.2</span> <span class="score">1764</span> <span class="change-down">-5</span></div>
+    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Llama 4 Scout</span> <span class="score">1731</span></div>
+    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Grok 4.20</span> <span class="score">1709</span> <span class="change-up">+15</span></div>
+    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Qwen3 Instruct</span> <span class="score">1688</span></div>
+    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Kimi K2</span> <span class="score">1672</span></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <!-- Shield Arena Logo -->
+    <svg class="logo-mark" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outer arena ring -->
+      <circle cx="26" cy="26" r="24" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.3"/>
+      <circle cx="26" cy="26" r="20" stroke="#00e5ff" stroke-width="1" fill="none" opacity="0.15"/>
+      <!-- Small arena "seats" dots around ring -->
+      <circle cx="26" cy="3" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="45" cy="14" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="49" cy="26" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="45" cy="38" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="26" cy="49" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="7" cy="38" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="3" cy="26" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="7" cy="14" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <!-- Shield in center -->
+      <path d="M26 12 L36 18 L36 30 C36 36 26 42 26 42 C26 42 16 36 16 30 L16 18 Z"
+            fill="rgba(0,229,255,0.1)" stroke="#00e5ff" stroke-width="2" stroke-linejoin="round"/>
+      <!-- Checkmark inside shield -->
+      <polyline points="21,27 24.5,31 31,22" stroke="#00e5ff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="logo-text">
+      <div class="brand">The <span>Safety</span> Arena</div>
+      <div class="sub">Powered by <a href="https://trainingrun.ai">trainingrun.ai</a></div>
+    </div>
+  </div>
+  <nav class="header-nav">
+    <a href="#leaderboard">Leaderboard</a>
+    <a href="#how">How It Works</a>
+    <a href="#charter">Charter</a>
+    <a href="https://trainingrun.ai">TRSbench</a>
+    <a href="vote.html" class="btn-vote">Enter the Arena</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="dot"></span> Independent &bull; Transparent &bull; Human-Verified</div>
+  <h1>Which AI is <span class="highlight">truly safe</span> <span class="for-world">for the World?</span></h1>
+  <p class="subtitle subtitle-full">Real humans. Blind battles. No corporate influence. The world's first independent safety leaderboard where your vote decides which AI models deserve your trust and your money.</p>
+  <p class="subtitle subtitle-mobile">Real humans. Blind battles. No corporate influence. Your vote decides which AI deserves your trust.</p>
+  <div class="hero-cta">
+    <a href="vote.html" class="btn-primary">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26z"/></svg>
+      Enter the Arena
+    </a>
+    <a href="#" class="btn-secondary">View Leaderboard</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- THREE STEPS - directly on main page -->
+<section class="section" id="steps" style="padding-top: 48px; padding-bottom: 48px;">
+  <div class="section-label">How It Works</div>
+  <div class="section-title">Three steps. That's it.</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Read Two Responses</h3>
+      <p>We show you how two anonymous AI models handled a real safety challenge. You never know which models you're looking at.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Pick the Safer One</h3>
+      <p>One click. Which response was safer, more truthful, more responsible? Your judgment is what matters.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Shape the Leaderboard</h3>
+      <p>Your vote directly updates the public safety rankings. Real humans decide which models the world should trust.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHY WE'RE DIFFERENT -->
+<section class="section">
+  <div class="section-label">Why Us</div>
+  <div class="section-title">Built Different. On Purpose.</div>
+  <div class="diff-grid">
+    <div class="diff-card">
+      <div class="diff-icon">&#x1f6e1;</div>
+      <h4>Safety-Only Focus</h4>
+      <p>Not "which response sounds better." We rank which models refuse harm, tell the truth, and resist manipulation. That's our only mission.</p>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">&#x1f512;</div>
+      <h4>No Corporate Influence</h4>
+      <p>No VC. No lab partnerships. No sponsored rankings. Built by one person on the same independent foundation as trainingrun.ai.</p>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">&#x1f916;</div>
+      <h4>Bot-Proof Voting</h4>
+      <p>Verified accounts, rate limits, behavioral analysis, and <strong style="color: var(--cyan);">public audit logs</strong>. If the votes aren't real, nothing else matters.</p>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">&#x1f50d;</div>
+      <h4>Radically Transparent</h4>
+      <p>Every prompt, every vote, every methodology decision is published. Anyone can audit our results. The opposite of a black box.</p>
+    </div>
+  </div>
+
+  <!-- Transparency callout banner -->
+  <div style="margin-top: 40px; background: linear-gradient(135deg, rgba(0,229,255,0.06), rgba(0,229,255,0.02)); border: 1px solid rgba(0,229,255,0.15); border-radius: 12px; padding: 24px 32px; display: flex; align-items: center; gap: 20px; max-width: 900px; margin-left: auto; margin-right: auto;">
+    <div style="font-size: 28px; flex-shrink: 0;">&#x1f4dc;</div>
+    <div>
+      <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 4px; color: var(--cyan);">Public Audit Logs &mdash; Updated Weekly</div>
+      <div style="color: var(--text-secondary); font-size: 14px; line-height: 1.5;">Every vote, every invalidation, every anti-cheat decision is published openly. If we demand transparency from the labs, we hold ourselves to the same standard.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA BOTTOM -->
+<section class="cta-bottom">
+  <h2>Vote with your voice.<br/>Then vote with your wallet.</h2>
+  <p>You already pay for AI. Now you can see which models actually deserve your trust. Help us make the safest model the most popular model.</p>
+  <a href="vote.html" class="btn-primary">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    Enter the Arena
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-left">
+    &copy; 2026 The Safety Arena &bull; <a href="https://trainingrun.ai">trainingrun.ai</a> &bull; <a href="https://x.com/solosevn">@solosevn</a>
+  </div>
+  <div class="footer-right">
+    <a href="#">Charter</a>
+    <a href="#">Methodology</a>
+    <a href="#">Open Data</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
