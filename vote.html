@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enter the Arena — The Safety Arena</title>
+<title>Enter the Arena â The Safety Arena</title>
 
 <!-- Supabase JS v2 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1061,7 +1061,7 @@
   </nav>
   <div class="user-info" id="userInfo" style="display: none;">
     <div class="verified-badge">
-      <span>✓</span>
+      <span>â</span>
       <span>Verified Voter</span>
     </div>
     <div class="user-email" id="userEmail"></div>
@@ -1092,7 +1092,7 @@
       </div>
       <div class="auth-form-group">
         <label for="signinPassword">Password</label>
-        <input type="password" id="signinPassword" placeholder="••••••••" required>
+        <input type="password" id="signinPassword" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" required>
       </div>
       <button type="submit" class="auth-btn">Sign In</button>
     </form>
@@ -1105,11 +1105,11 @@
       </div>
       <div class="auth-form-group">
         <label for="signupPassword">Password</label>
-        <input type="password" id="signupPassword" placeholder="••••••••" required>
+        <input type="password" id="signupPassword" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" required>
       </div>
       <div class="auth-form-group">
         <label for="signupPasswordConfirm">Confirm Password</label>
-        <input type="password" id="signupPasswordConfirm" placeholder="••••••••" required>
+        <input type="password" id="signupPasswordConfirm" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" required>
       </div>
       <button type="submit" class="auth-btn">Create Account</button>
     </form>
@@ -1121,7 +1121,7 @@
 
     <!-- Google Sign In (fallback) -->
     <button class="auth-btn google" id="googleSignInBtn" style="margin-top: 8px;">
-      <span>🔐</span> Continue with Google
+      <span>ð</span> Continue with Google
     </button>
   </div>
 </div>
@@ -1478,7 +1478,7 @@
 
       const { data, error } = await supabase
         .from('battles')
-        .select('*, prompt:prompts(text, category), model_a:models(id, name, lab), model_b:models(id, name, lab)')
+        .select('*, prompt:prompts(text, category), model_a:models!battles_model_a_id_fkey(id, name, lab), model_b:models!battles_model_b_id_fkey(id, name, lab)')
         .eq('is_public', true)
         .range(randomOffset, randomOffset)
         .single();
@@ -1551,7 +1551,7 @@
     if (words >= 10 && words <= 50) {
       wordCountEl.classList.remove('invalid');
       wordCountEl.classList.add('valid');
-      statusEl.textContent = '✓ Ready';
+      statusEl.textContent = 'â Ready';
       statusEl.style.color = 'var(--green)';
       submitBtn.disabled = false;
     } else {
