@@ -1145,7 +1145,106 @@
   <div class="scenario">
     <div class="scenario-label">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      SafetndsRemaining + 's';
+      Scenario
+    </div>
+    <p class="scenario-text" id="promptText">Loading scenario...</p>
+  </div>
+
+  <div class="battle-container">
+    <div class="response-card" id="responseA">
+      <div class="response-header">
+        <span class="model-label">Response A</span>
+      </div>
+      <div class="response-text">Loading...</div>
+    </div>
+    <div class="vs-divider">
+      <div class="vs-badge">VS</div>
+    </div>
+    <div class="response-card" id="responseB">
+      <div class="response-header">
+        <span class="model-label">Response B</span>
+      </div>
+      <div class="response-text">Loading...</div>
+    </div>
+  </div>
+
+  <div class="vote-section">
+    <div class="vote-buttons">
+      <button class="vote-btn vote-btn-a" id="voteA" onclick="castVote('A')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Vote for A
+      </button>
+      <button class="vote-btn vote-btn-b" id="voteB" onclick="castVote('B')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Vote for B
+      </button>
+    </div>
+    <div class="vote-explanation" id="voteExplanation" style="display:none;">
+      <label class="explanation-label">Why did you choose this response? (optional)</label>
+      <textarea id="explanationText" class="explanation-input" placeholder="Share your reasoning to help improve AI safety research..."></textarea>
+    </div>
+  </div>
+
+  <div class="result-reveal" id="resultReveal" style="display:none;">
+    <div class="result-header">The models were:</div>
+    <div class="result-models">
+      <div class="result-model-a">Response A: <strong id="modelA"></strong></div>
+      <div class="result-model-b">Response B: <strong id="modelB"></strong></div>
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <p class="progress-text" id="progressText">0 of 30 battles completed</p>
+  </div>
+</main>
+
+<footer class="arena-footer">
+  <p class="footer-copy">&copy; 2025 The Safety Arena &mdash; Independent AI Safety Research</p>
+</footer>
+<script>
+  const SUPABASE_URL = 'https://nvitztmlczdohicskrks.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52aXR6dG1sY3pkb2hpY3NrcmtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMzY3NDQsImV4cCI6MjA4NzcxMjc0NH0.g8SgL67sDyDvDQko8QFhTPj5Bkt88MdtIcgHpOy2f48';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const fpPromise = FingerprintJS.load();
+
+  let currentUser = null;
+  let currentBattle = null;
+  let selectedVote = null;
+  let visitorFingerprint = null;
+  let battlesCompleted = 0;
+
+  class EngagementTracker {
+    constructor() {
+      this.timerInterval = null;
+      this.timerStarted = false;
+      this.mouseMovements = 0;
+      this.maxScrollDepth = 0;
+      this.battleStartTime = Date.now();
+    }
+
+    start() {
+      this.battleStartTime = Date.now();
+      document.addEventListener('mousemove', () => { this.mouseMovements++; });
+      window.addEventListener('scroll', () => {
+        const depth = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
+        if (depth > this.maxScrollDepth) this.maxScrollDepth = depth;
+      });
+    }
+
+    startReadTimer() {
+      const timerEl = document.getElementById('engagementTimer');
+      if (!timerEl || this.timerStarted) return;
+      this.timerStarted = true;
+      timerEl.style.display = '';
+      let secondsRemaining = 30;
+      const countdown = document.getElementById('timerCountdown');
+      this.timerInterval = setInterval(() => {
+        secondsRemaining--;
+        if (countdown) countdown.textContent = secondsRemaining + 's';
 
         if (secondsRemaining <= 0) {
           clearInterval(this.timerInterval);
@@ -1663,24 +1762,4 @@
 </script>
 
 </body>
-</html>        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(function(btn) {
-                btn.classList.toggle('active', btn.getAttribute('onclick').indexOf(tab) !== -1);
-            });
-            var signinForm = document.getElementById('signinForm');
-            var signupForm = document.getElementById('signupForm');
-            if (tab === 'signin') {
-                signinForm.classList.add('active');
-                signinForm.style.display = '';
-                signupForm.classList.remove('active');
-                signupForm.style.display = 'none';
-            } else {
-                signupForm.classList.add('active');
-                signupForm.style.display = '';
-                signinForm.classList.remove('active');
-                signinForm.style.display = 'none';
-            }
-            clearAuthError();
-        }
-
-        
+</html>
