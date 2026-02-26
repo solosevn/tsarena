@@ -1207,7 +1207,7 @@
 <script>
   const SUPABASE_URL = 'https://nvitztmlczdohicskrks.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52aXR6dG1sY3pkb2hpY3NrcmtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMzY3NDQsImV4cCI6MjA4NzcxMjc0NH0.g8SgL67sDyDvDQko8QFhTPj5Bkt88MdtIcgHpOy2f48';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const fpPromise = FingerprintJS.load();
 
