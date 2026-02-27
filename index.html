@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Safety Arena ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ tsarena.ai</title>
+<title>The Safety Arena ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ tsarena.ai</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
@@ -566,7 +566,7 @@
     .ticker-wrap.arena-ticker .ticker-item .change-up,
     .ticker-wrap.arena-ticker .ticker-item .change-down { font-size: 12px; }
 
-    /* HEADER: Compact ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ logo left, Leaderboard right */
+    /* HEADER: Compact ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ logo left, Leaderboard right */
     .header {
       padding: 8px 14px;
       flex-direction: row;
@@ -857,49 +857,57 @@
 
 <script>
 (async function() {
-  const logoMap = {
-    'Anthropic': 'https://www.google.com/s2/favicons?domain=anthropic.com&sz=32',
-    'OpenAI':    'https://www.google.com/s2/favicons?domain=openai.com&sz=32',
-    'Google':    'https://www.google.com/s2/favicons?domain=google.com&sz=32',
-    'Meta':      'https://www.google.com/s2/favicons?domain=meta.com&sz=32',
-    'xAI':       'https://www.google.com/s2/favicons?domain=x.ai&sz=32',
-    'Alibaba':   'https://www.google.com/s2/favicons?domain=alibaba.com&sz=32',
-    'MiniMax':   'https://www.google.com/s2/favicons?domain=minimax.chat&sz=32',
-    'Cohere':    'https://www.google.com/s2/favicons?domain=cohere.com&sz=32',
-    'Writer':    'https://www.google.com/s2/favicons?domain=writer.com&sz=32',
-    'Mistral':   'https://www.google.com/s2/favicons?domain=mistral.ai&sz=32',
-    'DeepSeek':  'https://www.google.com/s2/favicons?domain=deepseek.com&sz=32',
-    'Palmyra':   'https://www.google.com/s2/favicons?domain=writer.com&sz=32',
+  var domainMap = {
+    'Anthropic': 'anthropic.com', 'OpenAI': 'openai.com',
+    'Google': 'google.com', 'Meta': 'meta.com', 'xAI': 'x.ai',
+    'Alibaba': 'alibaba.com', 'MiniMax': 'minimax.chat',
+    'Cohere': 'cohere.com', 'Mistral': 'mistral.ai',
+    'DeepSeek': 'deepseek.com', 'Writer': 'writer.com',
+    'Microsoft': 'microsoft.com', 'Amazon': 'amazon.com'
   };
   function getLogoUrl(company) {
-    return logoMap[company] || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(company.substring(0,2)) + '&size=32&background=1a1a2e&color=00d4ff&bold=true&length=2');
+    var d = domainMap[company] || (company.toLowerCase().replace(/\s+/g, '') + '.com');
+    return 'https://www.google.com/s2/favicons?domain=' + d + '&sz=32';
   }
-  function buildItems(models) {
-    return models.map(function(m) {
-      const logo = getLogoUrl(m.company);
-      const delta = m.delta > 0 ? '<span class="change-up">+' + m.delta + '</span>' :
-                    m.delta < 0 ? '<span class="change-down">' + m.delta + '</span>' : '';
-      return '<div class="ticker-item"><img src="' + logo + '" class="ticker-logo" alt="' + m.company + '" onerror="this.style.display='none'">&nbsp;<span class="rank">' + (m.rank===1?'&#x1F947;':m.rank===2?'&#x1F948;':m.rank===3?'&#x1F949;':'#'+m.rank)) + '</span> <span class="model">' + m.name + '</span> <span class="score">' + m.score + '</span>' + delta + '</div>';
-    }).join('');
+  function rankLabel(n) {
+    if (n === 1) return '&#x1F947;';
+    if (n === 2) return '&#x1F948;';
+    if (n === 3) return '&#x1F949;';
+    return '#' + n;
   }
   try {
-    const r = await fetch('https://trainingrun.ai/trs-data.json?v=' + Date.now());
-    const d = await r.json();
-    const todayIdx = d.dates.length - 1;
-    const top10 = d.models
+    var r = await fetch('https://trainingrun.ai/trs-data.json?v=' + Date.now());
+    var d = await r.json();
+    var ti = d.dates.length - 1;
+    var models = d.models
       .map(function(m) {
-        var s = m.scores[todayIdx], p = m.scores[todayIdx - 1];
-        return { rank: m.rank, name: m.name, company: m.company, score: s ? +s.toFixed(2) : 0, delta: (s && p) ? +(s - p).toFixed(2) : 0 };
+        var s = m.scores[ti], p = m.scores[ti - 1];
+        return {
+          name: m.name,
+          company: m.company,
+          score: s ? +s.toFixed(2) : 0,
+          delta: (s && p) ? +(s - p).toFixed(2) : 0
+        };
       })
       .filter(function(m) { return m.score > 0 && m.score < 100; })
       .sort(function(a, b) { return b.score - a.score; })
       .slice(0, 10);
+
+    var html = models.map(function(m, i) {
+      var pos = i + 1;
+      var img = '<img src="' + getLogoUrl(m.company) + '" class="ticker-logo" alt="">';
+      var delta = m.delta > 0
+        ? '<span class="change-up">+' + m.delta + '</span>'
+        : m.delta < 0 ? '<span class="change-down">' + m.delta + '</span>' : '';
+      return '<div class="ticker-item">' + img + '&nbsp;<span class="rank">' + rankLabel(pos) + '</span> <span class="model">' + m.name + '</span> <span class="score">' + m.score + '</span>' + delta + '</div>';
+    }).join('');
+
     var track = document.querySelector('.ticker-wrap:not(.arena-ticker) .ticker-track');
-    if (track && top10.length) {
-      var html = buildItems(top10);
-      track.innerHTML = html + html;
-    }
-  } catch(e) { console.warn('TRSbench ticker fetch failed, using cached data', e); }
+    if (track && html) track.innerHTML = html + html;
+
+    var lbl = document.querySelector('.ticker-label.trs');
+    if (lbl) lbl.innerHTML = '<span style="color:#00d4ff;font-weight:800">TRS</span><span style="color:#fff;font-weight:700;text-transform:none">bench</span>';
+  } catch(e) { console.warn('TRSbench ticker:', e); }
 })();
 </script>
 
