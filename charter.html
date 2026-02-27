@@ -465,7 +465,33 @@
     .promise-section { padding: 40px 24px; }
     nav.header-nav a:not(.btn-vote):not(.logo-nav) { display: none; }
   }
-</style>
+
+  /* Back button — matches trainingrun.ai style */
+  .back-btn {
+    position: fixed;
+    top: 72px;
+    left: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(20, 20, 40, 0.7);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 8px;
+    color: #a0a0b0;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    z-index: 100;
+    transition: border-color 0.2s, color 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  .back-btn:hover {
+    border-color: rgba(0, 212, 255, 0.4);
+    color: #00d4ff;
+  }
+  </style>
 </head>
 <body>
 
@@ -478,6 +504,8 @@
     <a href="vote.html" class="btn-vote">Enter the Arena</a>
   </nav>
 </header>
+<a href="#" class="back-btn" onclick="history.back(); return false;">← Back</a>
+
 
 <!-- HERO -->
 <section class="charter-hero">
