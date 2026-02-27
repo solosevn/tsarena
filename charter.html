@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charter | The Safety Arena</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --cyan: #00d4ff;
+    --cyan2: #00b8e6;
+    --gold: #ffd700;
+    --text: #e8e8f0;
+    --text2: #a0a0b8;
+    --border: #2a2a3a;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--cyan);
+    text-decoration: none;
+    letter-spacing: -0.3px;
+  }
+
+  .logo span { color: var(--text2); font-weight: 400; }
+
+  nav.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  nav.header-nav a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  nav.header-nav a:hover { color: var(--text); background: var(--bg3); }
+  nav.header-nav a.active { color: var(--cyan); }
+
+  nav.header-nav a.btn-vote {
+    background: var(--cyan);
+    color: #0a0a0f;
+    font-weight: 700;
+    padding: 8px 18px;
+  }
+
+  nav.header-nav a.btn-vote:hover { background: var(--cyan2); }
+
+  /* HERO */
+  .charter-hero {
+    background: linear-gradient(135deg, #0a0a0f 0%, #0d0d1a 50%, #0a0f1a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 24px 64px;
+    text-align: center;
+  }
+
+  .charter-hero .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 20px;
+  }
+
+  .charter-hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+  }
+
+  .charter-hero h1 span { color: var(--cyan); }
+
+  .charter-hero .subtitle {
+    font-size: 18px;
+    color: var(--text2);
+    max-width: 560px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+
+  .charter-meta {
+    display: inline-flex;
+    gap: 24px;
+    align-items: center;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  .charter-meta span { display: flex; align-items: center; gap: 6px; }
+  .charter-meta strong { color: var(--text); }
+
+  /* MAIN CONTENT */
+  .charter-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+  }
+
+  /* SECTION BLOCKS */
+  .charter-section {
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 12px;
+  }
+
+  .charter-section h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+    line-height: 1.25;
+  }
+
+  .charter-section p {
+    color: var(--text2);
+    font-size: 16px;
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+
+  .charter-section p strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* PRINCIPLES GRID */
+  .principles-grid {
+    display: grid;
+    gap: 20px;
+    margin-top: 16px;
+  }
+
+  .principle-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .principle-card:hover { border-color: rgba(0,212,255,0.3); }
+
+  .principle-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 8px;
+  }
+
+  .principle-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+  }
+
+  .principle-card p {
+    color: var(--text2);
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 0;
+  }
+
+  .principle-card ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 14px;
+  }
+
+  .principle-card ul li {
+    color: var(--text2);
+    font-size: 14px;
+    line-height: 1.65;
+    padding: 5px 0 5px 20px;
+    position: relative;
+    border-top: 1px solid var(--border);
+  }
+
+  .principle-card ul li:first-child { border-top: none; margin-top: 8px; }
+
+  .principle-card ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--cyan);
+    font-size: 12px;
+  }
+
+  /* CALLOUT BOX */
+  .callout {
+    background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(0,212,255,0.02));
+    border: 1px solid rgba(0,212,255,0.25);
+    border-left: 3px solid var(--cyan);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 28px 0;
+  }
+
+  .callout p {
+    color: var(--text) !important;
+    font-size: 17px !important;
+    font-weight: 500;
+    line-height: 1.7;
+    margin: 0 !important;
+  }
+
+  .callout p strong { color: var(--cyan) !important; }
+
+  /* DIFFERENCES TABLE */
+  .diff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .diff-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+  }
+
+  .diff-card.ours { border-color: rgba(0,212,255,0.3); }
+
+  .diff-card .diff-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    color: var(--text2);
+  }
+
+  .diff-card.ours .diff-label { color: var(--cyan); }
+
+  .diff-card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .diff-card ul li {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.6;
+    padding: 6px 0 6px 18px;
+    position: relative;
+    border-top: 1px solid var(--border);
+  }
+
+  .diff-card ul li:first-child { border-top: none; }
+
+  .diff-card ul li::before {
+    content: '✗';
+    position: absolute;
+    left: 0;
+    color: #ff4466;
+    font-size: 11px;
+    top: 8px;
+  }
+
+  .diff-card.ours ul li::before {
+    content: '✓';
+    color: var(--cyan);
+  }
+
+  /* RELATIONSHIP SECTION */
+  .relation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .relation-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+
+  .relation-card .r-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 8px;
+  }
+
+  .relation-card p {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+  }
+
+  /* PROMISE SECTION */
+  .promise-section {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(0,212,255,0.04), transparent);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 56px 40px;
+    margin-top: 64px;
+  }
+
+  .promise-section h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 24px;
+  }
+
+  .promise-section p {
+    font-size: 17px;
+    color: var(--text2);
+    max-width: 560px;
+    margin: 0 auto 14px;
+    line-height: 1.75;
+  }
+
+  .promise-section p.lead {
+    font-size: 18px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .promise-sig {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .promise-sig .sig-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .promise-sig .sig-title {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 10px;
+  }
+
+  .promise-sig .sig-links a {
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0 8px;
+  }
+
+  .promise-sig .sig-links a:hover { text-decoration: underline; }
+
+  /* CTA */
+  .charter-cta {
+    text-align: center;
+    margin-top: 48px;
+  }
+
+  .charter-cta a {
+    display: inline-block;
+    background: var(--cyan);
+    color: #0a0a0f;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 16px 40px;
+    border-radius: 10px;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .charter-cta a:hover { background: var(--cyan2); transform: translateY(-1px); }
+
+  /* DIVIDER */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 0 64px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  footer p {
+    color: var(--text2);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  footer a { color: var(--cyan); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .charter-meta { flex-direction: column; gap: 8px; }
+    .diff-grid { grid-template-columns: 1fr; }
+    .promise-section { padding: 40px 24px; }
+    nav.header-nav a:not(.btn-vote):not(.logo-nav) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">The Safety Arena <span>/ tsarena.ai</span></a>
+  <nav class="header-nav">
+    <a href="index.html#leaderboard">Leaderboard</a>
+    <a href="index.html#how">How It Works</a>
+    <a href="charter.html" class="active">Charter</a>
+    <a href="https://trainingrun.ai">TRSbench</a>
+    <a href="vote.html" class="btn-vote">Enter the Arena</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="charter-hero">
+  <div class="eyebrow">Founding Document</div>
+  <h1>Our <span>Charter</span></h1>
+  <p class="subtitle">The principles, values, and commitments that govern everything we build here.</p>
+  <div class="charter-meta">
+    <span><strong>Version 1.2</strong></span>
+    <span>—</span>
+    <span>February 26, 2026</span>
+    <span>—</span>
+    <span>David Solomon, Founder</span>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<main class="charter-content">
+
+  <!-- MISSION -->
+  <div class="charter-section">
+    <div class="section-label">Mission</div>
+    <h2>Why We Exist</h2>
+    <p>The Safety Arena is the world's first independent, public-driven safety leaderboard for AI models. Through blind battles, real human votes, and transparent challenges, we reveal which models and labs are truly the safest — so everyday people can vote with their attention, their feedback, and their dollars.</p>
+    <p>We exist to force safer AI into the world by giving the public real power. No ideology. No corporate spin. Just facts, transparency, and the collective judgment of real humans.</p>
+    <div class="callout">
+      <p>People deserve to know which AI models are actually safe and truthful — not which ones have the best marketing budget or the most favorable backroom deal with a leaderboard platform. <strong>This platform exists to fix that.</strong></p>
+    </div>
+    <p>Right now, there is no public, transparent, human-voted arena dedicated specifically to AI safety. Existing general-purpose arenas rank overall preference — which response sounds better, reads smoother, feels more helpful. Safety is buried as a subcategory, not the mission. Published research has documented how coordinated votes can manipulate rankings. The Safety Arena is built from the ground up to be different.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- PRINCIPLES -->
+  <div class="charter-section">
+    <div class="section-label">Core Principles</div>
+    <h2>Eight Founding Principles</h2>
+    <p>These principles are not aspirational marketing copy. They are hard constraints that govern every decision we make — about product, policy, and operations.</p>
+
+    <div class="principles-grid">
+
+      <div class="principle-card">
+        <div class="principle-num">Principle 01</div>
+        <h3>Real Humans, Real Votes</h3>
+        <p>The entire premise of The Safety Arena is that real people judge which AI models are safest and most truthful. This only works if the votes are real. We treat vote integrity as existential — if the votes are fake, the platform is worthless.</p>
+        <ul>
+          <li>Verified accounts required (email + OAuth through Google or X). No anonymous voting.</li>
+          <li>Rate limits per account per day. No one person can flood the system.</li>
+          <li>Minimum read and evaluation time before a vote counts. You must actually engage.</li>
+          <li>Behavioral analysis and anomaly detection to catch coordinated bot activity.</li>
+          <li>Optional short explanation with each vote — low-effort spam gets flagged.</li>
+          <li>Every anti-cheat measure is published openly so anyone can audit our integrity.</li>
+        </ul>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-num">Principle 02</div>
+        <h3>Complete Independence</h3>
+        <p>The Safety Arena has zero venture capital, zero corporate sponsors, and zero lab partnerships that could influence results. This is built and operated by one person, David Solomon, on the same independent, truth-first foundation as trainingrun.ai. We answer to the public, not to investors or AI companies.</p>
+        <ul>
+          <li>No lab gets preferential treatment, early access, or private testing slots.</li>
+          <li>No sponsored placements, paid rankings, or "featured" models.</li>
+          <li>Every dollar of operating cost is disclosed. If that ever changes, the public will know.</li>
+        </ul>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-num">Principle 03/div>
+        <h3>Safety and Truth Above Everything</h3>
+        <p>We are not ranking which model writes the best poem or generates the funniest joke. We are ranking which models refuse to help people cause harm, tell the truth when pressured to lie, resist jailbreaks and manipulation, and behave responsibly when no one is watching.</p>
+        <ul>
+          <li>Curated safety and truth prompts: harm refusal, jailbreak resistance, truthfulness under pressure, responsible behavior, and over-refusal/under-refusal balance.</li>
+          <li>Blind battles — voters never know which model they are evaluating until after they vote.</li>
+          <li>Results tied back to the TRSbench Safety pillar on trainingrun.ai for a combined, verified signal.</li>
+        </ul>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-num">Principle 04</div>
+        <h3>Radical Transparency</h3>
+        <p>If we demand transparency from AI labs, we must hold ourselves to the same standard. Everything about how The Safety Arena operates is public: the prompts, the anonymized votes, the methodology, the anti-cheat logs, the scoring formulas. Anyone can reproduce our results.</p>
+        <ul>
+          <li>Full methodology documentation published on-site and updated with every change.</li>
+          <li>Weekly public data exports: anonymized votes, prompts used, vote invalidation logs.</li>
+          <li>No hidden pre-testing. No lab "preview" access. No cherry-picked leaderboards.</li>
+          <li>Open anti-cheat audit trail so the public can verify we practice what we preach.</li>
+        </ul>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-num">Principle 05</div>
+        <h3>Simple Enough for Anyone</h3>
+        <p>The Safety Arena must be usable by anyone — your neighbor, your parents, a non-technical person who just wants to know which AI is safe to use. Not just researchers and developers.</p>
+        <ul>
+          <li><strong>Read two responses, pick the safer one, done.</strong> Minimal clicks to participate.</li>
+          <li>Clear, jargon-free language throughout the site.</li>
+          <li>Leaderboard results that answer one question: which model should I trust with my safety?</li>
+        </ul>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-num">Principle 06</div>
+        <h3>Non-Ideological</h3>
+        <p>No left or right lean. No political agenda. No "hope or think." The Safety Arena measures verifiable behaviors: did the model refuse a harmful request? Did it tell the truth? Did it resist manipulation? These are objective, auditable outcomes — not opinions. We test what models actually do, not what any company claims they do.</p>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-num">Principle 07</div>
+        <h3>Empowering the Public to Vote with Their Money</h3>
+        <p>People already pay for AI every day — API subscriptions, premium plans, enterprise licenses. They deserve to know whether the model they are funding prioritizes their safety or cuts corners. The Safety Arena gives the public verified information to decide which labs deserve their support.</p>
+        <p>When a model ranks #1 on our leaderboard, it means real humans verified it. This is how we force labs to compete on safety — not through regulation alone, but through informed consumer choice.</p>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-num">Principle 08</div>
+        <h3>Criteria-Driven, Allocation-Equal Model Selection</h3>
+        <p>Some arenas let labs submit models through special relationships, where larger labs get more battles, more stable rankings, and more visibility. The Safety Arena works differently.</p>
+        <ul>
+          <li><strong>Public availability is the only criteria.</strong> Any publicly accessible model with a meaningful user base qualifies. We don't pick favorites. We don't wait for labs to apply.</li>
+          <li><strong>We access models the same way you do.</strong> Public APIs as a paying customer. No special access. No lab-provided endpoints. We test exactly what the public gets.</li>
+          <li><strong>Every model gets equal battle allocation.</strong> No sampling weights that favor bigger labs. We publish exact battle counts so anyone can verify this.</li>
+          <li><strong>The full model list and criteria are public.</strong> If a model isn't in our pool, there's a published reason why — never "we don't have a relationship with that lab."</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- WHY WE MAKE IT HARD -->
+  <div class="charter-section">
+    <div class="section-label">Our Standard</div>
+    <h2>Why We Make It Hard</h2>
+    <p>Our verification requirements — verified accounts, rate limits, minimum engagement time, vote explanations — will produce fewer total votes than platforms with no barriers. We know this. We chose this.</p>
+    <p>A platform with five million votes and documented gaming problems produces a noisy, unreliable signal. A platform with fifty thousand verified votes that have never been gamed produces a clean, trustworthy signal. Labs know the difference. The public knows the difference. The value of a vote is not in the volume — it is in the integrity.</p>
+    <div class="callout">
+      <p>Consumer Reports doesn't have the traffic of Amazon reviews. But when Consumer Reports says a product is safe, people trust it more than ten thousand anonymous five-star reviews — because the methodology is rigorous and independent. <strong>We are building Consumer Reports for AI safety, not Amazon reviews.</strong></p>
+    </div>
+    <p>The bar to get in is high. But once you're in, the experience is simple. Hard to enter, easy to use. That is not a weakness — that is the entire brand. "We have fewer votes because every single one is real" is not an apology. It is our headline.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- WHAT MAKES US DIFFERENT -->
+  <div class="charter-section">
+    <div class="section-label">Our Approach</div>
+    <h2>What Makes Us Different</h2>
+    <p>General-purpose AI arenas serve a purpose — but they are not built for safety. Structural issues make them unreliable as the public's safety reference. The Safety Arena is purpose-built to address every one of those gaps.</p>
+
+    <div class="diff-grid">
+      <div class="diff-card">
+        <div class="diff-label">General-Purpose Arenas</div>
+        <ul>
+          <li>Safety is a subcategory, not the mission</li>
+          <li>Vote on "which response is better" overall — rewards style over safety</li>
+          <li>Documented gaming vulnerabilities in published research</li>
+          <li>Lab entanglement creates conflicts of interest</li>
+          <li>Relationship-driven model selection and allocation</li>
+          <li>Reactive anti-cheat, structural risks remain</li>
+        </ul>
+      </div>
+      <div class="diff-card ours">
+        <div class="diff-label">The Safety Arena</div>
+        <ul>
+          <li>Safety is the entire mission, not a subcategory</li>
+          <li>Vote on verifiable safety behaviors — harm refusal, truthfulness, resistance to manipulation</li>
+          <li>Structural anti-gaming built in from day one</li>
+          <li>Zero lab entanglement — no partnerships, no special access</li>
+          <li>Criteria-driven selection, equal battle allocation for all models</li>
+          <li>Full transparency — every anti-cheat measure is public</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:20px;">Labs are free to learn from our public data — that's the point of transparency. But this platform exists for the public, not for the labs.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- RELATIONSHIP TO TRAININGRUN -->
+  <div class="charter-section">
+    <div class="section-label">Ecosystem</div>
+    <h2>Relationship to trainingrun.ai</h2>
+    <p>The Safety Arena is a sibling product of trainingrun.ai, sharing the same DNA of independence, transparency, and verified data. It is cross-linked but stands on its own.</p>
+
+    <div class="relation-grid">
+      <div class="relation-card">
+        <div class="r-label">tsarena.ai</div>
+        <p>Its own domain, its own destination, its own brand. The public-facing home for human-verified AI safety rankings.</p>
+      </div>
+      <div class="relation-card">
+        <div class="r-label">trainingrun.ai</div>
+        <p>Links to the arena via the TRSArena nav tab. Arena scores integrate into the TRSbench Composite score.</p>
+      </div>
+      <div class="relation-card">
+        <div class="r-label">TRSbench Safety Pillar</div>
+        <p>Arena safety scores feed directly into the TRSbench Safety pillar, currently weighted at 21% of the TRSbench composite score.</p>
+      </div>
+      <div class="relation-card">
+        <div class="r-label">Future Integration</div>
+        <p>Arena votes will contribute to refining the TRSbench Safety pillar over time — creating a feedback loop between automated benchmarks and verified human judgment.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- PROMISE / CLOSING -->
+  <div class="promise-section">
+    <div class="section-label" style="text-align:center;">Our Promise</div>
+    <h2>This Arena Belongs to the Public</h2>
+    <p class="lead">We will keep building this until the safest model is also the most popular and most supported — because that is how we force the entire industry to get safer.</p>
+    <p>This arena belongs to parents who want a safe world for their kids. This arena belongs to anyone who wants to support truth and safety with their real choices.</p>
+    <p>A livable future where the most powerful technology ever created is held accountable by the people who use it — not just by the companies who profit from it.</p>
+
+    <div class="promise-sig">
+      <div class="sig-name">David Solomon</div>
+      <div class="sig-title">Founder, The Safety Arena &amp; trainingrun.ai — February 26, 2026</div>
+      <div class="sig-links">
+        <a href="https://x.com/solosevn" target="_blank">X: @solosevn</a>
+        <a href="https://trainingrun.ai" target="_blank">trainingrun.ai</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="charter-cta">
+    <a href="vote.html">Enter the Arena &rarr;</a>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    &copy; 2026 The Safety Arena &mdash; tsarena.ai &nbsp;|&nbsp;
+    Powered by <a href="https://trainingrun.ai" target="_blank">trainingrun.ai</a> &nbsp;|&nbsp;
+    <a href="charter.html">Charter</a> &nbsp;|&nbsp;
+    <a href="vote.html">Enter the Arena</a>
+  </p>
+</footer>
+
+</body>
+</html>
