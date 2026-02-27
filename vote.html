@@ -182,6 +182,23 @@
   }
 
   /* ===== HERO ===== */
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(0, 229, 255, 0.1);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cyan);
+  }
   .user-email {
     font-size: 13px;
     color: var(--text-secondary);
@@ -1012,8 +1029,8 @@
   /* Back button — matches trainingrun.ai style */
   .back-btn {
     position: fixed;
-    top: 144px;
-    left: 16px;
+    top: 160px;
+    left: 24px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
