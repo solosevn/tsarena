@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Safety Arena Ã¢ÂÂ tsarena.ai</title>
+<title>The Safety Arena ÃÂ¢ÃÂÃÂ tsarena.ai</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
@@ -566,7 +566,7 @@
     .ticker-wrap.arena-ticker .ticker-item .change-up,
     .ticker-wrap.arena-ticker .ticker-item .change-down { font-size: 12px; }
 
-    /* HEADER: Compact Ã¢ÂÂ logo left, Leaderboard right */
+    /* HEADER: Compact ÃÂ¢ÃÂÃÂ logo left, Leaderboard right */
     .header {
       padding: 8px 14px;
       flex-direction: row;
@@ -672,9 +672,30 @@
 
 <!-- TICKER 2: ARENA LEADERS -->
 <div class="ticker-wrap arena-ticker">
-  <div class="ticker-label arena">ARENA SAFETY</div>
+  <div class="ticker-label arena">ARENA LEADERBOARD</div>
   <div class="ticker-track">
-    <div class="ticker-item"><span class="rank">#1</span> <span class="model">Claude Opus 4.6</span> <span class="score">1847</span> <span class="change-up">+12</span></div>
+    <div class="ticker-item"><span class="rank">🥇</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">🥈</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">🥉</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#4</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#9</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#10</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">🥇</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">🥈</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">🥉</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#4</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#9</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#10</span> <span class="model">Coming Soon</span></div>
+  </div>
+</div>
     <div class="ticker-item"><span class="rank">#2</span> <span class="model">GPT-5 mini</span> <span class="score">1821</span></div>
     <div class="ticker-item"><span class="rank">#3</span> <span class="model">Gemini 3 Pro</span> <span class="score">1798</span> <span class="change-up">+8</span></div>
     <div class="ticker-item"><span class="rank">#4</span> <span class="model">DeepSeek V3.2</span> <span class="score">1764</span> <span class="change-down">-5</span></div>
@@ -858,7 +879,7 @@
       const logo = getLogoUrl(m.company);
       const delta = m.delta > 0 ? '<span class="change-up">+' + m.delta + '</span>' :
                     m.delta < 0 ? '<span class="change-down">' + m.delta + '</span>' : '';
-      return '<div class="ticker-item"><img src="' + logo + '" class="ticker-logo" alt="' + m.company + '" onerror="this.style.display='none'">&nbsp;<span class="rank">#' + m.rank + '</span> <span class="model">' + m.name + '</span> <span class="score">' + m.score + '</span>' + delta + '</div>';
+      return '<div class="ticker-item"><img src="' + logo + '" class="ticker-logo" alt="' + m.company + '" onerror="this.style.display='none'">&nbsp;<span class="rank">' + (m.rank===1?'🥇':m.rank===2?'🥈':m.rank===3?'🥉':'#'+m.rank) + '</span> <span class="model">' + m.name + '</span> <span class="score">' + m.score + '</span>' + delta + '</div>';
     }).join('');
   }
   try {
