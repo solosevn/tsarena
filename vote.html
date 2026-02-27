@@ -442,6 +442,8 @@
     margin-bottom: 28px;
   }
   .response-card {
+    flex: 1;
+    min-width: 0;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 14px;
@@ -508,6 +510,8 @@
 
   /* VS divider */
   .vs-divider {
+    flex-shrink: 0;
+    flex-direction: column;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1234,7 +1238,7 @@
 </main>
 
 <footer class="arena-footer">
-  <p class="footer-copy">&copy; 2025 The Safety Arena &mdash; Independent AI Safety Research</p>
+  <p class="footer-copy">&copy; 2026 The Safety Arena &mdash; Independent AI Safety Research</p>
 </footer>
 <script>
   const SUPABASE_URL = 'https://nvitztmlczdohicskrks.supabase.co';
