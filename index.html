@@ -830,5 +830,53 @@
   </div>
 </footer>
 
+
+<script>
+(async function() {
+  const logoMap = {
+    'Anthropic': 'https://logo.clearbit.com/anthropic.com',
+    'OpenAI':    'https://logo.clearbit.com/openai.com',
+    'Google':    'https://logo.clearbit.com/google.com',
+    'Meta':      'https://logo.clearbit.com/meta.com',
+    'xAI':       'https://logo.clearbit.com/x.ai',
+    'Alibaba':   'https://logo.clearbit.com/alibaba.com',
+    'MiniMax':   'https://logo.clearbit.com/minimax.chat',
+    'Cohere':    'https://logo.clearbit.com/cohere.com',
+    'Writer':    'https://logo.clearbit.com/writer.com',
+    'Mistral':   'https://logo.clearbit.com/mistral.ai',
+    'DeepSeek':  'https://logo.clearbit.com/deepseek.com',
+    'Palmyra':   'https://logo.clearbit.com/writer.com',
+  };
+  function getLogoUrl(company) {
+    return logoMap[company] || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(company.substring(0,2)) + '&size=32&background=1a1a2e&color=00d4ff&bold=true&length=2');
+  }
+  function buildItems(models) {
+    return models.map(function(m) {
+      const logo = getLogoUrl(m.company);
+      const delta = m.delta > 0 ? '<span class="change-up">+' + m.delta + '</span>' :
+                    m.delta < 0 ? '<span class="change-down">' + m.delta + '</span>' : '';
+      return '<div class="ticker-item"><img src="' + logo + '" class="ticker-logo" alt="' + m.company + '" onerror="this.style.display='none'">&nbsp;<span class="rank">#' + m.rank + '</span> <span class="model">' + m.name + '</span> <span class="score">' + m.score + '</span>' + delta + '</div>';
+    }).join('');
+  }
+  try {
+    const r = await fetch('https://trainingrun.ai/trs-data.json?v=' + Date.now());
+    const d = await r.json();
+    const todayIdx = d.dates.length - 1;
+    const top10 = d.models
+      .map(function(m) {
+        var s = m.scores[todayIdx], p = m.scores[todayIdx - 1];
+        return { rank: m.rank, name: m.name, company: m.company, score: s ? +s.toFixed(2) : 0, delta: (s && p) ? +(s - p).toFixed(2) : 0 };
+      })
+      .filter(function(m) { return m.score > 0 && m.score < 100; })
+      .sort(function(a, b) { return b.score - a.score; })
+      .slice(0, 10);
+    var track = document.querySelector('.ticker-wrap:not(.arena-ticker) .ticker-track');
+    if (track && top10.length) {
+      var html = buildItems(top10);
+      track.innerHTML = html + html;
+    }
+  } catch(e) { console.warn('TRSbench ticker fetch failed, using cached data', e); }
+})();
+</script>
 </body>
 </html>
