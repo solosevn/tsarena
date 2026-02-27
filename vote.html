@@ -64,20 +64,26 @@
     height: 100%;
     display: flex;
     align-items: center;
-    background: rgba(0,0,0,0.3);
+    background: #0d0d14;
+    position: relative;
+    z-index: 2;
   }
   .ticker-label.trs { color: var(--cyan); }
   .ticker-label.arena { color: var(--orange); }
+  .ticker-logo { width: 20px; height: 20px; border-radius: 3px; object-fit: contain; flex-shrink: 0; vertical-align: middle; }
+
   .ticker-track {
     display: flex;
     animation: scroll-left 40s linear infinite;
     white-space: nowrap;
   }
   .arena-ticker .ticker-track { animation-duration: 35s; }
+
   @keyframes scroll-left {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
+
   .ticker-item {
     display: inline-flex;
     align-items: center;
@@ -88,12 +94,13 @@
     color: var(--text-secondary);
     flex-shrink: 0;
   }
-  .ticker-item .rank { color: var(--text-dim); font-size: 10px; }
+  .ticker-item .rank { color: #e8e8f0; font-size: 13px; font-weight: 400; }
   .ticker-item .model { color: var(--text-primary); font-weight: 600; }
   .ticker-item .score { color: var(--cyan); font-weight: 700; font-family: 'Space Grotesk', monospace; }
   .arena-ticker .ticker-item .score { color: var(--orange); }
   .ticker-item .change-up { color: var(--green); font-size: 11px; }
   .ticker-item .change-down { color: var(--red); font-size: 11px; }
+  .ticker-item .sep { color: var(--border); margin: 0 4px; }
 
   /* ===== HEADER ===== */
   .header {
@@ -113,8 +120,15 @@
     align-items: center;
     gap: 20px;
   }
-  .logo-mark { width: 52px; height: 52px; flex-shrink: 0; }
-  .logo-text { display: flex; flex-direction: column; }
+  .logo-mark {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+  }
   .logo-text .brand {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 26px;
@@ -132,8 +146,17 @@
     text-transform: uppercase;
     margin-top: 2px;
   }
-  .logo-text .sub a { color: var(--cyan-dim); text-decoration: none; }
-  .header-nav { display: flex; align-items: center; gap: 28px; }
+  .logo-text .sub a {
+    color: var(--cyan-dim);
+    text-decoration: none;
+  }
+  .logo-text .sub a:hover { text-decoration: underline; }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
   .header-nav a {
     color: var(--text-secondary);
     text-decoration: none;
@@ -142,7 +165,6 @@
     transition: color 0.2s;
   }
   .header-nav a:hover { color: var(--cyan); }
-  .header-nav a.active { color: var(--cyan); }
   .header-nav .btn-vote {
     background: var(--cyan);
     color: var(--bg-dark);
@@ -159,24 +181,7 @@
     color: var(--bg-dark);
   }
 
-  /* Verified voter badge and user info */
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .verified-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    background: rgba(0, 229, 255, 0.1);
-    border: 1px solid rgba(0, 229, 255, 0.25);
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--cyan);
-  }
+  /* ===== HERO ===== */
   .user-email {
     font-size: 13px;
     color: var(--text-secondary);
@@ -1007,7 +1012,7 @@
   /* Back button — matches trainingrun.ai style */
   .back-btn {
     position: fixed;
-    top: 72px;
+    top: 144px;
     left: 16px;
     display: inline-flex;
     align-items: center;
@@ -1052,6 +1057,7 @@
     <div class="ticker-item"><span class="rank">#6</span> <span class="model">Palmyra X5</span> <span class="score">69.48</span></div>
     <div class="ticker-item"><span class="rank">#7</span> <span class="model">Qwen2 Instruct</span> <span class="score">68.45</span></div>
     <div class="ticker-item"><span class="rank">#8</span> <span class="model">Gemini 3 Pro</span> <span class="score">67.59</span></div>
+    <!-- duplicate for seamless loop -->
     <div class="ticker-item"><span class="rank">#1</span> <span class="model">GPT-oss-120b</span> <span class="score">76.81</span></div>
     <div class="ticker-item"><span class="rank">#2</span> <span class="model">Claude Code</span> <span class="score">76.68</span> <span class="change-up">+0.38</span></div>
     <div class="ticker-item"><span class="rank">#3</span> <span class="model">GPT-5 mini</span> <span class="score">73.25</span> <span class="change-down">-0.04</span></div>
@@ -1064,34 +1070,41 @@
 </div>
 
 <!-- TICKER 2: ARENA LEADERS -->
-<div class="ticker-wrap arena-ticker">
-  <div class="ticker-label arena">ARENA SAFETY</div>
+<div <div class="ticker-wrap arena-ticker">
+  <div class="ticker-label arena">ARENA LEADERBOARD</div>
   <div class="ticker-track">
-    <div class="ticker-item"><span class="rank">#1</span> <span class="model">Claude Opus 4.6</span> <span class="score">1847</span> <span class="change-up">+12</span></div>
-    <div class="ticker-item"><span class="rank">#2</span> <span class="model">GPT-5 mini</span> <span class="score">1821</span></div>
-    <div class="ticker-item"><span class="rank">#3</span> <span class="model">Gemini 3 Pro</span> <span class="score">1798</span> <span class="change-up">+8</span></div>
-    <div class="ticker-item"><span class="rank">#4</span> <span class="model">DeepSeek V3.2</span> <span class="score">1764</span> <span class="change-down">-5</span></div>
-    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Llama 4 Scout</span> <span class="score">1731</span></div>
-    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Grok 4.20</span> <span class="score">1709</span> <span class="change-up">+15</span></div>
-    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Qwen3 Instruct</span> <span class="score">1688</span></div>
-    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Kimi K2</span> <span class="score">1672</span></div>
-    <div class="ticker-item"><span class="rank">#1</span> <span class="model">Claude Opus 4.6</span> <span class="score">1847</span> <span class="change-up">+12</span></div>
-    <div class="ticker-item"><span class="rank">#2</span> <span class="model">GPT-5 mini</span> <span class="score">1821</span></div>
-    <div class="ticker-item"><span class="rank">#3</span> <span class="model">Gemini 3 Pro</span> <span class="score">1798</span> <span class="change-up">+8</span></div>
-    <div class="ticker-item"><span class="rank">#4</span> <span class="model">DeepSeek V3.2</span> <span class="score">1764</span> <span class="change-down">-5</span></div>
-    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Llama 4 Scout</span> <span class="score">1731</span></div>
-    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Grok 4.20</span> <span class="score">1709</span> <span class="change-up">+15</span></div>
-    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Qwen3 Instruct</span> <span class="score">1688</span></div>
-    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Kimi K2</span> <span class="score">1672</span></div>
+    <div class="ticker-item"><span class="rank"><span style="font-size:18px;text-shadow:0 0 12px rgba(255,215,0,0.75),0 0 4px rgba(255,215,0,0.5)">&#x1F947;</span></span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank"><span style="font-size:18px;text-shadow:0 0 10px rgba(200,200,220,0.65),0 0 4px rgba(200,200,220,0.4)">&#x1F948;</span></span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank"><span style="font-size:18px;text-shadow:0 0 10px rgba(210,140,70,0.65),0 0 4px rgba(210,140,70,0.4)">&#x1F949;</span></span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#4</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#9</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#10</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">&#x1F947;</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">&#x1F948;</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">&#x1F949;</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#4</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#9</span> <span class="model">Coming Soon</span></div>
+    <div class="ticker-item"><span class="rank">#10</span> <span class="model">Coming Soon</span></div>
   </div>
 </div>
 
 <!-- HEADER -->
 <header class="header">
   <div class="header-left">
+    <!-- Shield Arena Logo -->
     <svg class="logo-mark" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outer arena ring -->
       <circle cx="26" cy="26" r="24" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.3"/>
       <circle cx="26" cy="26" r="20" stroke="#00e5ff" stroke-width="1" fill="none" opacity="0.15"/>
+      <!-- Small arena "seats" dots around ring -->
       <circle cx="26" cy="3" r="1.5" fill="#00e5ff" opacity="0.5"/>
       <circle cx="45" cy="14" r="1.5" fill="#00e5ff" opacity="0.5"/>
       <circle cx="49" cy="26" r="1.5" fill="#00e5ff" opacity="0.5"/>
@@ -1100,8 +1113,10 @@
       <circle cx="7" cy="38" r="1.5" fill="#00e5ff" opacity="0.5"/>
       <circle cx="3" cy="26" r="1.5" fill="#00e5ff" opacity="0.5"/>
       <circle cx="7" cy="14" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <!-- Shield in center -->
       <path d="M26 12 L36 18 L36 30 C36 36 26 42 26 42 C26 42 16 36 16 30 L16 18 Z"
             fill="rgba(0,229,255,0.1)" stroke="#00e5ff" stroke-width="2" stroke-linejoin="round"/>
+      <!-- Checkmark inside shield -->
       <polyline points="21,27 24.5,31 31,22" stroke="#00e5ff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <div class="logo-text">
