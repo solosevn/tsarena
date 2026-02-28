@@ -1684,7 +1684,12 @@
     const statusEl = document.getElementById('wordStatus');
     const submitBtn = document.getElementById('submitVoteBtn');
 
-    if (words >= 10 && words <= 50) {
+    if (words === 0) {
+      wordCountEl.classList.remove('invalid', 'valid');
+      statusEl.textContent = '';
+      statusEl.style.color = '';
+      submitBtn.disabled = false;
+    } else if (words >= 10 && words <= 50) {
       wordCountEl.classList.remove('invalid');
       wordCountEl.classList.add('valid');
       statusEl.textContent = ' Ready';
