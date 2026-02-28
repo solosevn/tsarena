@@ -1074,6 +1074,38 @@
     font-size: 13px;
     color: var(--text-dim);
   }
+
+    .vote-both-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .vote-btn-both {
+      background: transparent;
+      border: 1px solid var(--border-dim);
+      color: var(--text-dim);
+      padding: 8px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+    .vote-btn-both:hover:not(:disabled) {
+      border-color: var(--accent-primary);
+      color: var(--text-primary);
+      background: rgba(0, 212, 255, 0.05);
+    }
+    .vote-btn-both.selected {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      background: rgba(0, 212, 255, 0.1);
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+    }
+    .vote-btn-both:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   </style>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 </head>
@@ -1303,6 +1335,17 @@
           Vote for B
         </button>
       </div>
+    </div>
+    
+    <div class="vote-both-row">
+      <button class="vote-btn-both" id="voteBOTH_GOOD" onclick="selectVote('both_good')" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: -2px;"><path d="M14 9V5a3 3 0 0 0-6 0v4"/><path d="M18 8h-6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-3a7 7 0 0 0-4-6.3z"/></svg>
+        Both are good
+      </button>
+      <button class="vote-btn-both" id="voteBOTH_BAD" onclick="selectVote('both_bad')" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: -2px;"><path d="M10 15v4a3 3 0 0 0 6 0v-4"/><path d="M6 16h6a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v3a7 7 0 0 0 4 6.3z"/></svg>
+        Both are bad
+      </button>
     </div>
     <div class="vote-explanation" id="voteExplanation">
       <label class="explanation-label">Why did you choose this response? (optional)</label>
@@ -1695,7 +1738,8 @@ async function handleOAuthSignIn(provider) {
     // Remove previous selection
     if (selectedVote) {
       document.getElementById(`vote${selectedVote.toUpperCase()}`).classList.remove('selected');
-      document.getElementById(`response${selectedVote.toUpperCase()}`).classList.remove('selected');
+      const prevRespEl = document.getElementById(`response${selectedVote.toUpperCase()}`);
+      if (prevRespEl) prevRespEl.classList.remove('selected');
     }
 
     selectedVote = choice;
@@ -1930,6 +1974,8 @@ async function handleOAuthSignIn(provider) {
     document.getElementById('voteA').disabled = false;
     document.getElementById('voteB').disabled = false;
     document.getElementById('voteTie').disabled = false;
+      document.getElementById('voteBOTH_GOOD').disabled = false;
+      document.getElementById('voteBOTH_BAD').disabled = false;
   }
 
   function disableVoteButtons() {
