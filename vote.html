@@ -1826,7 +1826,8 @@ async function handleOAuthSignIn(provider) {
       time_on_page: metrics.time_on_page,
       mouse_movements: metrics.mouse_movements,
       scroll_depth: metrics.scroll_depth,
-      device_fingerprint: visitorFingerprint
+      device_fingerprint: visitorFingerprint,
+        ip_address: userIpAddress
     };
 
     try {
@@ -2005,6 +2006,17 @@ async function handleOAuthSignIn(provider) {
 
   // Initialize Turnstile when page loads
   setTimeout(renderTurnstile, 1000);
+
+    // IP tracking for vote integrity (#12)
+    let userIpAddress = null;
+    async function fetchUserIp() {
+      try {
+        const resp = await fetch('https://api.ipify.org?format=json');
+        const data = await resp.json();
+        userIpAddress = data.ip;
+      } catch(e) { /* IP fetch failed, continue without it */ }
+    }
+    fetchUserIp();
 
 </script>
 
