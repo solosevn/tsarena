@@ -1075,6 +1075,7 @@
     color: var(--text-dim);
   }
   </style>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 </head>
 <body>
 
@@ -1215,6 +1216,9 @@
       <div class="auth-form-group">
         <label for="signupPasswordConfirm">Confirm Password</label>
         <input type="password" id="signupPasswordConfirm" placeholder="Confirm your password" required>
+      </div>
+            <div class="auth-form-group" style="margin-top: 12px;">
+        <div id="turnstile-widget"></div>
       </div>
       <div class="auth-form-group tos-group">
         <label class="tos-label">
@@ -1426,7 +1430,21 @@
     errorEl.textContent = '';
   }
 
-  async function handleOAuthSignIn(provider) {
+    let turnstileToken = null;
+  let turnstileWidgetId = null;
+
+  function renderTurnstile() {
+    if (typeof turnstile !== 'undefined' && document.getElementById('turnstile-widget')) {
+      turnstileWidgetId = turnstile.render('#turnstile-widget', {
+        sitekey: '0x4AAAAAACj1-HA26A5F1VNh',
+        theme: 'dark',
+        callback: function(token) { turnstileToken = token; },
+        'expired-callback': function() { turnstileToken = null; }
+      });
+    }
+  }
+
+async function handleOAuthSignIn(provider) {
     try {
       const { data, error } = supabaseClient.auth.signInWithOAuth({
         provider: provider,
@@ -1920,6 +1938,10 @@
       await initializeArena();
     }
   });
+
+  // Initialize Turnstile when page loads
+  setTimeout(renderTurnstile, 1000);
+
 </script>
 
 </body>
