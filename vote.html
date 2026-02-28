@@ -1737,25 +1737,22 @@ async function handleOAuthSignIn(provider) {
   function selectVote(choice) {
     // Remove previous selection
     if (selectedVote) {
-      document.getElementById(`vote${selectedVote.toUpperCase()}`).classList.remove('selected');
+      const prevVoteEl = document.getElementById(`vote${selectedVote.toUpperCase()}`);
+      if (prevVoteEl) prevVoteEl.classList.remove('selected');
       const prevRespEl = document.getElementById(`response${selectedVote.toUpperCase()}`);
       if (prevRespEl) prevRespEl.classList.remove('selected');
     }
 
     selectedVote = choice;
 
-    if (choice !== 'tie') {
-      document.getElementById(`vote${choice}`).classList.add('selected');
-      document.getElementById(`response${choice}`).classList.add('selected');
-    } else {
-      document.getElementById('voteTie').classList.add('selected');
-    }
+    // Add new selection
+    const newVoteEl = document.getElementById(`vote${choice.toUpperCase()}`);
+    if (newVoteEl) newVoteEl.classList.add('selected');
+    const newRespEl = document.getElementById(`response${choice.toUpperCase()}`);
+    if (newRespEl) newRespEl.classList.add('selected');
 
-    // Show explanation textarea
-    document.getElementById('voteExplanation').classList.add('show');
-    const _ta = document.getElementById('explanationText');
-    _ta.removeEventListener('input', updateWordCount);
-    _ta.addEventListener('input', updateWordCount);
+    // Show explanation section and enable submit
+    document.getElementById('voteExplanation').style.display = 'block';
     updateWordCount();
   }
 
