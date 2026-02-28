@@ -1626,12 +1626,8 @@ async function handleOAuthSignIn(provider) {
     document.getElementById('voteB').classList.remove('selected');
 
     try {
-      // Try to call edge function, fallback to direct query
-      let battle = await getNextBattleFromEdgeFunction();
-
-      if (!battle) {
-        battle = await getNextBattleFromDB();
-      }
+      // Direct DB query for battles (#19 - removed non-existent edge function)
+      let battle = await getNextBattleFromDB();
 
       if (!battle) {
         console.error('No battles available');
@@ -1662,62 +1658,8 @@ async function handleOAuthSignIn(provider) {
     }
   }
 
-  async function getNextBattleFromEdgeFunction() {
-    try {
-      const response = await fetch(`${SUPABASE_URL}/functions/v1/get-next-battle`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ user_id: currentUser?.id })
-      });
+  // Edge function removed (#19) - using direct DB query
 
-      if (response.ok) {
-        return await response.json();
-      }
-    } catch (error) {
-      console.log('Edge function not available, using fallback');
-    }
-    return null;
-  }
-
-  async function getNextBattleFromDB() {
-    try {
-      // Get random offset for variety
-      const offsetResponse = await supabase
-        .from('battles')
-        .select('id', { count: 'exact', head: true });
-
-      const totalBattles = offsetResponse.count || 1;
-      const randomOffset = Math.floor(Math.random() * Math.max(1, totalBattles - 1));
-
-      const { data, error } = await supabase
-        .from('battles')
-        .select('*, prompt:prompts(text, category), model_a:models!battles_model_a_id_fkey(id, name, lab), model_b:models!battles_model_b_id_fkey(id, name, lab)')
-        .eq('is_public', true)
-        .range(randomOffset, randomOffset)
-        .single();
-
-      if (error) throw error;
-
-      // Transform data to match expected structure
-      return {
-        id: data.id,
-        prompt_text: data.prompt?.text || '',
-        prompt_category: data.prompt?.category || '',
-        response_a: data.model_a_response || '',
-        response_b: data.model_b_response || '',
-        model_a: data.model_a,
-        model_b: data.model_b,
-        votes_a: data.votes_a || 0,
-        votes_b: data.votes_b || 0,
-        votes_tie: data.votes_tie || 0
-      };
-    } catch (error) {
-      console.error('Error fetching battle:', error);
-      return null;
-    }
   }
 
   
@@ -1865,41 +1807,24 @@ async function handleOAuthSignIn(provider) {
         ip_address: userIpAddress
     };
 
-    try {
-      // Try edge function first (pass user's JWT, not anon key)
-      const { data: { session } } = await supabase.auth.getSession();
-      const userToken = session?.access_token || SUPABASE_ANON_KEY;
-      const response = await fetch(`${SUPABASE_URL}/functions/v1/cast-vote`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${userToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(votePayload)
-      });
+    // Direct DB insert (#19 - removed non-existent edge function)
+    const { error: insertError } = await supabase
+      .from('votes')
+      .insert([{
+        battle_id: votePayload.battle_id,
+        user_id: votePayload.user_id,
+        vote_choice: votePayload.vote_choice,
+        vote_explanation: votePayload.vote_explanation,
+        time_on_page: votePayload.time_on_page,
+        mouse_movements: votePayload.mouse_movements,
+        scroll_depth: votePayload.scroll_depth,
+        device_fingerprint: votePayload.device_fingerprint,
+        ip_address: votePayload.ip_address,
+        created_at: new Date().toISOString()
+      }]);
 
-      if (!response.ok) {
-        throw new Error('Edge function failed');
-      }
-    } catch (error) {
-      // Fallback: Insert directly to DB
-      const { error: insertError } = await supabase
-        .from('votes')
-        .insert([{
-          battle_id: votePayload.battle_id,
-          user_id: votePayload.user_id,
-          vote_choice: votePayload.vote_choice,
-          vote_explanation: votePayload.vote_explanation,
-          time_on_page: votePayload.time_on_page,
-          mouse_movements: votePayload.mouse_movements,
-          scroll_depth: votePayload.scroll_depth,
-          device_fingerprint: votePayload.device_fingerprint,
-          created_at: new Date().toISOString()
-        }]);
-
-      if (insertError) {
-        console.error('Vote submission error:', insertError);
-      }
+    if (insertError) {
+      console.error('Vote submission error:', insertError);
     }
 
     // Show result reveal
