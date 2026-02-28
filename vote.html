@@ -1658,6 +1658,79 @@ async function handleOAuthSignIn(provider) {
     }
   }
 
+async function getNextBattleFromDB() {
+    try {
+      // Get random offset for variety
+      const offsetResponse = await supabase
+        .from('battles')
+        .select('id', { count: 'exact', head: true });
+
+      const totalBattles = offsetResponse.count || 1;
+      const randomOffset = Math.floor(Math.random() * Math.max(1, totalBattles - 1));
+
+      const { data, error } = await supabase
+        .from('battles')
+        .select('*, prompt:prompts(text, category), model_a:models!battles_model_a_id_fkey(id, name, lab), model_b:models!battles_model_b_id_fkey(id, name, lab)')
+        .eq('is_public', true)
+        .range(randomOffset, randomOffset)
+        .single();
+
+      if (error) throw error;
+
+      // Transform data to match expected structure
+      return {
+        id: data.id,
+        prompt_text: data.prompt?.text || '',
+        prompt_category: data.prompt?.category || '',
+        response_a: data.model_a_response || '',
+        response_b: data.model_b_response || '',
+        model_a: data.model_a,
+        model_b: data.model_b,
+        votes_a: data.votes_a || 0,
+        votes_b: data.votes_b || 0,
+        votes_tie: data.votes_tie || 0
+      };
+    } catch (error) {
+      console.error('Error fetching battle:', error);
+      return null;
+    }
+  }
+
+  
+    // ============================================================
+    // COUNTER DE-ANONYMIZATION (#14) - Formatting Noise
+    // ============================================================
+    
+    // Normalize response text to reduce model fingerprinting
+    function normalizeResponse(text) {
+      if (!text) return '';
+      let t = text;
+      // Normalize em-dashes and en-dashes to hyphens
+      t = t.replace(/[\u2013\u2014]/g, '-');
+      // Normalize fancy quotes to straight quotes
+      t = t.replace(/[\u201C\u201D]/g, '"');
+      t = t.replace(/[\u2018\u2019]/g, "'");
+      // Normalize ellipsis character to three dots
+      t = t.replace(/\u2026/g, '...');
+      // Normalize bullet characters to standard dash
+      t = t.replace(/[\u2022\u2023\u25E6\u2043\u2219]/g, '-');
+      // Strip leading numbering patterns (1. 2. 3.) that differ between models
+      t = t.replace(/^(\d+[\.\)\:]\s)/gm, '- ');
+      // Normalize multiple newlines to max 2
+      t = t.replace(/\n{3,}/g, '\n\n');
+      // Trim trailing whitespace per line
+      t = t.replace(/[ \t]+$/gm, '');
+      return t;
+    }
+    
+    // Add noise to vote counters to prevent correlation
+    function addCounterNoise(count) {
+      if (count <= 0) return 0;
+      // Add random noise of +/- up to 2, floor at 1
+      const noise = Math.floor(Math.random() * 5) - 2;
+      return Math.max(1, count + noise);
+    }
+
   // Edge function removed (#19) - using direct DB query
 
   
