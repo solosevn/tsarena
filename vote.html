@@ -1075,7 +1075,8 @@
     color: var(--text-dim);
   }
   </style>
-</head>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  </head>
 <body>
 
 <!-- TICKER 1: TRS SCORES -->
@@ -1216,7 +1217,10 @@
         <label for="signupPasswordConfirm">Confirm Password</label>
         <input type="password" id="signupPasswordConfirm" placeholder="Confirm your password" required>
       </div>
-      <div class="auth-form-group tos-group">
+                  <div class="auth-form-group" style="margin-top: 12px;">
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAAACj1-HA26A5F1VNh" data-theme="dark" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired"></div>
+            </div>
+            <div class="auth-form-group tos-group">
         <label class="tos-label">
           <input type="checkbox" id="tosAgree" required>
           <span>I agree to the <a href="/terms.html" target="_blank">Terms of Service</a> and have read the <a href="/privacy.html" target="_blank">Privacy Policy</a></span>
