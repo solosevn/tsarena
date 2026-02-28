@@ -1720,15 +1720,50 @@ async function handleOAuthSignIn(provider) {
     }
   }
 
-  function renderBattle(battle) {
+  
+    // ============================================================
+    // COUNTER DE-ANONYMIZATION (#14) - Formatting Noise
+    // ============================================================
+    
+    // Normalize response text to reduce model fingerprinting
+    function normalizeResponse(text) {
+      if (!text) return '';
+      let t = text;
+      // Normalize em-dashes and en-dashes to hyphens
+      t = t.replace(/[\u2013\u2014]/g, '-');
+      // Normalize fancy quotes to straight quotes
+      t = t.replace(/[\u201C\u201D]/g, '"');
+      t = t.replace(/[\u2018\u2019]/g, "'");
+      // Normalize ellipsis character to three dots
+      t = t.replace(/\u2026/g, '...');
+      // Normalize bullet characters to standard dash
+      t = t.replace(/[\u2022\u2023\u25E6\u2043\u2219]/g, '-');
+      // Strip leading numbering patterns (1. 2. 3.) that differ between models
+      t = t.replace(/^(\d+[\.\)\:]\s)/gm, '- ');
+      // Normalize multiple newlines to max 2
+      t = t.replace(/\n{3,}/g, '\n\n');
+      // Trim trailing whitespace per line
+      t = t.replace(/[ \t]+$/gm, '');
+      return t;
+    }
+    
+    // Add noise to vote counters to prevent correlation
+    function addCounterNoise(count) {
+      if (count <= 0) return 0;
+      // Add random noise of +/- up to 2, floor at 1
+      const noise = Math.floor(Math.random() * 5) - 2;
+      return Math.max(1, count + noise);
+    }
+
+    function renderBattle(battle) {
     document.getElementById('battleId').textContent = battle.id.substring(0, 8).toUpperCase();
     document.getElementById('scenarioText').textContent = battle.prompt_text;
     document.getElementById('scenarioCategory').textContent = battle.prompt_category;
-    document.getElementById('responseTextA').innerHTML = `<p>${battle.response_a}</p>`;
-    document.getElementById('responseTextB').innerHTML = `<p>${battle.response_b}</p>`;
+    document.getElementById('responseTextA').innerHTML = `<p>${normalizeResponse(battle.response_a)}</p>`;
+    document.getElementById('responseTextB').innerHTML = `<p>${normalizeResponse(battle.response_b)}</p>`;
 
     const totalVotes = (battle.votes_a || 0) + (battle.votes_b || 0) + (battle.votes_tie || 0);
-    document.getElementById('totalVotes').textContent = totalVotes;
+    document.getElementById('totalVotes').textContent = addCounterNoise(totalVotes);
   }
 
   // ============================================================
