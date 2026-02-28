@@ -3,149 +3,156 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacy Policy - The Safety Arena</title>
+  <title>Privacy Policy | The Safety Arena</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #0a0a0f;
-      color: #e0e0e0;
-      line-height: 1.7;
-      padding: 40px 20px;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    h1 {
-      font-size: 2rem;
-      color: #00e5ff;
-      margin-bottom: 8px;
-    }
-    .subtitle {
-      color: #888;
-      font-size: 0.95rem;
-      margin-bottom: 32px;
-    }
-    h2 {
-      font-size: 1.25rem;
-      color: #00e5ff;
-      margin-top: 32px;
-      margin-bottom: 12px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #1a1a2e;
-    }
-    p, li {
-      color: #ccc;
-      margin-bottom: 12px;
-    }
-    ul {
-      padding-left: 24px;
-      margin-bottom: 16px;
-    }
-    li {
-      margin-bottom: 6px;
-    }
-    a {
-      color: #00e5ff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .back-link {
-      display: inline-block;
-      margin-bottom: 24px;
-      color: #00e5ff;
-      font-size: 0.9rem;
-    }
-    strong {
-      color: #e0e0e0;
-    }
+    body { background: #060d1a; color: #e8eaed; font-family: 'Inter', sans-serif; line-height: 1.7; }
+    .page-wrapper { display: flex; max-width: 1100px; margin: 0 auto; padding: 40px 20px; gap: 40px; }
+    .sidebar { position: sticky; top: 40px; align-self: flex-start; width: 220px; flex-shrink: 0; }
+    .sidebar-inner { background: #0d1520; border: 1px solid #1a2332; border-radius: 12px; padding: 20px; }
+    .sidebar-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #00e5ff; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #1a2332; }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li { margin-bottom: 2px; }
+    .sidebar-nav a { display: block; padding: 6px 12px; font-size: 13px; color: #8899aa; text-decoration: none; border-left: 3px solid transparent; border-radius: 0 6px 6px 0; transition: all 0.2s; }
+    .sidebar-nav a:hover { color: #c0ccdd; background: rgba(0,229,255,0.05); }
+    .sidebar-nav a.active { color: #00e5ff; border-left-color: #00e5ff; background: rgba(0,229,255,0.08); font-weight: 500; }
+    .content { flex: 1; min-width: 0; }
+    .back-link { display: inline-block; margin-bottom: 24px; color: #00e5ff; font-size: 14px; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+    header { text-align: center; margin-bottom: 48px; padding-top: 20px; }
+    header h1 { font-size: 2rem; margin-bottom: 8px; color: #00e5ff; }
+    header p { color: #98a4ae; font-size: 14px; }
+    a { color: #00e5ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    h2 { font-size: 1.3rem; color: #e8eaed; margin-top: 36px; margin-bottom: 12px; border-bottom: 1px solid #1a2a3a; padding-bottom: 8px; scroll-margin-top: 20px; }
+    p, li { color: #c0c8d0; margin-bottom: 12px; }
+    ul { padding-left: 24px; margin-bottom: 16px; }
+    li { margin-bottom: 8px; }
+    strong { color: #e0e0e0; }
+    footer { text-align: center; padding: 32px; color: #546e7a; font-size: 13px; border-top: 1px solid #1a2a3a; margin-top: 48px; }
+    @media (max-width: 768px) { .sidebar { display: none; } .page-wrapper { padding: 20px 16px; } }
   </style>
 </head>
 <body>
-  <div class="container">
-    <a href="/vote.html" class="back-link">← Back to The Safety Arena</a>
-    <h1>Privacy Policy</h1>
-    <p class="subtitle">Last updated: February 28, 2026</p>
+  <div class="page-wrapper">
+    <nav class="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-title">On This Page</div>
+        <ul class="sidebar-nav">
+          <li><a href="#introduction" class="active">Introduction</a></li>
+          <li><a href="#info-collect">Information We Collect</a></li>
+          <li><a href="#how-use">How We Use Your Info</a></li>
+          <li><a href="#not-do">What We Do NOT Do</a></li>
+          <li><a href="#ai-tech">AI Technologies</a></li>
+          <li><a href="#storage">Data Storage & Security</a></li>
+          <li><a href="#cookies">Cookies & Tracking</a></li>
+          <li><a href="#sharing">Data Sharing</a></li>
+          <li><a href="#rights">Your Rights & Choices</a></li>
+          <li><a href="#children">Children's Privacy</a></li>
+          <li><a href="#international">International Users</a></li>
+          <li><a href="#changes">Changes to This Policy</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+        </ul>
+      </div>
+    </nav>
+    <main class="content">
+      <a href="/vote.html" class="back-link">&larr; Back to The Safety Arena</a>
+      <header>
+        <h1>Privacy Policy</h1>
+        <p>The Safety Arena &mdash; Powered by TrainingRun.AI</p>
+      </header>
 
-    <h2>1. Introduction</h2>
-    <p>The Safety Arena ("we," "us," or "our") operates tsarena.ai. This Privacy Policy explains what information we collect, how we use it, and your choices regarding your data. We are committed to transparency and minimal data collection.</p>
+      <h2 id="introduction">1. Introduction</h2>
+      <p>The Safety Arena ("we," "us," or "our") operates tsarena.ai. This Privacy Policy explains what information we collect, how we use it, and your choices regarding your data. We are committed to transparency and minimal data collection.</p>
 
-    <h2>2. Information We Collect</h2>
-    <p><strong>Account Information:</strong> When you create an account, we collect your email address and a hashed password. If you sign in via Google or X (Twitter) OAuth, we receive your public profile information (name and email) from those providers. We do not receive or store your OAuth passwords.</p>
-    <p><strong>Voting Data:</strong> When you cast a vote, we record your vote choice, the models compared, the prompt shown, and any optional reasoning you provide. We also record the time you spent reviewing responses before voting.</p>
-    <p><strong>Device and Browser Information:</strong> We use FingerprintJS to generate a device fingerprint for vote integrity purposes. This helps us detect duplicate accounts and coordinated manipulation. We also collect your IP address when you vote to identify potential bot farms or coordinated voting from a single network.</p>
-    <p><strong>Basic Analytics:</strong> We collect basic engagement data including scroll depth and time on page to help us improve the voting experience and detect automated behavior.</p>
+      <h2 id="info-collect">2. Information We Collect</h2>
+      <p><strong>Account Information:</strong> When you create an account, we collect your email address and a hashed password. If you sign in via Google or X (Twitter) OAuth, we receive your public profile information (name and email) from those providers. We do not receive or store your OAuth passwords.</p>
+      <p><strong>Voting Data:</strong> When you cast a vote, we record your vote choice, the models compared, the prompt shown, and any optional reasoning you provide. We also record the time you spent reviewing responses before voting.</p>
+      <p><strong>Device and Browser Information:</strong> We use FingerprintJS to generate a device fingerprint for vote integrity purposes. This helps us detect duplicate accounts and coordinated manipulation. We also collect your IP address when you vote to identify potential bot farms or coordinated voting from a single network.</p>
+      <p><strong>Basic Analytics:</strong> We collect basic engagement data including scroll depth and time on page to help us improve the voting experience and detect automated behavior.</p>
 
-    <h2>3. How We Use Your Information</h2>
-    <p>We use collected information for the following purposes:</p>
-    <ul>
-      <li><strong>Vote Integrity:</strong> To ensure one real human gets one real vote, detect bot activity, and prevent coordinated manipulation of safety rankings.</li>
-      <li><strong>Platform Operation:</strong> To authenticate users, process votes, and generate AI safety leaderboards and benchmarks.</li>
-      <li><strong>Transparency and Research:</strong> To publish anonymized, aggregated voting data and safety benchmarks. Individual votes are never published with identifying information.</li>
-      <li><strong>Platform Improvement:</strong> To improve the voting experience, fix bugs, and develop new features.</li>
-    </ul>
+      <h2 id="how-use">3. How We Use Your Information</h2>
+      <p>We use collected information for the following purposes:</p>
+      <ul>
+        <li><strong>Vote Integrity:</strong> To ensure one real human gets one real vote, detect bot activity, and prevent coordinated manipulation of safety rankings.</li>
+        <li><strong>Platform Operation:</strong> To authenticate users, process votes, and generate AI safety leaderboards and benchmarks.</li>
+        <li><strong>Transparency and Research:</strong> To publish anonymized, aggregated voting data and safety benchmarks. Individual votes are never published with identifying information.</li>
+        <li><strong>Platform Improvement:</strong> To improve the voting experience, fix bugs, and develop new features.</li>
+      </ul>
 
-    <h2>4. What We Do NOT Do</h2>
-    <p>We want to be explicit about what we will never do with your data:</p>
-    <ul>
-      <li>We do <strong>not</strong> sell your personal information to anyone.</li>
-      <li>We do <strong>not</strong> display advertisements or share data with advertisers.</li>
-      <li>We do <strong>not</strong> send marketing emails or promotional communications.</li>
-      <li>We do <strong>not</strong> share your individual voting data with AI companies whose models are being evaluated.</li>
-      <li>We do <strong>not</strong> use your data to train AI models.</li>
-    </ul>
+      <h2 id="not-do">4. What We Do NOT Do</h2>
+      <p>We want to be explicit about what we will never do with your data:</p>
+      <ul>
+        <li>We do <strong>not</strong> sell your personal information to anyone.</li>
+        <li>We do <strong>not</strong> display advertisements or share data with advertisers.</li>
+        <li>We do <strong>not</strong> send marketing emails or promotional communications.</li>
+        <li>We do <strong>not</strong> share your individual voting data with AI companies whose models are being evaluated.</li>
+        <li>We do <strong>not</strong> use your data to train AI models.</li>
+      </ul>
 
-    <h2>5. AI Technologies</h2>
-    <p>The Safety Arena evaluates AI model responses through blind pairwise comparisons. When you participate in a battle, two AI models generate responses to the same safety-related prompt. You see these responses anonymously (labeled "Response A" and "Response B") and vote on which is safer. Model identities are revealed only after you vote.</p>
-    <p>We do not use AI to make decisions about your account or voting rights. Vote integrity checks use rule-based systems (time thresholds, fingerprint matching, IP correlation), not AI classifiers.</p>
+      <h2 id="ai-tech">5. AI Technologies</h2>
+      <p>The Safety Arena evaluates AI model responses through blind pairwise comparisons. When you participate in a battle, two AI models generate responses to the same safety-related prompt. You see these responses anonymously (labeled "Response A" and "Response B") and vote on which is safer. Model identities are revealed only after you vote.</p>
+      <p>We do not use AI to make decisions about your account or voting rights. Vote integrity checks use rule-based systems (time thresholds, fingerprint matching, IP correlation), not AI classifiers.</p>
 
-    <h2>6. Data Storage and Security</h2>
-    <p>Your data is stored on Supabase, a secure cloud database platform. Passwords are hashed and never stored in plain text. We use HTTPS for all data transmission. Access to the database is restricted to authorized administrators only.</p>
-    <p>While we implement reasonable security measures, no system is 100% secure. We will notify affected users promptly in the event of a data breach.</p>
+      <h2 id="storage">6. Data Storage and Security</h2>
+      <p>Your data is stored on Supabase, a secure cloud database platform. Passwords are hashed and never stored in plain text. We use HTTPS for all data transmission. Access to the database is restricted to authorized administrators only.</p>
+      <p>While we implement reasonable security measures, no system is 100% secure. We will notify affected users promptly in the event of a data breach.</p>
 
-    <h2>7. Cookies and Tracking Technologies</h2>
-    <p>We use minimal cookies and tracking:</p>
-    <ul>
-      <li><strong>Authentication Cookies:</strong> Essential cookies to keep you signed in during your session.</li>
-      <li><strong>FingerprintJS:</strong> A device fingerprinting library used solely for vote integrity. It does not track you across other websites.</li>
-    </ul>
-    <p>We do not use advertising cookies, social media tracking pixels, or third-party analytics services that track you across the web.</p>
+      <h2 id="cookies">7. Cookies and Tracking Technologies</h2>
+      <p>We use minimal cookies and tracking:</p>
+      <ul>
+        <li><strong>Authentication Cookies:</strong> Essential cookies to keep you signed in during your session.</li>
+        <li><strong>FingerprintJS:</strong> A device fingerprinting library used solely for vote integrity. It does not track you across other websites.</li>
+      </ul>
+      <p>We do not use advertising cookies, social media tracking pixels, or third-party analytics services that track you across the web.</p>
 
-    <h2>8. Data Sharing</h2>
-    <p>We share data only in these limited circumstances:</p>
-    <ul>
-      <li><strong>Anonymized Aggregates:</strong> We publish aggregated voting statistics and AI safety leaderboards. These never contain personally identifiable information.</li>
-      <li><strong>Service Providers:</strong> We use Supabase (database), GitHub Pages (hosting), Cloudflare (security/CDN), and FingerprintJS (device fingerprinting) to operate the platform. These providers process data on our behalf under their respective privacy policies.</li>
-      <li><strong>Legal Requirements:</strong> We may disclose information if required by law, legal process, or to protect the rights and safety of our users or the public.</li>
-    </ul>
+      <h2 id="sharing">8. Data Sharing</h2>
+      <p>We share data only in these limited circumstances:</p>
+      <ul>
+        <li><strong>Anonymized Aggregates:</strong> We publish aggregated voting statistics and AI safety leaderboards. These never contain personally identifiable information.</li>
+        <li><strong>Service Providers:</strong> We use Supabase (database), GitHub Pages (hosting), Cloudflare (security/CDN), and FingerprintJS (device fingerprinting) to operate the platform. These providers process data on our behalf under their respective privacy policies.</li>
+        <li><strong>Legal Requirements:</strong> We may disclose information if required by law, legal process, or to protect the rights and safety of our users or the public.</li>
+      </ul>
 
-    <h2>9. Your Rights and Choices</h2>
-    <p>You have the following rights regarding your data:</p>
-    <ul>
-      <li><strong>Access:</strong> You can request a copy of the personal data we hold about you.</li>
-      <li><strong>Deletion:</strong> You can request deletion of your account and associated personal data.</li>
-      <li><strong>Correction:</strong> You can request correction of inaccurate personal data.</li>
-      <li><strong>Export:</strong> You can request your data in a portable format.</li>
-    </ul>
-    <p>To exercise any of these rights, contact us at <a href="mailto:david@trainingrun.ai">david@trainingrun.ai</a>. We will respond within 30 days.</p>
+      <h2 id="rights">9. Your Rights and Choices</h2>
+      <p>You have the following rights regarding your data:</p>
+      <ul>
+        <li><strong>Access:</strong> You can request a copy of the personal data we hold about you.</li>
+        <li><strong>Deletion:</strong> You can request deletion of your account and associated personal data.</li>
+        <li><strong>Correction:</strong> You can request correction of inaccurate personal data.</li>
+        <li><strong>Export:</strong> You can request your data in a portable format.</li>
+      </ul>
+      <p>To exercise any of these rights, contact us at <a href="mailto:david@trainingrun.ai">david@trainingrun.ai</a>. We will respond within 30 days.</p>
 
-    <h2>10. Children's Privacy</h2>
-    <p>The Safety Arena is not intended for users under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that we have collected data from a child under 13, we will delete it promptly. If you believe a child has provided us with personal information, please contact us.</p>
+      <h2 id="children">10. Children's Privacy</h2>
+      <p>The Safety Arena is not intended for users under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that we have collected data from a child under 13, we will delete it promptly. If you believe a child has provided us with personal information, please contact us.</p>
 
-    <h2>11. International Users</h2>
-    <p>The Safety Arena is operated from the United States. If you are accessing the platform from outside the United States, please be aware that your data may be transferred to and processed in the United States. By using The Safety Arena, you consent to this transfer.</p>
+      <h2 id="international">11. International Users</h2>
+      <p>The Safety Arena is operated from the United States. If you are accessing the platform from outside the United States, please be aware that your data may be transferred to and processed in the United States. By using The Safety Arena, you consent to this transfer.</p>
 
-    <h2>12. Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. We will notify users of material changes by posting a notice on the platform. Your continued use of The Safety Arena after changes are posted constitutes acceptance of the updated policy.</p>
+      <h2 id="changes">12. Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time. We will notify users of material changes by posting a notice on the platform. Your continued use of The Safety Arena after changes are posted constitutes acceptance of the updated policy.</p>
 
-    <h2>13. Contact Us</h2>
-    <p>If you have questions about this Privacy Policy or our data practices, contact us at:</p>
-    <p><strong>Email:</strong> <a href="mailto:david@trainingrun.ai">david@trainingrun.ai</a><br>
-    <strong>Project:</strong> The Safety Arena<br>
-    <strong>Organization:</strong> Training Run (<a href="https://trainingrun.ai">trainingrun.ai</a>)</p>
+      <h2 id="contact">13. Contact Us</h2>
+      <p>If you have questions about this Privacy Policy or our data practices, contact us at:</p>
+      <p><strong>Email:</strong> <a href="mailto:david@trainingrun.ai">david@trainingrun.ai</a><br>
+      <strong>Project:</strong> The Safety Arena<br>
+      <strong>Organization:</strong> Training Run (<a href="https://trainingrun.ai">trainingrun.ai</a>)</p>
+
+      <footer>&copy; 2026 The Safety Arena &mdash; Independent AI Safety Research</footer>
+    </main>
   </div>
+  <script>
+    const sections = document.querySelectorAll('h2[id]');
+    const navLinks = document.querySelectorAll('.sidebar-nav a');
+    function updateActiveLink() {
+      let current = '';
+      sections.forEach(s => { if (s.getBoundingClientRect().top <= 80) current = s.id; });
+      navLinks.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+    }
+    window.addEventListener('scroll', updateActiveLink);
+    navLinks.forEach(l => { l.addEventListener('click', e => { e.preventDefault(); document.querySelector(l.getAttribute('href')).scrollIntoView({ behavior: 'smooth', block: 'start' }); }); });
+  </script>
 </body>
 </html>
