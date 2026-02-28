@@ -338,6 +338,12 @@
     .auth-btn.twitter:hover {
       background: #1a1a1a;
     }
+
+    .tos-group { margin-top: 12px; }
+    .tos-label { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text-secondary); cursor: pointer; line-height: 1.4; }
+    .tos-label input[type='checkbox'] { margin-top: 3px; accent-color: var(--cyan); cursor: pointer; flex-shrink: 0; }
+    .tos-label a { color: var(--cyan); text-decoration: none; }
+    .tos-label a:hover { text-decoration: underline; }
   .auth-error {
     padding: 12px;
     background: rgba(255, 23, 68, 0.1);
@@ -1210,6 +1216,12 @@
         <label for="signupPasswordConfirm">Confirm Password</label>
         <input type="password" id="signupPasswordConfirm" placeholder="Confirm your password" required>
       </div>
+      <div class="auth-form-group tos-group">
+        <label class="tos-label">
+          <input type="checkbox" id="tosAgree" required>
+          <span>I agree to the <a href="/terms.html" target="_blank">Terms of Service</a> and have read the <a href="/privacy.html" target="_blank">Privacy Policy</a></span>
+        </label>
+      </div>
       <button type="submit" class="auth-btn">Create Account</button>
     </form>
 
@@ -1457,6 +1469,12 @@
 
     if (password !== passwordConfirm) {
       showAuthError('Passwords do not match');
+      return;
+    }
+
+    const tosChecked = document.getElementById('tosAgree').checked;
+    if (!tosChecked) {
+      showAuthError('You must agree to the Terms of Service to create an account');
       return;
     }
 
