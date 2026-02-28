@@ -1711,7 +1711,7 @@ async function handleOAuthSignIn(provider) {
       showArena();
     }
 
-    function showArena() {
+    async function showArena() {
       document.getElementById('arenaContent').style.display = 'block';
       document.getElementById('userInfo').style.display = 'flex';
       document.getElementById('userEmail').textContent = currentUser ? currentUser.email : '';
