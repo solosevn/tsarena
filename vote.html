@@ -1105,6 +1105,7 @@
     .vote-btn-both:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+    }
   /* Phone Verification Modal (#6) */
   .phone-verify-overlay { display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(6,13,26,0.95);backdrop-filter:blur(8px);align-items:center;justify-content:center;z-index:1000; }
   .phone-verify-modal { background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:40px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.4);text-align:center; }
@@ -1295,9 +1296,9 @@
 <!-- PHONE VERIFICATION MODAL (#6) -->
 <div class="phone-verify-overlay" id="phoneVerifyModal" style="display: none;">
   <div class="phone-verify-modal">
-    <div class="shield-icon">ð¡ï¸</div>
+    <div class="shield-icon">&#x1F6E1;&#xFE0F;</div>
     <h2>Verify Your Phone</h2>
-    <p class="subtitle">One last step before voting. We verify every voterâs phone number to ensure one real human, one real vote.</p>
+    <p class="subtitle">One last step before voting. We verify every voter's phone number to ensure one real human, one real vote.</p>
     <div class="phone-step active" id="phoneStep1">
       <div class="phone-input-group">
         <input type="tel" id="phoneNumber" placeholder="+1 (555) 123-4567" autocomplete="tel">
@@ -1310,7 +1311,7 @@
         <input type="text" id="otpCode" class="otp-input" maxlength="6" placeholder="000000" autocomplete="one-time-code">
       </div>
       <button class="phone-verify-btn" id="verifyOtpBtn" onclick="verifyPhoneOtp()">Verify & Enter Arena</button>
-      <p style="margin-top:12px;"><a href="#" onclick="resendOtp();return false;" style="color:var(--cyan);font-size:13px;">Resend code</a> Â· <a href="#" onclick="changePhone();return false;" style="color:var(--text-dim);font-size:13px;">Change number</a></p>
+      <p style="margin-top:12px;"><a href="#" onclick="resendOtp();return false;" style="color:var(--cyan);font-size:13px;">Resend code</a> &middot; <a href="#" onclick="changePhone();return false;" style="color:var(--text-dim);font-size:13px;">Change number</a></p>
     </div>
     <div class="phone-verify-error" id="phoneVerifyError"></div>
     <p class="phone-verify-note">Your number is used only for verification and is never shared. This is how we keep every vote real.</p>
