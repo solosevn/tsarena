@@ -1042,7 +1042,7 @@
     .footer-right a { font-size: 11px; }
   }
 
-  /* Back button — matches trainingrun.ai style */
+  /* Back button â matches trainingrun.ai style */
   .back-btn {
     position: fixed;
     top: 160px;
@@ -1214,14 +1214,14 @@
   </nav>
   <div class="user-info" id="userInfo" style="display: none;">
     <div class="verified-badge">
-      <span>✓</span>
+      <span>â</span>
       <span>Verified Voter</span>
     </div>
     <div class="user-email" id="userEmail"></div>
     <button class="logout-btn" onclick="handleLogout()">Logout</button>
   </div>
 </header>
-<a href="#" class="back-btn" onclick="history.back(); return false;">← Back</a>
+<a href="#" class="back-btn" onclick="history.back(); return false;">â Back</a>
 
 
 <!-- AUTH MODAL OVERLAY -->
@@ -1288,16 +1288,16 @@
       <span>G</span> Continue with Google
     </button>
     <button class="auth-btn twitter" id="twitterSignInBtn" style="margin-top: 8px;" onclick="handleOAuthSignIn('twitter')">
-      <span>𝕏</span> Continue with X
+      <span>ð</span> Continue with X
     </button>
   </div>
 </div>
 <!-- PHONE VERIFICATION MODAL (#6) -->
 <div class="phone-verify-overlay" id="phoneVerifyModal" style="display: none;">
   <div class="phone-verify-modal">
-    <div class="shield-icon">🛡️</div>
+    <div class="shield-icon">ð¡ï¸</div>
     <h2>Verify Your Phone</h2>
-    <p class="subtitle">One last step before voting. We verify every voter’s phone number to ensure one real human, one real vote.</p>
+    <p class="subtitle">One last step before voting. We verify every voterâs phone number to ensure one real human, one real vote.</p>
     <div class="phone-step active" id="phoneStep1">
       <div class="phone-input-group">
         <input type="tel" id="phoneNumber" placeholder="+1 (555) 123-4567" autocomplete="tel">
@@ -1310,7 +1310,7 @@
         <input type="text" id="otpCode" class="otp-input" maxlength="6" placeholder="000000" autocomplete="one-time-code">
       </div>
       <button class="phone-verify-btn" id="verifyOtpBtn" onclick="verifyPhoneOtp()">Verify & Enter Arena</button>
-      <p style="margin-top:12px;"><a href="#" onclick="resendOtp();return false;" style="color:var(--cyan);font-size:13px;">Resend code</a> · <a href="#" onclick="changePhone();return false;" style="color:var(--text-dim);font-size:13px;">Change number</a></p>
+      <p style="margin-top:12px;"><a href="#" onclick="resendOtp();return false;" style="color:var(--cyan);font-size:13px;">Resend code</a> Â· <a href="#" onclick="changePhone();return false;" style="color:var(--text-dim);font-size:13px;">Change number</a></p>
     </div>
     <div class="phone-verify-error" id="phoneVerifyError"></div>
     <p class="phone-verify-note">Your number is used only for verification and is never shared. This is how we keep every vote real.</p>
@@ -1412,8 +1412,8 @@
     </div>
     <span id="votesRemaining" style="display:none"></span><p class="progress-text" id="progressText">0 of 30 battles completed</p>
   <div style="text-align:center;padding:24px 0 8px;">
-    <button onclick="loadNextBattle()" style="background:#00d4ff;color:#0a0a0f;border:none;padding:14px 32px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:.5px;">Next Battle →</button>
-    <a href="index.html" style="display:inline-block;margin-left:12px;padding:14px 28px;border:1px solid #444;border-radius:8px;color:#888;font-size:14px;text-decoration:none;">← Home</a>
+    <button onclick="loadNextBattle()" style="background:#00d4ff;color:#0a0a0f;border:none;padding:14px 32px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:.5px;">Next Battle â</button>
+    <a href="index.html" style="display:inline-block;margin-left:12px;padding:14px 28px;border:1px solid #444;border-radius:8px;color:#888;font-size:14px;text-decoration:none;">â Home</a>
   </div>
   </div>
 </main>
@@ -1706,7 +1706,7 @@ async function handleOAuthSignIn(provider) {
       document.getElementById('userInfo').style.display = 'flex';
       document.getElementById('userEmail').textContent = currentUser ? currentUser.email : '';
       var badge = document.querySelector('.verified-badge span:last-child');
-      if (badge && isPhoneVerified(currentUser)) badge.textContent = 'Verified Voter • Phone';
+      if (badge && isPhoneVerified(currentUser)) badge.textContent = 'Verified Voter â¢ Phone';
       var fp = await fpPromise;
       var result = await fp.get();
       visitorFingerprint = result.visitorId;
@@ -1728,7 +1728,6 @@ async function handleOAuthSignIn(provider) {
       // Phone is verified - proceed to arena
       await showArena();
     }
-  }
 
   // ============================================================
   // BATTLE LOADING & RENDERING
