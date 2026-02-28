@@ -1496,6 +1496,11 @@ async function handleOAuthSignIn(provider) {
       return;
     }
 
+    if (!turnstileToken) {
+      showAuthError('Please complete the CAPTCHA verification.');
+      return;
+    }
+
     showLoadingState();
 
     supabase.auth.signUp({ email, password })
