@@ -1748,6 +1748,22 @@ async function handleOAuthSignIn(provider) {
   async function submitVote() {
     if (!selectedVote || !currentBattle) return;
 
+    // Account age threshold check (#7)
+    try {
+      const { data: { user: ageCheckUser } } = await supabase.auth.getUser();
+      if (ageCheckUser && ageCheckUser.created_at) {
+        const accountCreated = new Date(ageCheckUser.created_at);
+        const daysSinceCreation = (Date.now() - accountCreated.getTime()) / (1000 * 60 * 60 * 24);
+        const MIN_ACCOUNT_AGE_DAYS = 0; // Set to 1-30 to enforce; 0 = disabled for launch
+        if (MIN_ACCOUNT_AGE_DAYS > 0 && daysSinceCreation < MIN_ACCOUNT_AGE_DAYS) {
+          const daysLeft = Math.ceil(MIN_ACCOUNT_AGE_DAYS - daysSinceCreation);
+          document.getElementById('explanationText').placeholder = 'Your account must be at least ' + MIN_ACCOUNT_AGE_DAYS + ' day(s) old to vote. Please wait ' + daysLeft + ' more day(s).';
+          return;
+        }
+      }
+    } catch(ageErr) { /* If age check fails, allow vote */ }
+
+
     const explanation = document.getElementById('explanationText').value;
     const honeypotValue = document.getElementById('honeypot-website').value;
 
