@@ -1,0 +1,161 @@
+{
+  "_meta": {
+    "description": "TSArena model-to-company mapping. Single source of truth for logos, colors, and branding.",
+    "updated": "2026-03-01",
+    "usage": "Fetched by vote.html and any future TSArena pages. Edit this file to add models or update branding."
+  },
+  "companies": {
+    "OpenAI": {
+      "logo": "https://avatars.githubusercontent.com/u/14957082?s=128",
+      "color": "#10a37f",
+      "website": "https://openai.com"
+    },
+    "Anthropic": {
+      "logo": "https://avatars.githubusercontent.com/u/76263028?s=128",
+      "color": "#d4a574",
+      "website": "https://anthropic.com"
+    },
+    "Google": {
+      "logo": "https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png",
+      "color": "#4285f4",
+      "website": "https://deepmind.google"
+    },
+    "Meta": {
+      "logo": "https://avatars.githubusercontent.com/u/69631?s=128",
+      "color": "#0668E1",
+      "website": "https://ai.meta.com"
+    },
+    "xAI": {
+      "logo": "https://avatars.githubusercontent.com/u/141821688?s=128",
+      "color": "#ffffff",
+      "website": "https://x.ai"
+    },
+    "Mistral": {
+      "logo": "https://avatars.githubusercontent.com/u/132372032?s=128",
+      "color": "#f97316",
+      "website": "https://mistral.ai"
+    },
+    "DeepSeek": {
+      "logo": "https://avatars.githubusercontent.com/u/148330874?s=128",
+      "color": "#4D6BFE",
+      "website": "https://deepseek.com"
+    },
+    "Alibaba": {
+      "logo": "https://avatars.githubusercontent.com/u/151893169?s=128",
+      "color": "#7c3aed",
+      "website": "https://qwenlm.github.io"
+    },
+    "Cohere": {
+      "logo": "https://avatars.githubusercontent.com/u/54850923?s=128",
+      "color": "#39d353",
+      "website": "https://cohere.com"
+    },
+    "Microsoft": {
+      "logo": "https://avatars.githubusercontent.com/u/6154722?s=128",
+      "color": "#00a4ef",
+      "website": "https://microsoft.com/ai"
+    },
+    "NVIDIA": {
+      "logo": "https://avatars.githubusercontent.com/u/1728152?s=128",
+      "color": "#76b900",
+      "website": "https://nvidia.com"
+    },
+    "Amazon": {
+      "logo": "https://avatars.githubusercontent.com/u/8594673?s=128",
+      "color": "#ff9900",
+      "website": "https://aws.amazon.com/bedrock"
+    },
+    "Nous Research": {
+      "logo": "https://avatars.githubusercontent.com/u/130908587?s=128",
+      "color": "#e040fb",
+      "website": "https://nousresearch.com"
+    },
+    "01.AI": {
+      "logo": "https://avatars.githubusercontent.com/u/139308978?s=128",
+      "color": "#6366f1",
+      "website": "https://01.ai"
+    },
+    "AI21 Labs": {
+      "logo": "https://avatars.githubusercontent.com/u/33798954?s=128",
+      "color": "#ff6f00",
+      "website": "https://ai21.com"
+    },
+    "Inflection": {
+      "logo": "https://avatars.githubusercontent.com/u/101123883?s=128",
+      "color": "#1e88e5",
+      "website": "https://inflection.ai"
+    },
+    "Perplexity": {
+      "logo": "https://avatars.githubusercontent.com/u/78307748?s=128",
+      "color": "#20b8cd",
+      "website": "https://perplexity.ai"
+    },
+    "Reka": {
+      "logo": "https://avatars.githubusercontent.com/u/109515370?s=128",
+      "color": "#ef4444",
+      "website": "https://reka.ai"
+    },
+    "Writer": {
+      "logo": "https://avatars.githubusercontent.com/u/8090724?s=128",
+      "color": "#7c3aed",
+      "website": "https://writer.com"
+    },
+    "Zhipu AI": {
+      "logo": "https://avatars.githubusercontent.com/u/48590610?s=128",
+      "color": "#2563eb",
+      "website": "https://zhipuai.cn"
+    }
+  },
+  "models": {
+    "Yi Lightning": "01.AI",
+    "Jamba 2": "AI21 Labs",
+    "Qwen3 72B": "Alibaba",
+    "Qwen2.5 Max": "Alibaba",
+    "Qwen3 Instruct": "Alibaba",
+    "Nova Pro": "Amazon",
+    "Nova Lite": "Amazon",
+    "Claude Opus 4.6": "Anthropic",
+    "Claude Haiku 4.5": "Anthropic",
+    "Claude Sonnet 4": "Anthropic",
+    "Claude Sonnet 4.5": "Anthropic",
+    "Claude Opus 4": "Anthropic",
+    "Command A Reasoning": "Cohere",
+    "Command R+": "Cohere",
+    "Command A": "Cohere",
+    "DeepSeek R1": "DeepSeek",
+    "DeepSeek V3": "DeepSeek",
+    "DeepSeek V3.2": "DeepSeek",
+    "Gemini 2.5 Flash": "Google",
+    "Gemini 2.5 Pro": "Google",
+    "Gemini 3 Pro": "Google",
+    "Gemini 3 Flash": "Google",
+    "Gemini 2.0 Flash": "Google",
+    "Gemma 3 27B": "Google",
+    "Pi 3.0": "Inflection",
+    "Llama 3.3 70B": "Meta",
+    "Llama 4 Behemoth": "Meta",
+    "Llama 4 Scout": "Meta",
+    "Llama 4 Maverick": "Meta",
+    "Phi-4 Mini": "Microsoft",
+    "Phi-4": "Microsoft",
+    "Mistral Large 3": "Mistral",
+    "Codestral": "Mistral",
+    "Mistral Small 3": "Mistral",
+    "Mistral Medium 3": "Mistral",
+    "Hermes 3 405B": "Nous Research",
+    "GPT-5.2": "OpenAI",
+    "GPT-5 mini": "OpenAI",
+    "GPT-5": "OpenAI",
+    "GPT-4.1": "OpenAI",
+    "o3": "OpenAI",
+    "o4-mini": "OpenAI",
+    "GPT-4o": "OpenAI",
+    "Sonar Huge": "Perplexity",
+    "Reka Core": "Reka",
+    "Palmyra X5": "Writer",
+    "Grok 4.1": "xAI",
+    "Grok 3": "xAI",
+    "Grok 4.0": "xAI",
+    "GLM-4 Plus": "Zhipu AI"
+  }
+}
