@@ -1316,7 +1316,7 @@
     <div class="phone-verify-error" id="phoneVerifyError"></div>
     <p class="phone-verify-note">Your number is used only for verification and is never shared. This is how we keep every vote real.</p>
     <div style="margin-top:20px;text-align:center;">
-      <a href="#" onclick="skipPhoneVerify();return false;" style="color:#00e5ff;font-size:16px;font-weight:600;text-decoration:underline;text-underline-offset:4px;">Skip for now â SMS verification coming soon</a>
+      <a href="#" onclick="skipPhoneVerify();return false;" style="color:#00e5ff;font-size:16px;font-weight:600;text-decoration:underline;text-underline-offset:4px;">Skip for now Ã¢ÂÂ SMS verification coming soon</a>
     </div>
   </div>
 </div>
@@ -2022,24 +2022,41 @@ async function getNextBattleFromDB() {
       return;
     }
 
-    // Direct DB insert (#19 - removed non-existent edge function)
-    const { error: insertError } = await supabase
-      .from('votes')
-      .insert([{
+    // Server-side vote submission via Edge Function
+    const edgeFunctionUrl = 'https://nvitztmlczdohicskrks.supabase.co/functions/v1/submit-vote';
+    const session = (await supabase.auth.getSession()).data.session;
+    
+    const edgeResponse = await fetch(edgeFunctionUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + session.access_token,
+        'apikey': SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify({
         battle_id: votePayload.battle_id,
-        user_id: votePayload.user_id,
         vote_choice: votePayload.vote_choice,
         vote_explanation: votePayload.vote_explanation,
         time_on_page: votePayload.time_on_page,
         mouse_movements: votePayload.mouse_movements,
         scroll_depth: votePayload.scroll_depth,
         device_fingerprint: votePayload.device_fingerprint,
-        ip_address: votePayload.ip_address,
-        created_at: new Date().toISOString()
-      }]);
+        turnstile_token: turnstileToken,
+        honeypot: document.getElementById('website')?.value || '',
+      }),
+    });
 
-    if (insertError) {
-      console.error('Vote submission error:', insertError);
+    const edgeResult = await edgeResponse.json();
+
+    if (!edgeResponse.ok) {
+      console.error('Vote submission error:', edgeResult.error);
+      const voteError = document.getElementById('voteError');
+      if (voteError) {
+        voteError.textContent = edgeResult.error || 'Vote submission failed. Please try again.';
+        voteError.style.display = 'block';
+      }
+      enableVoteButtons();
+      return;
     }
 
     // Reset Turnstile for next vote
