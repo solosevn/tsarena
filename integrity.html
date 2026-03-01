@@ -293,6 +293,16 @@
             .measure-icon { display: none; }
             nav { padding: 0 16px; }
         }
+    
+        /* Sidebar nav */
+        .page-wrapper { display: flex; max-width: 1100px; margin: 0 auto; padding: 0 40px 80px; gap: 40px; }
+        .sidebar { position: sticky; top: 80px; align-self: flex-start; width: 220px; flex-shrink: 0; padding-top: 40px; }
+        .sidebar .sidebar-title { text-transform: uppercase; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #00d4ff; margin-bottom: 16px; }
+        .sidebar a { display: block; padding: 8px 12px; font-size: 13px; color: #888; border-left: 2px solid transparent; transition: all 0.2s; text-decoration: none; }
+        .sidebar a:hover, .sidebar a.active { color: #00d4ff; border-left-color: #00d4ff; background: rgba(0,212,255,0.03); }
+        .page-content-main { flex: 1; min-width: 0; }
+        @media (max-width: 768px) { .page-wrapper { flex-direction: column; padding: 0 20px 60px; } .sidebar { position: static; width: 100%; } .page-content { padding: 20px 0 0; } }
+    
     </style>
 </head>
 <body>
@@ -300,7 +310,6 @@
 <nav>
     <div class="nav-logo"><a href="/" style="color:inherit;text-decoration:none">The <span>Safety</span> Arena</a> <small>/ tsarena.ai</small></div>
     <div class="nav-links">
-        <a href="/howitworks.html">How It Works</a>
         <a href="/charter.html">Charter</a>
         <a href="/vote.html" class="btn-vote">Enter the Arena</a>
     </div>
@@ -321,6 +330,16 @@
     </div>
 </div>
 
+<div class="page-wrapper">
+<nav class="sidebar">
+  <div class="sidebar-title">On This Page</div>
+  <a href="#defense" class="active">Defense in Depth</a>
+  <a href="#pipeline">14-Step Pipeline</a>
+  <a href="#measures">Security Measures</a>
+  <a href="#constraints">DB Constraints</a>
+  <a href="#promise">Our Promise</a>
+</nav>
+<div class="page-content-main">
 <main class="page-content">
 
     <!-- Stats Overview -->
@@ -349,7 +368,7 @@
 
     <div class="page-section">
         <div class="section-label">Overview</div>
-        <h2>Defense in Depth</h2>
+        <h2 id="defense">Defense in Depth</h2>
         <p>Vote integrity isn't one feature &mdash; it's the entire architecture. We enforce validation at four independent layers: client-side (browser), server-side (Edge Function), database (PostgreSQL constraints), and infrastructure (Cloudflare, TLS). An attacker would need to compromise all four layers simultaneously to submit a fraudulent vote.</p>
         <p>This page documents every measure. We publish this because our <a href="/charter.html">Charter's Principle 4 (Radical Transparency)</a> demands it &mdash; and because we believe transparency makes security stronger, not weaker.</p>
     </div>
@@ -359,7 +378,7 @@
     <!-- Server-Side Pipeline -->
     <div class="page-section">
         <div class="section-label">Server-Side Validation</div>
-        <h2>The 14-Step Pipeline</h2>
+        <h2 id="pipeline">The 14-Step Pipeline</h2>
         <p>Every vote submission is routed through a Supabase Edge Function that performs 14 sequential checks before any data touches the database. This runs server-side &mdash; it cannot be bypassed by modifying client code.</p>
 
         <div class="pipeline">
@@ -469,7 +488,7 @@
     <!-- All Measures -->
     <div class="page-section">
         <div class="section-label">Complete Inventory</div>
-        <h2>All Security Measures</h2>
+        <h2 id="measures">All Security Measures</h2>
         <p>Every active and planned security measure, organized by what it protects against.</p>
 
         <div class="measure-grid">
@@ -660,7 +679,7 @@
     <!-- Database Layer -->
     <div class="page-section">
         <div class="section-label">Database Layer</div>
-        <h2>Structural Constraints</h2>
+        <h2 id="constraints">Structural Constraints</h2>
         <p>Beyond application logic, PostgreSQL enforces structural rules that serve as the final safety net. Even if the Edge Function has a bug, these constraints prevent invalid data from being written:</p>
 
         <ul class="principle-list">
@@ -678,7 +697,7 @@
 
     <div class="page-section">
         <div class="section-label">Commitment</div>
-        <h2>Our Ongoing Promise</h2>
+        <h2 id="promise">Our Ongoing Promise</h2>
         <p>Security is not a feature we shipped &mdash; it's a practice we maintain. As threats evolve, so do our defenses. This page will be updated whenever we add, modify, or retire a security measure.</p>
         <p>If you discover a vulnerability, please report it to <a href="mailto:david@trainingrun.ai">david@trainingrun.ai</a>. We take every report seriously.</p>
 
@@ -688,14 +707,29 @@
     </div>
 
 </main>
+</div>
+</div>
 
-<footer>
+<footer style="text-align:center;padding:40px;border-top:1px solid rgba(255,255,255,0.06);color:#555;font-size:13px;">
     &copy; 2026 The Safety Arena &mdash; tsarena.ai &nbsp;|&nbsp;
     Powered by <a href="https://trainingrun.ai">trainingrun.ai</a> &nbsp;|&nbsp;
     <a href="/charter.html">Charter</a> &nbsp;|&nbsp;
     <a href="/prompts.html">Our Prompts</a> &nbsp;|&nbsp;
+    <a href="/integrity.html">Integrity</a> &nbsp;|&nbsp;
+    <a href="/privacy.html">Privacy</a> &nbsp;|&nbsp;
+    <a href="/terms.html">Terms</a> &nbsp;|&nbsp;
     <a href="/vote.html">Enter the Arena</a>
 </footer>
 
+
+<script>
+document.addEventListener('scroll', function() {
+  const sections = document.querySelectorAll('h2[id]');
+  const links = document.querySelectorAll('.sidebar a');
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+  links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+});
+</script>
 </body>
 </html>
