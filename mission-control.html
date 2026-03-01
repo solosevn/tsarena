@@ -52,7 +52,7 @@
 
     const sb = supabase.createClient(SB_URL, SB_KEY);
     let lastTotalVotes = null;
-    let lastAlertVotes = 0;
+    let lastAlertVotes = parseInt(localStorage.getItem('mc_lastAlertVotes') || '0');
     let tgAlertsSent = 0;
 
     function log(msg, isAlert) {
