@@ -237,7 +237,7 @@
   .principle-card ul li:first-child { border-top: none; margin-top: 8px; }
 
   .principle-card ul li::before {
-    content: '—';
+    content: 'â';
     position: absolute;
     left: 0;
     color: var(--cyan);
@@ -309,7 +309,7 @@
   .diff-card ul li:first-child { border-top: none; }
 
   .diff-card ul li::before {
-    content: '✗';
+    content: 'â';
     position: absolute;
     left: 0;
     color: #ff4466;
@@ -318,7 +318,7 @@
   }
 
   .diff-card.ours ul li::before {
-    content: '✓';
+    content: 'â';
     color: var(--cyan);
   }
 
@@ -466,7 +466,7 @@
     nav.header-nav a:not(.btn-vote):not(.logo-nav) { display: none; }
   }
 
-  /* Back button — matches trainingrun.ai style */
+  /* Back button â matches trainingrun.ai style */
   .back-btn {
     position: fixed;
     top: 72px;
@@ -491,7 +491,17 @@
     border-color: rgba(0, 212, 255, 0.4);
     color: #00d4ff;
   }
-  </style>
+  
+        /* Sidebar nav */
+        .page-wrapper { display: flex; max-width: 1100px; margin: 0 auto; padding: 0 40px 80px; gap: 40px; }
+        .sidebar { position: sticky; top: 80px; align-self: flex-start; width: 220px; flex-shrink: 0; padding-top: 40px; }
+        .sidebar .sidebar-title { text-transform: uppercase; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #00d4ff; margin-bottom: 16px; }
+        .sidebar a { display: block; padding: 8px 12px; font-size: 13px; color: #888; border-left: 2px solid transparent; transition: all 0.2s; text-decoration: none; }
+        .sidebar a:hover, .sidebar a.active { color: #00d4ff; border-left-color: #00d4ff; background: rgba(0,212,255,0.03); }
+        .page-content-main { flex: 1; min-width: 0; }
+        @media (max-width: 768px) { .page-wrapper { flex-direction: column; padding: 0 20px 60px; } .sidebar { position: static; width: 100%; } }
+    
+    </style>
 </head>
 <body>
 
@@ -504,7 +514,7 @@
     <a href="vote.html" class="btn-vote">Enter the Arena</a>
   </nav>
 </header>
-<a href="#" class="back-btn" onclick="history.back(); return false;">← Back</a>
+<a href="/" class="back-btn">â Back</a>
 
 
 <!-- HERO -->
@@ -514,26 +524,37 @@
   <p class="subtitle">The principles, values, and commitments that govern everything we build here.</p>
   <div class="charter-meta">
     <span><strong>Version 1.2</strong></span>
-    <span>—</span>
+    <span>â</span>
     <span>February 26, 2026</span>
-    <span>—</span>
+    <span>â</span>
     <span>David Solomon, Founder</span>
   </div>
 </section>
 
 <!-- MAIN CONTENT -->
+<div class="page-wrapper">
+<nav class="sidebar">
+  <div class="sidebar-title">On This Page</div>
+  <a href="#why-we-exist" class="active">Why We Exist</a>
+  <a href="#principles">Founding Principles</a>
+  <a href="#why-hard">Why We Make It Hard</a>
+  <a href="#different">What Makes Us Different</a>
+  <a href="#relationship">Relationship to trainingrun.ai</a>
+  <a href="#public">Belongs to the Public</a>
+</nav>
+<div class="page-content-main">
 <main class="charter-content">
 
   <!-- MISSION -->
   <div class="charter-section">
     <div class="section-label">Mission</div>
-    <h2>Why We Exist</h2>
-    <p>The Safety Arena is the world's first independent, public-driven safety leaderboard for AI models. Through blind battles, real human votes, and transparent challenges, we reveal which models and labs are truly the safest — so everyday people can vote with their attention, their feedback, and their dollars.</p>
+    <h2 id="why-we-exist">Why We Exist</h2>
+    <p>The Safety Arena is the world's first independent, public-driven safety leaderboard for AI models. Through blind battles, real human votes, and transparent challenges, we reveal which models and labs are truly the safest â so everyday people can vote with their attention, their feedback, and their dollars.</p>
     <p>We exist to force safer AI into the world by giving the public real power. No ideology. No corporate spin. Just facts, transparency, and the collective judgment of real humans.</p>
     <div class="callout">
-      <p>People deserve to know which AI models are actually safe and truthful — not which ones have the best marketing budget or the most favorable backroom deal with a leaderboard platform. <strong>This platform exists to fix that.</strong></p>
+      <p>People deserve to know which AI models are actually safe and truthful â not which ones have the best marketing budget or the most favorable backroom deal with a leaderboard platform. <strong>This platform exists to fix that.</strong></p>
     </div>
-    <p>Right now, there is no public, transparent, human-voted arena dedicated specifically to AI safety. Existing general-purpose arenas rank overall preference — which response sounds better, reads smoother, feels more helpful. Safety is buried as a subcategory, not the mission. Published research has documented how coordinated votes can manipulate rankings. The Safety Arena is built from the ground up to be different.</p>
+    <p>Right now, there is no public, transparent, human-voted arena dedicated specifically to AI safety. Existing general-purpose arenas rank overall preference â which response sounds better, reads smoother, feels more helpful. Safety is buried as a subcategory, not the mission. Published research has documented how coordinated votes can manipulate rankings. The Safety Arena is built from the ground up to be different.</p>
   </div>
 
   <hr class="section-divider">
@@ -541,21 +562,21 @@
   <!-- PRINCIPLES -->
   <div class="charter-section">
     <div class="section-label">Core Principles</div>
-    <h2>Eight Founding Principles</h2>
-    <p>These principles are not aspirational marketing copy. They are hard constraints that govern every decision we make — about product, policy, and operations.</p>
+    <h2 id="principles">Eight Founding Principles</h2>
+    <p>These principles are not aspirational marketing copy. They are hard constraints that govern every decision we make â about product, policy, and operations.</p>
 
     <div class="principles-grid">
 
       <div class="principle-card">
         <div class="principle-num">Principle 01</div>
         <h3>Real Humans, Real Votes</h3>
-        <p>The entire premise of The Safety Arena is that real people judge which AI models are safest and most truthful. This only works if the votes are real. We treat vote integrity as existential — if the votes are fake, the platform is worthless.</p>
+        <p>The entire premise of The Safety Arena is that real people judge which AI models are safest and most truthful. This only works if the votes are real. We treat vote integrity as existential â if the votes are fake, the platform is worthless.</p>
         <ul>
           <li>Verified accounts required (email + OAuth through Google or X). No anonymous voting.</li>
           <li>Rate limits per account per day. No one person can flood the system.</li>
           <li>Minimum read and evaluation time before a vote counts. You must actually engage.</li>
           <li>Behavioral analysis and anomaly detection to catch coordinated bot activity.</li>
-          <li>Optional short explanation with each vote — low-effort spam gets flagged.</li>
+          <li>Optional short explanation with each vote â low-effort spam gets flagged.</li>
           <li>Every anti-cheat measure is published openly so anyone can audit our integrity.</li>
         </ul>
       </div>
@@ -577,7 +598,7 @@
         <p>We are not ranking which model writes the best poem or generates the funniest joke. We are ranking which models refuse to help people cause harm, tell the truth when pressured to lie, resist jailbreaks and manipulation, and behave responsibly when no one is watching.</p>
         <ul>
           <li>Curated safety and truth prompts: harm refusal, jailbreak resistance, truthfulness under pressure, responsible behavior, and over-refusal/under-refusal balance.</li>
-          <li>Blind battles — voters never know which model they are evaluating until after they vote.</li>
+          <li>Blind battles â voters never know which model they are evaluating until after they vote.</li>
           <li>Results tied back to the TRSbench Safety pillar on trainingrun.ai for a combined, verified signal.</li>
         </ul>
       </div>
@@ -597,7 +618,7 @@
       <div class="principle-card">
         <div class="principle-num">Principle 05</div>
         <h3>Simple Enough for Anyone</h3>
-        <p>The Safety Arena must be usable by anyone — your neighbor, your parents, a non-technical person who just wants to know which AI is safe to use. Not just researchers and developers.</p>
+        <p>The Safety Arena must be usable by anyone â your neighbor, your parents, a non-technical person who just wants to know which AI is safe to use. Not just researchers and developers.</p>
         <ul>
           <li><strong>Read two responses, pick the safer one, done.</strong> Minimal clicks to participate.</li>
           <li>Clear, jargon-free language throughout the site.</li>
@@ -608,14 +629,14 @@
       <div class="principle-card">
         <div class="principle-num">Principle 06</div>
         <h3>Non-Ideological</h3>
-        <p>No left or right lean. No political agenda. No "hope or think." The Safety Arena measures verifiable behaviors: did the model refuse a harmful request? Did it tell the truth? Did it resist manipulation? These are objective, auditable outcomes — not opinions. We test what models actually do, not what any company claims they do.</p>
+        <p>No left or right lean. No political agenda. No "hope or think." The Safety Arena measures verifiable behaviors: did the model refuse a harmful request? Did it tell the truth? Did it resist manipulation? These are objective, auditable outcomes â not opinions. We test what models actually do, not what any company claims they do.</p>
       </div>
 
       <div class="principle-card">
         <div class="principle-num">Principle 07</div>
         <h3>Empowering the Public to Vote with Their Money</h3>
-        <p>People already pay for AI every day — API subscriptions, premium plans, enterprise licenses. They deserve to know whether the model they are funding prioritizes their safety or cuts corners. The Safety Arena gives the public verified information to decide which labs deserve their support.</p>
-        <p>When a model ranks #1 on our leaderboard, it means real humans verified it. This is how we force labs to compete on safety — not through regulation alone, but through informed consumer choice.</p>
+        <p>People already pay for AI every day â API subscriptions, premium plans, enterprise licenses. They deserve to know whether the model they are funding prioritizes their safety or cuts corners. The Safety Arena gives the public verified information to decide which labs deserve their support.</p>
+        <p>When a model ranks #1 on our leaderboard, it means real humans verified it. This is how we force labs to compete on safety â not through regulation alone, but through informed consumer choice.</p>
       </div>
 
       <div class="principle-card">
@@ -626,7 +647,7 @@
           <li><strong>Public availability is the only criteria.</strong> Any publicly accessible model with a meaningful user base qualifies. We don't pick favorites. We don't wait for labs to apply.</li>
           <li><strong>We access models the same way you do.</strong> Public APIs as a paying customer. No special access. No lab-provided endpoints. We test exactly what the public gets.</li>
           <li><strong>Every model gets equal battle allocation.</strong> No sampling weights that favor bigger labs. We publish exact battle counts so anyone can verify this.</li>
-          <li><strong>The full model list and criteria are public.</strong> If a model isn't in our pool, there's a published reason why — never "we don't have a relationship with that lab."</li>
+          <li><strong>The full model list and criteria are public.</strong> If a model isn't in our pool, there's a published reason why â never "we don't have a relationship with that lab."</li>
         </ul>
       </div>
 
@@ -638,13 +659,13 @@
   <!-- WHY WE MAKE IT HARD -->
   <div class="charter-section">
     <div class="section-label">Our Standard</div>
-    <h2>Why We Make It Hard</h2>
-    <p>Our verification requirements — verified accounts, rate limits, minimum engagement time, vote explanations — will produce fewer total votes than platforms with no barriers. We know this. We chose this.</p>
-    <p>A platform with five million votes and documented gaming problems produces a noisy, unreliable signal. A platform with fifty thousand verified votes that have never been gamed produces a clean, trustworthy signal. Labs know the difference. The public knows the difference. The value of a vote is not in the volume — it is in the integrity.</p>
+    <h2 id="why-hard">Why We Make It Hard</h2>
+    <p>Our verification requirements â verified accounts, rate limits, minimum engagement time, vote explanations â will produce fewer total votes than platforms with no barriers. We know this. We chose this.</p>
+    <p>A platform with five million votes and documented gaming problems produces a noisy, unreliable signal. A platform with fifty thousand verified votes that have never been gamed produces a clean, trustworthy signal. Labs know the difference. The public knows the difference. The value of a vote is not in the volume â it is in the integrity.</p>
     <div class="callout">
-      <p>Consumer Reports doesn't have the traffic of Amazon reviews. But when Consumer Reports says a product is safe, people trust it more than ten thousand anonymous five-star reviews — because the methodology is rigorous and independent. <strong>We are building Consumer Reports for AI safety, not Amazon reviews.</strong></p>
+      <p>Consumer Reports doesn't have the traffic of Amazon reviews. But when Consumer Reports says a product is safe, people trust it more than ten thousand anonymous five-star reviews â because the methodology is rigorous and independent. <strong>We are building Consumer Reports for AI safety, not Amazon reviews.</strong></p>
     </div>
-    <p>The bar to get in is high. But once you're in, the experience is simple. Hard to enter, easy to use. That is not a weakness — that is the entire brand. "We have fewer votes because every single one is real" is not an apology. It is our headline.</p>
+    <p>The bar to get in is high. But once you're in, the experience is simple. Hard to enter, easy to use. That is not a weakness â that is the entire brand. "We have fewer votes because every single one is real" is not an apology. It is our headline.</p>
   </div>
 
   <hr class="section-divider">
@@ -652,15 +673,15 @@
   <!-- WHAT MAKES US DIFFERENT -->
   <div class="charter-section">
     <div class="section-label">Our Approach</div>
-    <h2>What Makes Us Different</h2>
-    <p>General-purpose AI arenas serve a purpose — but they are not built for safety. Structural issues make them unreliable as the public's safety reference. The Safety Arena is purpose-built to address every one of those gaps.</p>
+    <h2 id="different">What Makes Us Different</h2>
+    <p>General-purpose AI arenas serve a purpose â but they are not built for safety. Structural issues make them unreliable as the public's safety reference. The Safety Arena is purpose-built to address every one of those gaps.</p>
 
     <div class="diff-grid">
       <div class="diff-card">
         <div class="diff-label">General-Purpose Arenas</div>
         <ul>
           <li>Safety is a subcategory, not the mission</li>
-          <li>Vote on "which response is better" overall — rewards style over safety</li>
+          <li>Vote on "which response is better" overall â rewards style over safety</li>
           <li>Documented gaming vulnerabilities in published research</li>
           <li>Lab entanglement creates conflicts of interest</li>
           <li>Relationship-driven model selection and allocation</li>
@@ -671,15 +692,15 @@
         <div class="diff-label">The Safety Arena</div>
         <ul>
           <li>Safety is the entire mission, not a subcategory</li>
-          <li>Vote on verifiable safety behaviors — harm refusal, truthfulness, resistance to manipulation</li>
+          <li>Vote on verifiable safety behaviors â harm refusal, truthfulness, resistance to manipulation</li>
           <li>Structural anti-gaming built in from day one</li>
-          <li>Zero lab entanglement — no partnerships, no special access</li>
+          <li>Zero lab entanglement â no partnerships, no special access</li>
           <li>Criteria-driven selection, equal battle allocation for all models</li>
-          <li>Full transparency — every anti-cheat measure is public</li>
+          <li>Full transparency â every anti-cheat measure is public</li>
         </ul>
       </div>
     </div>
-    <p style="margin-top:20px;">Labs are free to learn from our public data — that's the point of transparency. But this platform exists for the public, not for the labs.</p>
+    <p style="margin-top:20px;">Labs are free to learn from our public data â that's the point of transparency. But this platform exists for the public, not for the labs.</p>
   </div>
 
   <hr class="section-divider">
@@ -687,7 +708,7 @@
   <!-- RELATIONSHIP TO TRAININGRUN -->
   <div class="charter-section">
     <div class="section-label">Ecosystem</div>
-    <h2>Relationship to trainingrun.ai</h2>
+    <h2 id="relationship">Relationship to trainingrun.ai</h2>
     <p>The Safety Arena is a sibling product of trainingrun.ai, sharing the same DNA of independence, transparency, and verified data. It is cross-linked but stands on its own.</p>
 
     <div class="relation-grid">
@@ -705,7 +726,7 @@
       </div>
       <div class="relation-card">
         <div class="r-label">Future Integration</div>
-        <p>Arena votes will contribute to refining the TRSbench Safety pillar over time — creating a feedback loop between automated benchmarks and verified human judgment.</p>
+        <p>Arena votes will contribute to refining the TRSbench Safety pillar over time â creating a feedback loop between automated benchmarks and verified human judgment.</p>
       </div>
     </div>
   </div>
@@ -715,14 +736,14 @@
   <!-- PROMISE / CLOSING -->
   <div class="promise-section">
     <div class="section-label" style="text-align:center;">Our Promise</div>
-    <h2>This Arena Belongs to the Public</h2>
-    <p class="lead">We will keep building this until the safest model is also the most popular and most supported — because that is how we force the entire industry to get safer.</p>
+    <h2 id="public">This Arena Belongs to the Public</h2>
+    <p class="lead">We will keep building this until the safest model is also the most popular and most supported â because that is how we force the entire industry to get safer.</p>
     <p>This arena belongs to parents who want a safe world for their kids. This arena belongs to anyone who wants to support truth and safety with their real choices.</p>
-    <p>A livable future where the most powerful technology ever created is held accountable by the people who use it — not just by the companies who profit from it.</p>
+    <p>A livable future where the most powerful technology ever created is held accountable by the people who use it â not just by the companies who profit from it.</p>
 
     <div class="promise-sig">
       <div class="sig-name">David Solomon</div>
-      <div class="sig-title">Founder, The Safety Arena &amp; trainingrun.ai — February 26, 2026</div>
+      <div class="sig-title">Founder, The Safety Arena &amp; trainingrun.ai â February 26, 2026</div>
       <div class="sig-links">
         <a href="https://x.com/solosevn" target="_blank">X: @solosevn</a>
         <a href="https://trainingrun.ai" target="_blank">trainingrun.ai</a>
@@ -736,16 +757,32 @@
   </div>
 
 </main>
+</div>
+</div>
 
 <!-- FOOTER -->
-<footer>
-  <p>
-    &copy; 2026 The Safety Arena &mdash; tsarena.ai &nbsp;|&nbsp;
-    Powered by <a href="https://trainingrun.ai" target="_blank">trainingrun.ai</a> &nbsp;|&nbsp;
-    <a href="charter.html">Charter</a> &nbsp;|&nbsp;
-    <a href="vote.html">Enter the Arena</a>
-  </p>
+<footer class="footer">
+  <div class="footer-left">
+    &copy; 2026 The Safety Arena &bull; <a href="https://trainingrun.ai">trainingrun.ai</a>
+  </div>
+  <div class="footer-right">
+    <a href="/charter.html">Charter</a>
+    <a href="/prompts.html">Our Prompts</a>
+    <a href="/integrity.html">Integrity</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+  </div>
 </footer>
 
+
+<script>
+document.addEventListener('scroll', function() {
+  const sections = document.querySelectorAll('h2[id]');
+  const links = document.querySelectorAll('.sidebar a');
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+  links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+});
+</script>
 </body>
 </html>
