@@ -749,6 +749,37 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+  .submit-vote-btn.submitting {
+    background: #0099b3;
+    pointer-events: none;
+    position: relative;
+  }
+  .submit-vote-btn.submitting::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(10,10,15,0.3);
+    border-top-color: #0a0a0f;
+    border-radius: 50%;
+    animation: spinBtn 0.6s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  @keyframes spinBtn {
+    to { transform: rotate(360deg); }
+  }
+  .submit-vote-btn.submitted {
+    background: #00e676;
+    color: #0a0a0f;
+    pointer-events: none;
+    animation: pulseSuccess 0.4s ease;
+  }
+  @keyframes pulseSuccess {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+  }
 
   /* Hidden honeypot field */
   #honeypot-website {
@@ -1756,6 +1787,16 @@ async function handleOAuthSignIn(provider) {
     document.getElementById('voteA').classList.remove('selected');
     document.getElementById('voteB').classList.remove('selected');
 
+    // Reset submit button for new battle
+    const submitBtn = document.getElementById('submitVoteBtn');
+    submitBtn.classList.remove('submitting', 'submitted');
+    submitBtn.textContent = 'Submit Vote';
+    submitBtn.style.display = '';
+
+    // Remove auto-next countdown if present
+    const countdown = document.getElementById('autoNextCountdown');
+    if (countdown) countdown.remove();
+
     try {
       // Direct DB query for battles (#19 - removed non-existent edge function)
       let battle = await getNextBattleFromDB();
@@ -1968,6 +2009,11 @@ async function getNextBattleFromDB() {
   async function submitVote() {
     if (!selectedVote || !currentBattle) return;
 
+    // Visual feedback: show submitting state
+    const submitBtn = document.getElementById('submitVoteBtn');
+    submitBtn.classList.add('submitting');
+    submitBtn.textContent = 'Submitting...';
+
     // Account age threshold check (#7)
     try {
       const { data: { user: ageCheckUser } } = await supabase.auth.getUser();
@@ -2018,6 +2064,8 @@ async function getNextBattleFromDB() {
         voteError.textContent = 'Verification failed. Please wait a moment and try again.';
         voteError.style.display = 'block';
       }
+      submitBtn.classList.remove('submitting');
+      submitBtn.textContent = 'Submit Vote';
       enableVoteButtons();
       return;
     }
@@ -2055,6 +2103,8 @@ async function getNextBattleFromDB() {
         voteError.textContent = edgeResult.error || 'Vote submission failed. Please try again.';
         voteError.style.display = 'block';
       }
+      submitBtn.classList.remove('submitting');
+      submitBtn.textContent = 'Submit Vote';
       enableVoteButtons();
       return;
     }
@@ -2063,6 +2113,11 @@ async function getNextBattleFromDB() {
     if (typeof turnstile !== 'undefined') {
       try { turnstile.reset(); } catch(e) { console.warn('Turnstile reset failed:', e); }
     }
+
+    // Visual feedback: show success state
+    submitBtn.classList.remove('submitting');
+    submitBtn.classList.add('submitted');
+    submitBtn.textContent = '\u2713 Vote Submitted!';
 
     // Show result reveal
     showResultReveal();
@@ -2118,6 +2173,27 @@ async function getNextBattleFromDB() {
     updateVotesRemainingDisplay();
     document.getElementById('submitVoteBtn').style.display = 'none';
     document.getElementById('voteExplanation').style.display = 'none';
+
+    // Auto-load next battle after 4 seconds
+    if (votesRemainingToday > 0) {
+      const countdownEl = document.createElement('p');
+      countdownEl.id = 'autoNextCountdown';
+      countdownEl.style.cssText = 'text-align:center;color:#00d4ff;font-size:14px;margin-top:12px;';
+      let secs = 4;
+      countdownEl.textContent = 'Next battle in ' + secs + 's...';
+      document.getElementById('resultReveal').appendChild(countdownEl);
+      const cdInterval = setInterval(() => {
+        secs--;
+        if (secs > 0) {
+          countdownEl.textContent = 'Next battle in ' + secs + 's...';
+        } else {
+          clearInterval(cdInterval);
+          loadNextBattle();
+        }
+      }, 1000);
+      countdownEl.style.cursor = 'pointer';
+      countdownEl.addEventListener('click', () => { clearInterval(cdInterval); loadNextBattle(); });
+    }
   }
 
   // ============================================================
