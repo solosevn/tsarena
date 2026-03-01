@@ -1592,28 +1592,25 @@
   supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // Company logo mapping (GitHub avatar URLs)
-  const COMPANY_LOGOS = {
-    'OpenAI': 'https://avatars.githubusercontent.com/u/14957082?s=128',
-    'Anthropic': 'https://avatars.githubusercontent.com/u/76263028?s=128',
-    'Google': 'https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png',
-    'Meta': 'https://avatars.githubusercontent.com/u/69631?s=128',
-    'xAI': 'https://avatars.githubusercontent.com/u/141821688?s=128',
-    'Mistral AI': 'https://avatars.githubusercontent.com/u/132372032?s=128',
-    'DeepSeek': 'https://avatars.githubusercontent.com/u/148330874?s=128',
-    'Alibaba Cloud': 'https://avatars.githubusercontent.com/u/151893169?s=128',
-    'Cohere': 'https://avatars.githubusercontent.com/u/54850923?s=128',
-    'Microsoft': 'https://avatars.githubusercontent.com/u/6154722?s=128',
-    'NVIDIA': 'https://avatars.githubusercontent.com/u/1728152?s=128',
-    'Amazon': 'https://avatars.githubusercontent.com/u/8594673?s=128',
-    'Nous Research': 'https://avatars.githubusercontent.com/u/130908587?s=128',
-  };
-  const COMPANY_COLORS = {
-    'OpenAI': '#10a37f', 'Anthropic': '#d4a574', 'Google': '#4285f4',
-    'Meta': '#0668E1', 'xAI': '#ffffff', 'Mistral AI': '#f97316',
-    'DeepSeek': '#4D6BFE', 'Alibaba Cloud': '#7c3aed', 'Cohere': '#39d353',
-    'Microsoft': '#00a4ef', 'NVIDIA': '#76b900', 'Amazon': '#ff9900',
-    'Nous Research': '#e040fb',
-  };
+  // Model-to-company mapping loaded from models.json (single source of truth)
+      let COMPANY_LOGOS = {};
+      let COMPANY_COLORS = {};
+      let MODEL_TO_COMPANY = {};
+      
+      (async function loadModelMapping() {
+        try {
+          const resp = await fetch('models.json?v=' + Date.now());
+          const data = await resp.json();
+          for (const [company, info] of Object.entries(data.companies)) {
+            COMPANY_LOGOS[company] = info.logo;
+            COMPANY_COLORS[company] = info.color;
+          }
+          MODEL_TO_COMPANY = data.models;
+          console.log('Loaded model mapping:', Object.keys(MODEL_TO_COMPANY).length, 'models,', Object.keys(COMPANY_LOGOS).length, 'companies');
+        } catch (e) {
+          console.error('Failed to load models.json:', e);
+        }
+      })();
 
   const fpPromise = FingerprintJS.load();
 
@@ -2278,9 +2275,9 @@ async function getNextBattleFromDB() {
 
   function showResultReveal() {
     const aName = currentBattle.model_a?.name || 'Unknown';
-    const aLab = currentBattle.model_a?.lab || '';
+    const aLab = currentBattle.model_a?.lab || MODEL_TO_COMPANY[aName] || '';
     const bName = currentBattle.model_b?.name || 'Unknown';
-    const bLab = currentBattle.model_b?.lab || '';
+    const bLab = currentBattle.model_b?.lab || MODEL_TO_COMPANY[bName] || '';
 
     const totalVotes = (currentBattle.votes_a || 0) + (currentBattle.votes_b || 0) + (currentBattle.votes_tie || 0);
     const pctA = totalVotes > 0 ? Math.round((currentBattle.votes_a / totalVotes) * 100) : 0;
