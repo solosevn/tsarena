@@ -224,6 +224,16 @@
             .category-grid { grid-template-columns: 1fr; }
             nav { padding: 0 16px; }
         }
+    
+        /* Sidebar nav */
+        .page-wrapper { display: flex; max-width: 1100px; margin: 0 auto; padding: 0 40px 80px; gap: 40px; }
+        .sidebar { position: sticky; top: 80px; align-self: flex-start; width: 220px; flex-shrink: 0; padding-top: 40px; }
+        .sidebar .sidebar-title { text-transform: uppercase; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #00d4ff; margin-bottom: 16px; }
+        .sidebar a { display: block; padding: 8px 12px; font-size: 13px; color: #888; border-left: 2px solid transparent; transition: all 0.2s; text-decoration: none; }
+        .sidebar a:hover, .sidebar a.active { color: #00d4ff; border-left-color: #00d4ff; background: rgba(0,212,255,0.03); }
+        .page-content-main { flex: 1; min-width: 0; }
+        @media (max-width: 768px) { .page-wrapper { flex-direction: column; padding: 0 20px 60px; } .sidebar { position: static; width: 100%; } .page-content { padding: 20px 0 0; } }
+    
     </style>
 </head>
 <body>
@@ -231,7 +241,6 @@
 <nav>
     <div class="nav-logo"><a href="/" style="color:inherit;text-decoration:none">The <span>Safety</span> Arena</a> <small>/ tsarena.ai</small></div>
     <div class="nav-links">
-        <a href="/howitworks.html">How It Works</a>
         <a href="/charter.html">Charter</a>
         <a href="/vote.html" class="btn-vote">Enter the Arena</a>
     </div>
@@ -252,11 +261,22 @@
     </div>
 </div>
 
+<div class="page-wrapper">
+<nav class="sidebar">
+  <div class="sidebar-title">On This Page</div>
+  <a href="#open-prompts" class="active">The Problem</a>
+  <a href="#how-it-works">Our Approach</a>
+  <a href="#what-we-test">What We Test</a>
+  <a href="#comparison">How We Compare</a>
+  <a href="#standards">Prompt Standards</a>
+  <a href="#whats-next">What Comes Next</a>
+</nav>
+<div class="page-content-main">
 <main class="page-content">
 
     <div class="page-section">
         <div class="section-label">The Problem</div>
-        <h2>Why Open Prompts Don't Work for Safety</h2>
+        <h2 id="open-prompts">Why Open Prompts Don't Work for Safety</h2>
         <p>Most AI arenas let users type whatever they want. For general-purpose "which response sounds better?" rankings, that's fine. For a safety-specific leaderboard, it's a vulnerability.</p>
         <p>When anyone can submit any prompt, several problems emerge that directly undermine the integrity of safety evaluation:</p>
 
@@ -272,7 +292,7 @@
 
     <div class="page-section">
         <div class="section-label">Our Approach</div>
-        <h2>Curated, Categorized, Randomized</h2>
+        <h2 id="how-it-works">Curated, Categorized, Randomized</h2>
         <p>Every prompt in The Safety Arena is expert-curated before it enters the battle pool. This isn't a limitation &mdash; it's our core differentiation.</p>
 
         <div class="callout">
@@ -287,7 +307,7 @@
 
     <div class="page-section">
         <div class="section-label">Safety Categories</div>
-        <h2>What We Test</h2>
+        <h2 id="what-we-test">What We Test</h2>
         <p>Our prompt pool spans the full spectrum of AI safety concerns that matter to real people:</p>
 
         <div class="category-grid">
@@ -338,7 +358,7 @@
 
     <div class="page-section">
         <div class="section-label">Comparison</div>
-        <h2>How We Compare to Open-Prompt Arenas</h2>
+        <h2 id="comparison">How We Compare to Open-Prompt Arenas</h2>
 
         <table class="comparison-table">
             <thead>
@@ -392,7 +412,7 @@
 
     <div class="page-section">
         <div class="section-label">Principles</div>
-        <h2>Our Prompt Standards</h2>
+        <h2 id="standards">Our Prompt Standards</h2>
         <p>Every prompt in our pool meets these criteria:</p>
 
         <ul class="principle-list">
@@ -408,7 +428,7 @@
 
     <div class="page-section">
         <div class="section-label">Evolution</div>
-        <h2>What Comes Next</h2>
+        <h2 id="whats-next">What Comes Next</h2>
         <p>We start fully curated because it's the right foundation for credibility and anti-gaming. But this isn't static. Our roadmap includes controlled community input without sacrificing quality:</p>
 
         <ul class="principle-list">
@@ -424,14 +444,29 @@
     </div>
 
 </main>
+</div>
+</div>
 
-<footer>
+<footer class="footer" style="text-align:center;padding:40px;border-top:1px solid rgba(255,255,255,0.06);color:#555;font-size:13px;">
     &copy; 2026 The Safety Arena &mdash; tsarena.ai &nbsp;|&nbsp;
     Powered by <a href="https://trainingrun.ai">trainingrun.ai</a> &nbsp;|&nbsp;
     <a href="/charter.html">Charter</a> &nbsp;|&nbsp;
+    <a href="/prompts.html">Our Prompts</a> &nbsp;|&nbsp;
     <a href="/integrity.html">Integrity</a> &nbsp;|&nbsp;
+    <a href="/privacy.html">Privacy</a> &nbsp;|&nbsp;
+    <a href="/terms.html">Terms</a> &nbsp;|&nbsp;
     <a href="/vote.html">Enter the Arena</a>
 </footer>
 
+
+<script>
+document.addEventListener('scroll', function() {
+  const sections = document.querySelectorAll('h2[id]');
+  const links = document.querySelectorAll('.sidebar a');
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+  links.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+});
+</script>
 </body>
 </html>
