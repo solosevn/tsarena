@@ -2440,25 +2440,20 @@ async function getNextBattleFromDB() {
     document.getElementById('submitVoteBtn').style.display = 'none';
     document.getElementById('voteExplanation').style.display = 'none';
 
-    // Auto-load next battle after 4 seconds
+    // Show "Next Battle" button inside reveal (no auto-load)
     if (votesRemainingToday > 0) {
-      const countdownEl = document.createElement('p');
-      countdownEl.id = 'autoNextCountdown';
-      countdownEl.style.cssText = 'text-align:center;color:#00d4ff;font-size:14px;margin-top:12px;';
-      let secs = 4;
-      countdownEl.textContent = 'Next battle in ' + secs + 's...';
-      reveal.appendChild(countdownEl);
-      const cdInterval = setInterval(() => {
-        secs--;
-        if (secs > 0) {
-          countdownEl.textContent = 'Next battle in ' + secs + 's...';
-        } else {
-          clearInterval(cdInterval);
-          loadNextBattle();
-        }
-      }, 1000);
-      countdownEl.style.cursor = 'pointer';
-      countdownEl.addEventListener('click', () => { clearInterval(cdInterval); loadNextBattle(); });
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = 'Next Battle \u2192';
+      nextBtn.style.cssText = 'display:block;margin:16px auto 0;padding:12px 32px;background:linear-gradient(135deg,#00e5ff,#00acc1);color:#060d1a;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;font-family:Space Grotesk,sans-serif;';
+      nextBtn.addEventListener('mouseenter', () => { nextBtn.style.transform = 'scale(1.05)'; });
+      nextBtn.addEventListener('mouseleave', () => { nextBtn.style.transform = 'scale(1)'; });
+      nextBtn.addEventListener('click', () => { loadNextBattle(); });
+      reveal.appendChild(nextBtn);
+    } else {
+      const doneMsg = document.createElement('p');
+      doneMsg.style.cssText = 'text-align:center;color:#ff6d00;font-size:14px;margin-top:12px;font-weight:600;';
+      doneMsg.textContent = 'You\u2019ve used all your votes for today. Come back tomorrow!';
+      reveal.appendChild(doneMsg);
     }
   }
 
