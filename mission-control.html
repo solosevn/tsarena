@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TSArena Mission Control</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #060d1a; color: #e0e0e0; font-family: 'Space Grotesk', sans-serif; padding: 24px; }
+    h1 { color: #00e5ff; font-size: 28px; margin-bottom: 4px; }
+    .subtitle { color: #90a4ae; font-size: 14px; margin-bottom: 24px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: #0c1829; border: 1px solid #1a2a3a; border-radius: 12px; padding: 20px; text-align: center; }
+    .stat-card .number { font-size: 36px; font-weight: 700; color: #00e5ff; }
+    .stat-card .label { font-size: 13px; color: #90a4ae; margin-top: 4px; }
+    .log { background: #0c1829; border: 1px solid #1a2a3a; border-radius: 12px; padding: 16px; max-height: 400px; overflow-y: auto; }
+    .log-entry { padding: 8px 0; border-bottom: 1px solid #111f35; font-size: 13px; }
+    .log-entry .time { color: #546e7a; }
+    .log-entry .msg { color: #b0bec5; }
+    .log-entry.alert { color: #00e5ff; font-weight: 600; }
+    .status { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #00e676; margin-right: 8px; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .tg-status { margin-top: 16px; padding: 12px; background: #0a1520; border-radius: 8px; font-size: 13px; color: #90a4ae; }
+  </style>
+</head>
+<body>
+  <h1><span class="status"></span> TSArena Mission Control</h1>
+  <p class="subtitle">Live vote monitoring • Telegram alerts every 5 votes</p>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="number" id="totalVotes">--</div><div class="label">Total Votes</div></div>
+    <div class="stat-card"><div class="number" id="totalBattles">--</div><div class="label">Total Battles</div></div>
+    <div class="stat-card"><div class="number" id="activeBattles">--</div><div class="label">Battles w/ Votes</div></div>
+    <div class="stat-card"><div class="number" id="avgVotes">--</div><div class="label">Avg Votes/Battle</div></div>
+    <div class="stat-card"><div class="number" id="lastCheck">--</div><div class="label">Last Check</div></div>
+    <div class="stat-card"><div class="number" id="tgSent">0</div><div class="label">TG Alerts Sent</div></div>
+  </div>
+
+  <h2 style="color:#90a4ae;font-size:16px;margin-bottom:8px;">Activity Log</h2>
+  <div class="log" id="log"></div>
+  <div class="tg-status" id="tgStatus">Telegram: connecting...</div>
+
+  <script>
+    const SB_URL = 'https://nvitztmlczdohicskrks.supabase.co';
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52aXR6dG1sY3pkb2hpY3NrcmtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMzY3NDQsImV4cCI6MjA4NzcxMjc0NH0.g8SgL67sDyDvDQko8QFhTPj5Bkt88MdtIcgHpOy2f48';
+    const TG_TOKEN = '8602493378:AAEgO7heeDRim74QIO9plvcxe1OV-RO4ZgI';
+    const TG_CHAT = 8054313621;
+    const VOTE_THRESHOLD = 5;
+    const POLL_INTERVAL = 30000;
+
+    const sb = supabase.createClient(SB_URL, SB_KEY);
+    let lastTotalVotes = null;
+    let lastAlertVotes = 0;
+    let tgAlertsSent = 0;
+
+    function log(msg, isAlert) {
+      const el = document.getElementById('log');
+      const t = new Date().toLocaleTimeString();
+      const div = document.createElement('div');
+      div.className = 'log-entry' + (isAlert ? ' alert' : '');
+      div.innerHTML = '<span class="time">' + t + '</span> <span class="msg">' + msg + '</span>';
+      el.prepend(div);
+      if (el.children.length > 100) el.removeChild(el.lastChild);
+    }
+
+    async function sendTG(text) {
+      try {
+        await fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: TG_CHAT, text: text, parse_mode: 'HTML' })
+        });
+        tgAlertsSent++;
+        document.getElementById('tgSent').textContent = tgAlertsSent;
+        return true;
+      } catch(e) { log('TG send failed: ' + e.message); return false; }
+    }
+
+    async function poll() {
+      try {
+        // Get total votes across all battles
+        const { data: battles, error } = await sb.from('battles')
+          .select('battle_number, model_a_id, model_b_id, total_votes, votes_a, votes_b, votes_tie')
+          .gt('total_votes', 0)
+          .order('total_votes', { ascending: false });
+
+        if (error) { log('Query error: ' + error.message); return; }
+
+        const { count: totalBattles } = await sb.from('battles').select('*', { count: 'exact', head: true });
+
+        const totalVotes = battles.reduce((sum, b) => sum + b.total_votes, 0);
+        const activeBattles = battles.length;
+        const avgVotes = activeBattles > 0 ? (totalVotes / activeBattles).toFixed(1) : 0;
+
+        // Update UI
+        document.getElementById('totalVotes').textContent = totalVotes;
+        document.getElementById('totalBattles').textContent = totalBattles;
+        document.getElementById('activeBattles').textContent = activeBattles;
+        document.getElementById('avgVotes').textContent = avgVotes;
+        document.getElementById('lastCheck').textContent = new Date().toLocaleTimeString();
+        document.title = 'MC: ' + totalVotes + ' votes | ' + totalBattles + ' battles';
+
+        // First run - initialize
+        if (lastTotalVotes === null) {
+          lastTotalVotes = totalVotes;
+          lastAlertVotes = totalVotes;
+          log('Initialized. Total votes: ' + totalVotes + ', Battles: ' + totalBattles);
+          document.getElementById('tgStatus').textContent = 'Telegram: active | Alerts every ' + VOTE_THRESHOLD + ' votes | Chat: David';
+          return;
+        }
+
+        const newVotes = totalVotes - lastTotalVotes;
+        if (newVotes > 0) {
+          log('+' + newVotes + ' new vote(s). Total: ' + totalVotes);
+        }
+
+        // Check if we crossed a threshold
+        const votesSinceAlert = totalVotes - lastAlertVotes;
+        if (votesSinceAlert >= VOTE_THRESHOLD) {
+          // Build summary for Telegram
+          // Get recent battles with votes for context
+          const topBattles = battles.slice(0, 5);
+
+          // Get model names for top battles
+          const modelIds = new Set();
+          topBattles.forEach(b => { modelIds.add(b.model_a_id); modelIds.add(b.model_b_id); });
+          const { data: models } = await sb.from('models').select('id, name, lab').in('id', [...modelIds]);
+          const modelMap = {};
+          if (models) models.forEach(m => { modelMap[m.id] = m; });
+
+          let summary = '\u{1F3DF} <b>TSArena Mission Control</b>\n\n';
+          summary += '\u{1F4CA} <b>' + votesSinceAlert + ' new votes!</b> (' + totalVotes + ' total)\n';
+          summary += '\u{2694} ' + activeBattles + '/' + totalBattles + ' battles have votes\n';
+          summary += '\u{1F4C8} Avg: ' + avgVotes + ' votes/battle\n\n';
+          summary += '<b>Top Voted Battles:</b>\n';
+
+          topBattles.forEach((b, i) => {
+            const mA = modelMap[b.model_a_id];
+            const mB = modelMap[b.model_b_id];
+            const nameA = mA ? mA.name : '?';
+            const nameB = mB ? mB.name : '?';
+            const winner = b.votes_a > b.votes_b ? nameA : b.votes_b > b.votes_a ? nameB : 'TIE';
+            summary += (i+1) + '. ' + nameA + ' vs ' + nameB + ' \u2014 ' + b.total_votes + ' votes (' + winner + ' leads)\n';
+          });
+
+          await sendTG(summary);
+          lastAlertVotes = totalVotes;
+          log('\u{1F4E8} Telegram alert sent! (' + votesSinceAlert + ' new votes)', true);
+        }
+
+        lastTotalVotes = totalVotes;
+      } catch(e) {
+        log('Poll error: ' + e.message);
+      }
+    }
+
+    // Start polling
+    log('Starting mission control...');
+    poll();
+    setInterval(poll, POLL_INTERVAL);
+  </script>
+</body>
+</html>
