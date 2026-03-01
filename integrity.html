@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote Integrity | The Safety Arena</title>
+    <meta name="description" content="How The Safety Arena protects every vote. 18 security measures across 4 layers ensure one real human, one real vote.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #e8e8f0;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+        a { color: #00d4ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 0 40px;
+            height: 56px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-logo { font-weight: 700; font-size: 15px; }
+        .nav-logo span { color: #00d4ff; }
+        .nav-logo small { color: #888; font-weight: 400; font-size: 13px; margin-left: 6px; }
+        .nav-links { display: flex; gap: 28px; align-items: center; }
+        .nav-links a { color: #aaa; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover, .nav-links a.active { color: #00d4ff; text-decoration: none; }
+        .btn-vote {
+            background: #00d4ff; color: #0a0a0f !important; padding: 8px 20px;
+            border-radius: 8px; font-weight: 600; font-size: 13px;
+            transition: background 0.2s;
+        }
+        .btn-vote:hover { background: #00bde0; text-decoration: none; }
+
+        /* Back button */
+        .back-btn {
+            position: fixed; top: 70px; left: 20px; z-index: 50;
+            color: #aaa; font-size: 14px; padding: 6px 14px;
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
+            background: rgba(10,10,15,0.8); backdrop-filter: blur(5px);
+            transition: all 0.2s;
+        }
+        .back-btn:hover { color: #00d4ff; border-color: #00d4ff; text-decoration: none; }
+
+        /* Hero */
+        .page-hero {
+            text-align: center;
+            padding: 140px 40px 60px;
+            background: linear-gradient(180deg, rgba(0,212,255,0.03) 0%, transparent 100%);
+        }
+        .eyebrow {
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #00d4ff;
+            margin-bottom: 16px;
+        }
+        .page-hero h1 {
+            font-size: 44px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        .page-hero h1 span { color: #00d4ff; }
+        .page-hero .subtitle {
+            color: #aaa;
+            font-size: 17px;
+            max-width: 640px;
+            margin: 0 auto 24px;
+        }
+        .page-meta {
+            display: inline-flex; align-items: center; gap: 12px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-size: 13px; color: #888;
+        }
+        .page-meta strong { color: #ccc; font-weight: 600; }
+
+        /* Content */
+        .page-content {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 20px 40px 80px;
+        }
+        .page-section { padding: 40px 0; }
+        .section-label {
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #00d4ff;
+            margin-bottom: 12px;
+        }
+        .page-section h2 {
+            font-size: 28px; font-weight: 700;
+            margin-bottom: 20px; color: #e8e8f0;
+        }
+        .page-section h3 {
+            font-size: 20px; font-weight: 600;
+            margin: 28px 0 12px; color: #e8e8f0;
+        }
+        .page-section p {
+            color: #b8b8c8; margin-bottom: 16px;
+        }
+        .section-divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            margin: 0;
+        }
+
+        /* Callout */
+        .callout {
+            border-left: 3px solid #00d4ff;
+            border-radius: 10px;
+            padding: 24px 28px;
+            margin: 24px 0;
+            background: rgba(0,212,255,0.03);
+        }
+        .callout p { color: #d0d0e0; margin-bottom: 0; }
+        .callout strong { color: #e8e8f0; }
+        .callout .highlight { color: #00d4ff; font-weight: 600; }
+
+        /* Stats banner */
+        .stats-banner {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin: 32px 0;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-card .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: #00d4ff;
+            line-height: 1.1;
+        }
+        .stat-card .stat-label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Measure cards */
+        .measure-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin: 24px 0;
+        }
+        .measure-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 20px 24px;
+            display: grid;
+            grid-template-columns: 40px 1fr auto;
+            gap: 16px;
+            align-items: start;
+        }
+        .measure-icon {
+            width: 36px; height: 36px;
+            background: rgba(0,212,255,0.1);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .measure-info h4 {
+            font-size: 15px; font-weight: 600; color: #e8e8f0; margin-bottom: 4px;
+        }
+        .measure-info p {
+            font-size: 13px; color: #888; margin-bottom: 0; line-height: 1.5;
+        }
+        .measure-info .layer-tag {
+            display: inline-block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00d4ff;
+            background: rgba(0,212,255,0.08);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+        .status-badge {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .status-active {
+            color: #22c55e;
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.2);
+        }
+        .status-pending {
+            color: #f59e0b;
+            background: rgba(245,158,11,0.1);
+            border: 1px solid rgba(245,158,11,0.2);
+        }
+
+        /* Pipeline steps */
+        .pipeline {
+            margin: 24px 0;
+            position: relative;
+        }
+        .pipeline-step {
+            display: grid;
+            grid-template-columns: 36px 1fr;
+            gap: 16px;
+            padding: 12px 0;
+            position: relative;
+        }
+        .pipeline-step::before {
+            content: '';
+            position: absolute;
+            left: 17px; top: 36px; bottom: -12px;
+            width: 2px;
+            background: rgba(0,212,255,0.15);
+        }
+        .pipeline-step:last-child::before { display: none; }
+        .step-number {
+            width: 36px; height: 36px;
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; color: #00d4ff;
+            position: relative; z-index: 1;
+        }
+        .step-content h4 {
+            font-size: 14px; font-weight: 600; color: #e8e8f0; margin-bottom: 2px;
+        }
+        .step-content p {
+            font-size: 13px; color: #888; margin-bottom: 0; line-height: 1.5;
+        }
+
+        /* Principle list */
+        .principle-list {
+            list-style: none; margin: 20px 0;
+        }
+        .principle-list li {
+            padding: 12px 0 12px 32px;
+            position: relative; color: #b8b8c8;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .principle-list li::before {
+            content: '';
+            position: absolute; left: 0; top: 18px;
+            width: 8px; height: 8px;
+            background: #00d4ff; border-radius: 50%;
+        }
+        .principle-list li strong { color: #e8e8f0; }
+
+        /* Footer */
+        footer {
+            text-align: center; padding: 40px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            color: #555; font-size: 13px;
+        }
+        footer a { color: #888; }
+
+        @media (max-width: 768px) {
+            .page-hero h1 { font-size: 32px; }
+            .page-content { padding: 20px 20px 60px; }
+            .stats-banner { grid-template-columns: repeat(2, 1fr); }
+            .measure-card { grid-template-columns: 1fr; }
+            .measure-icon { display: none; }
+            nav { padding: 0 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-logo"><a href="/" style="color:inherit;text-decoration:none">The <span>Safety</span> Arena</a> <small>/ tsarena.ai</small></div>
+    <div class="nav-links">
+        <a href="/howitworks.html">How It Works</a>
+        <a href="/charter.html">Charter</a>
+        <a href="/vote.html" class="btn-vote">Enter the Arena</a>
+    </div>
+</nav>
+
+<a href="/" class="back-btn">&larr; Back</a>
+
+<div class="page-hero">
+    <div class="eyebrow">Public Audit</div>
+    <h1>Vote <span>Integrity</span></h1>
+    <p class="subtitle">Every security measure protecting every vote. Published openly because our Charter demands radical transparency.</p>
+    <div class="page-meta">
+        <strong>Version 1.0</strong>
+        <span>&mdash;</span>
+        <span>March 1, 2026</span>
+        <span>&mdash;</span>
+        <span>David Solomon, Founder</span>
+    </div>
+</div>
+
+<main class="page-content">
+
+    <!-- Stats Overview -->
+    <div class="stats-banner">
+        <div class="stat-card">
+            <div class="stat-number">18</div>
+            <div class="stat-label">Active Measures</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">4</div>
+            <div class="stat-label">Security Layers</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">14</div>
+            <div class="stat-label">Validation Steps</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Client-Side Trust</div>
+        </div>
+    </div>
+
+    <div class="callout">
+        <p><strong>Our philosophy:</strong> No single point of failure can compromise a vote. Every submission passes through <span class="highlight">14 independent server-side validation steps</span> before it's recorded. The client is never trusted.</p>
+    </div>
+
+    <div class="page-section">
+        <div class="section-label">Overview</div>
+        <h2>Defense in Depth</h2>
+        <p>Vote integrity isn't one feature &mdash; it's the entire architecture. We enforce validation at four independent layers: client-side (browser), server-side (Edge Function), database (PostgreSQL constraints), and infrastructure (Cloudflare, TLS). An attacker would need to compromise all four layers simultaneously to submit a fraudulent vote.</p>
+        <p>This page documents every measure. We publish this because our <a href="/charter.html">Charter's Principle 4 (Radical Transparency)</a> demands it &mdash; and because we believe transparency makes security stronger, not weaker.</p>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Server-Side Pipeline -->
+    <div class="page-section">
+        <div class="section-label">Server-Side Validation</div>
+        <h2>The 14-Step Pipeline</h2>
+        <p>Every vote submission is routed through a Supabase Edge Function that performs 14 sequential checks before any data touches the database. This runs server-side &mdash; it cannot be bypassed by modifying client code.</p>
+
+        <div class="pipeline">
+            <div class="pipeline-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Authorization Header</h4>
+                    <p>Verifies the request includes a valid Bearer JWT token. Unauthenticated requests are rejected immediately.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Request Body Parsing</h4>
+                    <p>Parses and validates the JSON payload: battle ID, vote choice, explanation, behavioral metrics, CAPTCHA token, and honeypot field.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Honeypot Detection</h4>
+                    <p>Checks a hidden form field that humans never see. Bots that auto-fill all fields are silently rejected.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Required Field Validation</h4>
+                    <p>Ensures battle ID, vote choice, and CAPTCHA token are all present and non-empty.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h4>CAPTCHA Verification (Cloudflare Turnstile)</h4>
+                    <p>Server-side cryptographic verification of the Turnstile token via Cloudflare's API. Proves a real browser controlled by a human generated this request.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <h4>Supabase Client Initialization</h4>
+                    <p>Creates a privileged service-role client for database operations and a user-scoped client for authentication verification.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">7</div>
+                <div class="step-content">
+                    <h4>User Authentication (JWT Validation)</h4>
+                    <p>Extracts and validates the user identity from the JWT. Expired or tampered tokens are rejected.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">8</div>
+                <div class="step-content">
+                    <h4>Account Age Check</h4>
+                    <p>Requires the account to be at least 30 seconds old. Prevents rapid account-cycling attacks.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">9</div>
+                <div class="step-content">
+                    <h4>Rate Limit Enforcement</h4>
+                    <p>Checks the user's daily vote count. Maximum 10 votes per day per user, enforced server-side.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">10</div>
+                <div class="step-content">
+                    <h4>Battle Existence Validation</h4>
+                    <p>Confirms the battle ID references a real battle in the database. Fabricated IDs are rejected.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">11</div>
+                <div class="step-content">
+                    <h4>Duplicate Vote Prevention</h4>
+                    <p>Queries for an existing vote from this user on this battle. One vote per user per battle, enforced at both application and database levels.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">12</div>
+                <div class="step-content">
+                    <h4>Vote Record Insert</h4>
+                    <p>Writes the vote with all metadata: choice, explanation, time on page, mouse movements, scroll depth, device fingerprint, IP address, and timestamp.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">13</div>
+                <div class="step-content">
+                    <h4>Rate Limit Counter Update</h4>
+                    <p>Increments the user's daily vote counter for ongoing rate limit enforcement.</p>
+                </div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number">14</div>
+                <div class="step-content">
+                    <h4>Success Confirmation</h4>
+                    <p>Returns the vote ID. Only then does the client reveal which models generated each response.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- All Measures -->
+    <div class="page-section">
+        <div class="section-label">Complete Inventory</div>
+        <h2>All Security Measures</h2>
+        <p>Every active and planned security measure, organized by what it protects against.</p>
+
+        <div class="measure-grid">
+            <div class="measure-card">
+                <div class="measure-icon">&#128274;</div>
+                <div class="measure-info">
+                    <h4>Cloudflare Turnstile CAPTCHA</h4>
+                    <p>Non-intrusive bot detection. Browser behavior analysis generates a cryptographic proof of humanity, verified server-side.</p>
+                    <span class="layer-tag">Client + Server</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#9889;</div>
+                <div class="measure-info">
+                    <h4>Server-Side Edge Function (14-Step Pipeline)</h4>
+                    <p>All vote validation happens server-side. The client cannot bypass any check by modifying browser code.</p>
+                    <span class="layer-tag">Server</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128290;</div>
+                <div class="measure-info">
+                    <h4>JWT Authentication</h4>
+                    <p>Every request requires a valid, non-expired JSON Web Token. Anonymous voting is impossible.</p>
+                    <span class="layer-tag">Server</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#9201;</div>
+                <div class="measure-info">
+                    <h4>Server-Side Rate Limiting</h4>
+                    <p>Maximum 10 votes per user per calendar day. Prevents any single account from disproportionately influencing results.</p>
+                    <span class="layer-tag">Server</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128683;</div>
+                <div class="measure-info">
+                    <h4>Duplicate Vote Prevention</h4>
+                    <p>Application-level check + database UNIQUE constraint on (user_id, battle_id). One vote per user per battle, enforced at two levels.</p>
+                    <span class="layer-tag">Server + Database</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128118;</div>
+                <div class="measure-info">
+                    <h4>Account Age Gate</h4>
+                    <p>New accounts must wait before voting. Makes rapid account-cycling attacks impractical.</p>
+                    <span class="layer-tag">Server</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#127891;</div>
+                <div class="measure-info">
+                    <h4>Honeypot Field</h4>
+                    <p>Invisible form field that catches bots. Humans never see it; bots that auto-fill everything are silently rejected.</p>
+                    <span class="layer-tag">Client + Server</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128065;</div>
+                <div class="measure-info">
+                    <h4>Blind Voting</h4>
+                    <p>Model identities hidden until after the vote is recorded. Eliminates brand bias entirely.</p>
+                    <span class="layer-tag">Client</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128214;</div>
+                <div class="measure-info">
+                    <h4>Mandatory Reading Timer (22s)</h4>
+                    <p>Vote buttons are disabled until the timer expires. Forces voters to actually read both responses before deciding.</p>
+                    <span class="layer-tag">Client</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128202;</div>
+                <div class="measure-info">
+                    <h4>Behavioral Analytics</h4>
+                    <p>Collects time-on-page, mouse movements, and scroll depth. Used to identify bot-like patterns and suspicious voting behavior.</p>
+                    <span class="layer-tag">Client + Server</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128241;</div>
+                <div class="measure-info">
+                    <h4>Device Fingerprinting</h4>
+                    <p>Browser-derived hash detecting multi-account abuse from the same device.</p>
+                    <span class="layer-tag">Client + Server</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#127760;</div>
+                <div class="measure-info">
+                    <h4>IP Address Logging</h4>
+                    <p>Records voter IP for post-hoc fraud analysis. Detects vote farms (many accounts, same IP).</p>
+                    <span class="layer-tag">Server</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128737;</div>
+                <div class="measure-info">
+                    <h4>Row Level Security (RLS)</h4>
+                    <p>PostgreSQL-enforced access control. Users can only interact with their own data, regardless of application bugs.</p>
+                    <span class="layer-tag">Database</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128451;</div>
+                <div class="measure-info">
+                    <h4>Database Constraints</h4>
+                    <p>Foreign keys, UNIQUE constraints, CHECK constraints (vote_choice in A/B/tie, scroll_depth 0-100), and NOT NULL enforcement.</p>
+                    <span class="layer-tag">Database</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#127758;</div>
+                <div class="measure-info">
+                    <h4>CORS Restriction</h4>
+                    <p>Edge Function only accepts requests from tsarena.ai. Third-party sites cannot submit votes.</p>
+                    <span class="layer-tag">Server</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128681;</div>
+                <div class="measure-info">
+                    <h4>Vote Integrity Flagging</h4>
+                    <p>Suspicious votes can be flagged and excluded from leaderboard calculations without deleting the audit trail.</p>
+                    <span class="layer-tag">Database</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128737;</div>
+                <div class="measure-info">
+                    <h4>Cloudflare DDoS Protection</h4>
+                    <p>Infrastructure-level protection against denial-of-service attacks. SSL/TLS encryption on all traffic.</p>
+                    <span class="layer-tag">Infrastructure</span>
+                </div>
+                <span class="status-badge status-active">Active</span>
+            </div>
+
+            <div class="measure-card">
+                <div class="measure-icon">&#128241;</div>
+                <div class="measure-info">
+                    <h4>SMS Phone Verification</h4>
+                    <p>One phone number per voter via Twilio. Makes Sybil attacks (fake accounts) economically unviable. Achieves "one real human, one real vote."</p>
+                    <span class="layer-tag">Client + Server</span>
+                </div>
+                <span class="status-badge status-pending">Pending</span>
+            </div>
+        </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- Database Layer -->
+    <div class="page-section">
+        <div class="section-label">Database Layer</div>
+        <h2>Structural Constraints</h2>
+        <p>Beyond application logic, PostgreSQL enforces structural rules that serve as the final safety net. Even if the Edge Function has a bug, these constraints prevent invalid data from being written:</p>
+
+        <ul class="principle-list">
+            <li><strong>UNIQUE (user_id, battle_id)</strong> &mdash; Prevents duplicate votes at the database level, independent of application checks.</li>
+            <li><strong>FOREIGN KEY to battles(id)</strong> &mdash; Every vote must reference a real battle. Fabricated battle IDs are impossible.</li>
+            <li><strong>FOREIGN KEY to auth.users(id)</strong> &mdash; Every vote must belong to a real authenticated user.</li>
+            <li><strong>CHECK (vote_choice IN 'A', 'B', 'tie')</strong> &mdash; Only valid vote choices are accepted. No arbitrary strings.</li>
+            <li><strong>CHECK (scroll_depth BETWEEN 0 AND 100)</strong> &mdash; Behavioral data must be within valid ranges.</li>
+            <li><strong>NOT NULL on critical fields</strong> &mdash; Vote choice, user ID, battle ID, and reading time cannot be omitted.</li>
+            <li><strong>Auto-increment trigger</strong> &mdash; Battle vote counts update automatically via PostgreSQL trigger, not application code.</li>
+        </ul>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="page-section">
+        <div class="section-label">Commitment</div>
+        <h2>Our Ongoing Promise</h2>
+        <p>Security is not a feature we shipped &mdash; it's a practice we maintain. As threats evolve, so do our defenses. This page will be updated whenever we add, modify, or retire a security measure.</p>
+        <p>If you discover a vulnerability, please report it to <a href="mailto:david@trainingrun.ai">david@trainingrun.ai</a>. We take every report seriously.</p>
+
+        <div class="callout">
+            <p>We publish this because we believe <span class="highlight">transparency makes security stronger, not weaker.</span> If our defenses can't withstand public scrutiny, they aren't strong enough. This is what <a href="/charter.html">Radical Transparency</a> looks like in practice.</p>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    &copy; 2026 The Safety Arena &mdash; tsarena.ai &nbsp;|&nbsp;
+    Powered by <a href="https://trainingrun.ai">trainingrun.ai</a> &nbsp;|&nbsp;
+    <a href="/charter.html">Charter</a> &nbsp;|&nbsp;
+    <a href="/prompts.html">Our Prompts</a> &nbsp;|&nbsp;
+    <a href="/vote.html">Enter the Arena</a>
+</footer>
+
+</body>
+</html>
