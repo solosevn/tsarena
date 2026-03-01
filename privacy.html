@@ -32,9 +32,13 @@
     strong { color: #e0e0e0; }
     footer { text-align: center; padding: 32px; color: #546e7a; font-size: 13px; border-top: 1px solid #1a2a3a; margin-top: 48px; }
     @media (max-width: 768px) { .sidebar { display: none; } .page-wrapper { padding: 20px 16px; } }
-  </style>
+  
+    .back-btn { position: fixed; top: 16px; left: 20px; z-index: 50; color: #aaa; font-size: 14px; padding: 6px 14px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; background: rgba(10,10,15,0.8); backdrop-filter: blur(5px); transition: all 0.2s; text-decoration: none; }
+    .back-btn:hover { color: #00d4ff; border-color: #00d4ff; text-decoration: none; }
+    </style>
 </head>
 <body>
+  <a href="/" class="back-btn">&larr; Back</a>
   <div class="page-wrapper">
     <nav class="sidebar">
       <div class="sidebar-inner">
@@ -140,7 +144,16 @@
       <strong>Project:</strong> The Safety Arena<br>
       <strong>Organization:</strong> Training Run (<a href="https://trainingrun.ai">trainingrun.ai</a>)</p>
 
-      <footer>&copy; 2026 The Safety Arena &mdash; Independent AI Safety Research</footer>
+      <footer style="text-align:center;padding:40px;border-top:1px solid rgba(255,255,255,0.06);color:#555;font-size:13px;">
+    &copy; 2026 The Safety Arena &mdash; tsarena.ai &nbsp;|&nbsp;
+    Powered by <a href="https://trainingrun.ai" style="color:#888">trainingrun.ai</a> &nbsp;|&nbsp;
+    <a href="/charter.html" style="color:#888">Charter</a> &nbsp;|&nbsp;
+    <a href="/prompts.html" style="color:#888">Our Prompts</a> &nbsp;|&nbsp;
+    <a href="/integrity.html" style="color:#888">Integrity</a> &nbsp;|&nbsp;
+    <a href="/privacy.html" style="color:#888">Privacy</a> &nbsp;|&nbsp;
+    <a href="/terms.html" style="color:#888">Terms</a> &nbsp;|&nbsp;
+    <a href="/vote.html" style="color:#888">Enter the Arena</a>
+</footer>
     </main>
   </div>
   <script>
