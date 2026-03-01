@@ -792,6 +792,34 @@
     overflow: hidden;
     animation: revealGlow 2s ease-in-out infinite alternate;
   }
+        /* === SKIP ARROW INDICATOR === */
+        .skip-arrow-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 12px;
+          margin-bottom: -4px;
+          animation: bounceArrow 1.2s ease-in-out infinite;
+        }
+        .skip-arrow-container .arrow-text {
+          color: #ff1744;
+          font-size: 14px;
+          font-weight: 700;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          margin-bottom: 4px;
+        }
+        .skip-arrow-container .arrow-icon {
+          font-size: 36px;
+          color: #ff1744;
+          line-height: 1;
+          filter: drop-shadow(0 0 8px rgba(255,23,68,0.6));
+        }
+        @keyframes bounceArrow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(10px); }
+        }
+
   @keyframes revealGlow {
     from { box-shadow: 0 0 25px rgba(0,230,118,0.15); }
     to { box-shadow: 0 0 40px rgba(0,230,118,0.3); }
@@ -1480,7 +1508,11 @@
     <div class="phone-verify-error" id="phoneVerifyError"></div>
     <p class="phone-verify-note">Your number is used only for verification and is never shared. This is how we keep every vote real.</p>
     <div style="margin-top:20px;text-align:center;">
-      <a href="#" onclick="skipPhoneVerify();return false;" style="color:#00e5ff;font-size:16px;font-weight:600;text-decoration:underline;text-underline-offset:4px;">Skip for now &mdash; SMS verification coming soon</a>
+      <div class="skip-arrow-container">
+              <span class="arrow-text">Click here to skip</span>
+              <span class="arrow-icon">⬇</span>
+            </div>
+            <a href="#" onclick="skipPhoneVerify();return false;" style="color:#00e5ff;font-size:16px;font-weight:600;text-decoration:underline;text-underline-offset:4px;">Skip for now &mdash; SMS verification coming soon</a>
     </div>
   </div>
 </div>
