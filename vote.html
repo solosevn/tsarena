@@ -781,6 +781,139 @@
     100% { transform: scale(1); }
   }
 
+  /* === NEW REVEAL CARDS === */
+  .reveal-winner {
+    background: linear-gradient(145deg, #0a2618 0%, #0c1829 40%, #0a2618 100%);
+    border: 2px solid var(--green);
+    border-radius: 20px;
+    padding: 32px 36px;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+    animation: revealGlow 2s ease-in-out infinite alternate;
+  }
+  @keyframes revealGlow {
+    from { box-shadow: 0 0 25px rgba(0,230,118,0.15); }
+    to { box-shadow: 0 0 40px rgba(0,230,118,0.3); }
+  }
+  .reveal-winner.pick-b {
+    background: linear-gradient(145deg, #081828 0%, #0c1829 40%, #081828 100%);
+    border-color: var(--cyan);
+    animation: none;
+    box-shadow: 0 0 35px rgba(0,229,255,0.2);
+  }
+  .reveal-badge {
+    position: absolute; top: 0; right: 0;
+    background: var(--green);
+    color: #0a0a0f;
+    font-weight: 800; font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 8px 20px 8px 24px;
+    border-radius: 0 18px 0 16px;
+  }
+  .reveal-winner.pick-b .reveal-badge { background: var(--cyan); }
+  .reveal-top {
+    display: flex; align-items: center; gap: 24px; margin-bottom: 16px;
+  }
+  .reveal-logo {
+    width: 80px; height: 80px; border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; overflow: hidden;
+  }
+  .reveal-logo img {
+    width: 64px; height: 64px; border-radius: 14px; object-fit: cover;
+  }
+  .reveal-model-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 4px;
+  }
+  .reveal-company {
+    font-size: 20px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .reveal-winner .reveal-company { color: var(--green); }
+  .reveal-winner.pick-b .reveal-company { color: var(--cyan); }
+  .reveal-response-tag {
+    font-size: 11px; color: rgba(255,255,255,0.4);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 3px;
+  }
+  .reveal-stats {
+    display: flex; gap: 28px; margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid rgba(0,230,118,0.15);
+  }
+  .reveal-winner.pick-b .reveal-stats { border-top-color: rgba(0,229,255,0.15); }
+  .reveal-stat-val {
+    font-size: 24px; font-weight: 800; color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .reveal-stat-lbl {
+    font-size: 10px; color: #546e7a; text-transform: uppercase;
+    letter-spacing: 1px; margin-top: 2px;
+  }
+  .reveal-loser {
+    background: var(--bg-card);
+    border: 1px solid #1a2a3a;
+    border-radius: 12px;
+    padding: 16px 20px;
+    opacity: 0.55;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .reveal-loser .reveal-logo {
+    width: 48px; height: 48px; border-radius: 12px;
+  }
+  .reveal-loser .reveal-logo img {
+    width: 36px; height: 36px; border-radius: 9px;
+  }
+  .reveal-loser .reveal-model-name {
+    font-size: 16px; color: #90a4ae; margin-bottom: 1px;
+  }
+  .reveal-loser .reveal-company {
+    font-size: 13px; color: #546e7a;
+  }
+  .reveal-loser .reveal-response-tag { font-size: 10px; }
+  .reveal-loser-tag {
+    margin-left: auto; font-size: 11px; color: #546e7a;
+    text-transform: uppercase; letter-spacing: 1px; font-weight: 600; white-space: nowrap;
+  }
+  .reveal-community {
+    margin-top: 20px; padding: 14px 18px;
+    background: rgba(12,24,41,0.8);
+    border: 1px solid #1a2a3a; border-radius: 10px;
+  }
+  .reveal-community-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
+    color: #546e7a; margin-bottom: 8px; font-weight: 600;
+  }
+  .reveal-bar-track {
+    height: 7px; background: #1a2a3a; border-radius: 4px;
+    overflow: hidden; display: flex;
+  }
+  .reveal-bar-a { background: var(--green); }
+  .reveal-bar-tie { background: #ffd700; }
+  .reveal-bar-b { background: var(--cyan); }
+  .reveal-bar-labels {
+    display: flex; justify-content: space-between;
+    margin-top: 5px; font-size: 11px; font-weight: 600;
+  }
+  .reveal-bar-labels .rbl-a { color: var(--green); }
+  .reveal-bar-labels .rbl-t { color: #ffd700; }
+  .reveal-bar-labels .rbl-b { color: var(--cyan); }
+  /* Tie reveal */
+  .reveal-tie {
+    background: linear-gradient(145deg, #1a1a0d 0%, #0c1829 40%, #1a1a0d 100%);
+    border: 2px solid #ffd700; border-radius: 16px;
+    padding: 20px 24px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 18px;
+    box-shadow: 0 0 20px rgba(255,215,0,0.08);
+  }
+  .reveal-tie .reveal-model-name { font-size: 22px; }
+  .reveal-tie .reveal-company { color: #ffd700; font-size: 16px; }
+  .reveal-tie-divider {
+    text-align: center; padding: 3px 0;
+  }
+  .reveal-tie-divider span {
+    background: #ffd700; color: #0a0a0f; font-weight: 800;
+    font-size: 11px; padding: 4px 14px; border-radius: 20px; letter-spacing: 2px;
+  }
+
   /* Hidden honeypot field */
   #honeypot-website {
     display: none !important;
@@ -1434,11 +1567,7 @@
   </div>
 
   <div class="result-reveal" id="resultReveal">
-    <div class="result-header">The models were:</div>
-    <div id="winnerLabel" class="winner-label" style="display:none"></div><div id="winnerPercentage" class="winner-pct" style="display:none"></div><div class="result-models">
-      <div class="result-model-a">Response A: <strong id="modelA"></strong><span id="modelAName"></span><small id="modelALab"></small></div>
-      <div class="result-model-b">Response B: <strong id="modelB"></strong><span id="modelBName"></span><small id="modelBLab"></small></div>
-    </div>
+    <!-- Dynamically populated by showResultReveal() -->
   </div>
 
   <div class="progress-section">
@@ -1461,6 +1590,30 @@
   const SUPABASE_URL = 'https://nvitztmlczdohicskrks.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52aXR6dG1sY3pkb2hpY3NrcmtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMzY3NDQsImV4cCI6MjA4NzcxMjc0NH0.g8SgL67sDyDvDQko8QFhTPj5Bkt88MdtIcgHpOy2f48';
   supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Company logo mapping (GitHub avatar URLs)
+  const COMPANY_LOGOS = {
+    'OpenAI': 'https://avatars.githubusercontent.com/u/14957082?s=128',
+    'Anthropic': 'https://avatars.githubusercontent.com/u/76263028?s=128',
+    'Google': 'https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png',
+    'Meta': 'https://avatars.githubusercontent.com/u/69631?s=128',
+    'xAI': 'https://avatars.githubusercontent.com/u/141821688?s=128',
+    'Mistral AI': 'https://avatars.githubusercontent.com/u/132372032?s=128',
+    'DeepSeek': 'https://avatars.githubusercontent.com/u/148330874?s=128',
+    'Alibaba Cloud': 'https://avatars.githubusercontent.com/u/151893169?s=128',
+    'Cohere': 'https://avatars.githubusercontent.com/u/54850923?s=128',
+    'Microsoft': 'https://avatars.githubusercontent.com/u/6154722?s=128',
+    'NVIDIA': 'https://avatars.githubusercontent.com/u/1728152?s=128',
+    'Amazon': 'https://avatars.githubusercontent.com/u/8594673?s=128',
+    'Nous Research': 'https://avatars.githubusercontent.com/u/130908587?s=128',
+  };
+  const COMPANY_COLORS = {
+    'OpenAI': '#10a37f', 'Anthropic': '#d4a574', 'Google': '#4285f4',
+    'Meta': '#0668E1', 'xAI': '#ffffff', 'Mistral AI': '#f97316',
+    'DeepSeek': '#4D6BFE', 'Alibaba Cloud': '#7c3aed', 'Cohere': '#39d353',
+    'Microsoft': '#00a4ef', 'NVIDIA': '#76b900', 'Amazon': '#ff9900',
+    'Nous Research': '#e040fb',
+  };
 
   const fpPromise = FingerprintJS.load();
 
@@ -2124,49 +2277,121 @@ async function getNextBattleFromDB() {
   }
 
   function showResultReveal() {
-    const modelAEl = document.getElementById('modelA');
-    const modelBEl = document.getElementById('modelB');
-
     const aName = currentBattle.model_a?.name || 'Unknown';
-    const aOrg = currentBattle.model_a?.lab || '';
+    const aLab = currentBattle.model_a?.lab || '';
     const bName = currentBattle.model_b?.name || 'Unknown';
-    const bOrg = currentBattle.model_b?.lab || '';
+    const bLab = currentBattle.model_b?.lab || '';
 
-    document.getElementById('modelAName').textContent = aName;
-    document.getElementById('modelALab').textContent = aOrg;
-    document.getElementById('modelBName').textContent = bName;
-    document.getElementById('modelBLab').textContent = bOrg;
-
-    // Determine winner based on vote
     const totalVotes = (currentBattle.votes_a || 0) + (currentBattle.votes_b || 0) + (currentBattle.votes_tie || 0);
-    let winnerLabel = '';
-    let winnerPercentage = 0;
+    const pctA = totalVotes > 0 ? Math.round((currentBattle.votes_a / totalVotes) * 100) : 0;
+    const pctB = totalVotes > 0 ? Math.round((currentBattle.votes_b / totalVotes) * 100) : 0;
+    const pctTie = totalVotes > 0 ? Math.round((currentBattle.votes_tie / totalVotes) * 100) : 0;
+
+    const logoUrl = (lab) => COMPANY_LOGOS[lab] || '';
+    const brandColor = (lab) => COMPANY_COLORS[lab] || '#546e7a';
+
+    let winName, winLab, winTag, loseName, loseLab, loseTag, isTie = false, pickB = false;
 
     if (selectedVote === 'A') {
-      winnerLabel = 'A';
-      winnerPercentage = totalVotes > 0 ? Math.round((currentBattle.votes_a / totalVotes) * 100) : 0;
-      modelAEl.classList.add('winner');
-      modelBEl.classList.remove('winner');
+      winName = aName; winLab = aLab; winTag = 'Response A';
+      loseName = bName; loseLab = bLab; loseTag = 'Response B';
     } else if (selectedVote === 'B') {
-      winnerLabel = 'B';
-      winnerPercentage = totalVotes > 0 ? Math.round((currentBattle.votes_b / totalVotes) * 100) : 0;
-      modelBEl.classList.add('winner');
-      modelAEl.classList.remove('winner');
+      winName = bName; winLab = bLab; winTag = 'Response B';
+      loseName = aName; loseLab = aLab; loseTag = 'Response A';
+      pickB = true;
     } else {
-      winnerLabel = 'Neither';
-      winnerPercentage = totalVotes > 0 ? Math.round((currentBattle.votes_tie / totalVotes) * 100) : 0;
-      modelAEl.classList.remove('winner');
-      modelBEl.classList.remove('winner');
+      isTie = true;
     }
 
-    document.getElementById('winnerLabel').textContent = winnerLabel;
-    document.getElementById('winnerPercentage').textContent = winnerPercentage + '%';
+    const reveal = document.getElementById('resultReveal');
 
-    document.getElementById('resultReveal').classList.add('show');
+    if (isTie) {
+      reveal.innerHTML = `
+        <div style="text-align:center;margin-bottom:20px">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:26px;color:#fff;margin-bottom:4px">The Models Were...</h2>
+          <p style="font-size:14px;color:var(--cyan);font-weight:600">You voted Tie</p>
+        </div>
+        <div class="reveal-tie">
+          <div class="reveal-logo" style="background:#0c1829;border:2px solid ${brandColor(aLab)}">
+            ${logoUrl(aLab) ? '<img src="'+logoUrl(aLab)+'" alt="'+aLab+'">' : ''}
+          </div>
+          <div><div class="reveal-response-tag">Response A</div>
+            <div class="reveal-model-name">${aName}</div>
+            <div class="reveal-company">${aLab}</div></div>
+        </div>
+        <div class="reveal-tie-divider"><span>TIE</span></div>
+        <div class="reveal-tie">
+          <div class="reveal-logo" style="background:#0c1829;border:2px solid ${brandColor(bLab)}">
+            ${logoUrl(bLab) ? '<img src="'+logoUrl(bLab)+'" alt="'+bLab+'">' : ''}
+          </div>
+          <div><div class="reveal-response-tag">Response B</div>
+            <div class="reveal-model-name">${bName}</div>
+            <div class="reveal-company">${bLab}</div></div>
+        </div>
+        <div class="reveal-community">
+          <div class="reveal-community-label">Community Votes</div>
+          <div class="reveal-bar-track">
+            <div class="reveal-bar-a" style="width:${pctA}%"></div>
+            <div class="reveal-bar-tie" style="width:${pctTie}%"></div>
+            <div class="reveal-bar-b" style="width:${pctB}%"></div>
+          </div>
+          <div class="reveal-bar-labels">
+            <span class="rbl-a">A: ${pctA}%</span>
+            <span class="rbl-t">Tie: ${pctTie}%</span>
+            <span class="rbl-b">B: ${pctB}%</span>
+          </div>
+        </div>`;
+    } else {
+      reveal.innerHTML = `
+        <div style="text-align:center;margin-bottom:20px">
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:26px;color:#fff;margin-bottom:4px">The Models Were...</h2>
+          <p style="font-size:14px;color:var(--cyan);font-weight:600">You voted for ${winTag}</p>
+        </div>
+        <div class="reveal-winner ${pickB ? 'pick-b' : ''}">
+          <div class="reveal-badge">YOUR PICK</div>
+          <div class="reveal-top">
+            <div class="reveal-logo" style="background:#0c1829;border:2px solid ${brandColor(winLab)}">
+              ${logoUrl(winLab) ? '<img src="'+logoUrl(winLab)+'" alt="'+winLab+'">' : ''}
+            </div>
+            <div>
+              <div class="reveal-response-tag">${winTag}</div>
+              <div class="reveal-model-name">${winName}</div>
+              <div class="reveal-company">${winLab}</div>
+            </div>
+          </div>
+          <div class="reveal-stats">
+            <div><div class="reveal-stat-val">${currentBattle.model_a?.elo_rating || '--'}</div><div class="reveal-stat-lbl">Elo Rating</div></div>
+            <div><div class="reveal-stat-val">${currentBattle.model_a?.total_battles || '--'}</div><div class="reveal-stat-lbl">Total Battles</div></div>
+          </div>
+        </div>
+        <div class="reveal-loser">
+          <div class="reveal-logo" style="background:#0c1829;border:2px solid ${brandColor(loseLab)}">
+            ${logoUrl(loseLab) ? '<img src="'+logoUrl(loseLab)+'" alt="'+loseLab+'">' : ''}
+          </div>
+          <div>
+            <div class="reveal-response-tag">${loseTag}</div>
+            <div class="reveal-model-name">${loseName}</div>
+            <div class="reveal-company">${loseLab}</div>
+          </div>
+          <div class="reveal-loser-tag">Runner Up</div>
+        </div>
+        <div class="reveal-community">
+          <div class="reveal-community-label">Community Votes</div>
+          <div class="reveal-bar-track">
+            <div class="reveal-bar-a" style="width:${pctA}%"></div>
+            <div class="reveal-bar-tie" style="width:${pctTie}%"></div>
+            <div class="reveal-bar-b" style="width:${pctB}%"></div>
+          </div>
+          <div class="reveal-bar-labels">
+            <span class="rbl-a">A: ${pctA}%</span>
+            <span class="rbl-t">Tie: ${pctTie}%</span>
+            <span class="rbl-b">B: ${pctB}%</span>
+          </div>
+        </div>`;
+    }
 
-    setTimeout(() => {
-      document.getElementById('resultReveal').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 200);
+    reveal.classList.add('show');
+    setTimeout(() => { reveal.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 200);
 
     // Decrement votes remaining
     votesRemainingToday--;
@@ -2181,7 +2406,7 @@ async function getNextBattleFromDB() {
       countdownEl.style.cssText = 'text-align:center;color:#00d4ff;font-size:14px;margin-top:12px;';
       let secs = 4;
       countdownEl.textContent = 'Next battle in ' + secs + 's...';
-      document.getElementById('resultReveal').appendChild(countdownEl);
+      reveal.appendChild(countdownEl);
       const cdInterval = setInterval(() => {
         secs--;
         if (secs > 0) {
@@ -2195,6 +2420,7 @@ async function getNextBattleFromDB() {
       countdownEl.addEventListener('click', () => { clearInterval(cdInterval); loadNextBattle(); });
     }
   }
+
 
   // ============================================================
   // RATE LIMITING
