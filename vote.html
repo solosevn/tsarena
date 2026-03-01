@@ -1316,7 +1316,7 @@
     <div class="phone-verify-error" id="phoneVerifyError"></div>
     <p class="phone-verify-note">Your number is used only for verification and is never shared. This is how we keep every vote real.</p>
     <div style="margin-top:20px;text-align:center;">
-      <a href="#" onclick="skipPhoneVerify();return false;" style="color:#00e5ff;font-size:16px;font-weight:600;text-decoration:underline;text-underline-offset:4px;">Skip for now — SMS verification coming soon</a>
+      <a href="#" onclick="skipPhoneVerify();return false;" style="color:#00e5ff;font-size:16px;font-weight:600;text-decoration:underline;text-underline-offset:4px;">Skip for now â SMS verification coming soon</a>
     </div>
   </div>
 </div>
@@ -2009,6 +2009,19 @@ async function getNextBattleFromDB() {
         ip_address: userIpAddress
     };
 
+    // ANTI-GAMING: Turnstile CAPTCHA verification
+    const turnstileToken = typeof turnstile !== 'undefined' ? turnstile.getResponse() : null;
+    if (!turnstileToken) {
+      console.warn('Turnstile token missing - possible bot');
+      const voteError = document.getElementById('voteError');
+      if (voteError) {
+        voteError.textContent = 'Verification failed. Please wait a moment and try again.';
+        voteError.style.display = 'block';
+      }
+      enableVoteButtons();
+      return;
+    }
+
     // Direct DB insert (#19 - removed non-existent edge function)
     const { error: insertError } = await supabase
       .from('votes')
@@ -2027,6 +2040,11 @@ async function getNextBattleFromDB() {
 
     if (insertError) {
       console.error('Vote submission error:', insertError);
+    }
+
+    // Reset Turnstile for next vote
+    if (typeof turnstile !== 'undefined') {
+      try { turnstile.reset(); } catch(e) { console.warn('Turnstile reset failed:', e); }
     }
 
     // Show result reveal
