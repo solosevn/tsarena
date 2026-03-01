@@ -2241,6 +2241,8 @@ async function getNextBattleFromDB() {
     const turnstileToken = typeof turnstile !== 'undefined' ? turnstile.getResponse() : null;
     if (!turnstileToken) {
       console.warn('Turnstile token missing - possible bot');
+        // Reset Turnstile so user can retry
+        if (typeof turnstile !== 'undefined') { try { turnstile.reset(); } catch(e) {} }
       const voteError = document.getElementById('voteError');
       if (voteError) {
         voteError.textContent = 'Verification failed. Please wait a moment and try again.';
@@ -2279,17 +2281,27 @@ async function getNextBattleFromDB() {
     const edgeResult = await edgeResponse.json();
 
     if (!edgeResponse.ok) {
-      console.error('Vote submission error:', edgeResult.error);
-      const voteError = document.getElementById('voteError');
-      if (voteError) {
-        voteError.textContent = edgeResult.error || 'Vote submission failed. Please try again.';
-        voteError.style.display = 'block';
-      }
-      submitBtn.classList.remove('submitting');
-      submitBtn.textContent = 'Submit Vote';
-      enableVoteButtons();
-      return;
-    }
+        console.error('Vote submission error:', edgeResult.error);
+        // Reset Turnstile on error too, so next vote attempt works
+        if (typeof turnstile !== 'undefined') { try { turnstile.reset(); } catch(e) {} }
+        // If "Already voted" — user already voted on this battle, show them the reveal
+        if (edgeResult.error && edgeResult.error.includes('Already voted')) {
+          submitBtn.classList.remove('submitting');
+          submitBtn.classList.add('submitted');
+          submitBtn.textContent = '\u2713 Already Voted';
+          showResultReveal();
+          return;
+        }
+        const voteError = document.getElementById('voteError');
+        if (voteError) {
+          voteError.textContent = edgeResult.error || 'Vote submission failed. Please try again.';
+          voteError.style.display = 'block';
+        }
+        submitBtn.classList.remove('submitting');
+        submitBtn.textContent = 'Submit Vote';
+        enableVoteButtons();
+        return;
+        }
 
     // Reset Turnstile for next vote
     if (typeof turnstile !== 'undefined') {
