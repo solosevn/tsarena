@@ -33,7 +33,7 @@
       overflow-x: hidden;
     }
 
-    /* ===== TICKER BAR (same as index.html) ===== */
+    /* ===== TICKER BAR ===== */
     .ticker-wrap {
       width: 100%;
       overflow: hidden;
@@ -118,47 +118,52 @@
     .ticker-score.mid { color: var(--cyan); }
     .ticker-score.low { color: var(--orange); }
 
-    /* ===== HEADER ===== */
-    .site-header {
+    /* ===== HEADER â matches index.html exactly ===== */
+    .header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 16px 32px;
+      align-items: center;
+      padding: 20px 40px;
       border-bottom: 1px solid var(--border);
-      background: rgba(6, 13, 26, 0.95);
       position: sticky;
       top: 0;
       z-index: 100;
+      background: var(--bg-dark);
       backdrop-filter: blur(12px);
     }
-    .header-brand {
+    .header-left {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 20px;
       text-decoration: none;
     }
-    .header-brand svg {
-      width: 40px;
-      height: 40px;
+    .logo-mark {
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
     }
-    .header-brand .title {
+    .logo-text .brand {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 20px;
+      font-size: 26px;
       font-weight: 700;
       color: var(--text-primary);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
     }
-    .header-brand .title span { color: var(--cyan); }
-    .header-brand .sub {
+    .logo-text .brand span { color: var(--cyan); }
+    .logo-text .sub {
       font-size: 10px;
       font-weight: 600;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text-dim);
+      margin-top: 2px;
     }
-    .header-brand .sub a {
-      color: var(--cyan);
+    .logo-text .sub a {
+      color: var(--cyan-dim);
       text-decoration: none;
     }
+    .logo-text .sub a:hover { color: var(--cyan); }
     .header-nav {
       display: flex;
       align-items: center;
@@ -173,20 +178,23 @@
     }
     .header-nav a:hover { color: var(--cyan); }
 
-    /* ===== PAGE TITLE BAR ===== */
-    .page-title-bar {
-      padding: 28px 32px 20px;
+    /* ===== LEADERBOARD META BAR ===== */
+    .leaderboard-bar {
+      padding: 16px 40px;
       border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
     }
-    .page-title-bar h1 {
+    .leaderboard-bar h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 26px;
-      font-weight: 800;
+      font-size: 18px;
+      font-weight: 700;
       color: var(--text-primary);
-      margin-bottom: 6px;
+      white-space: nowrap;
     }
-    .page-title-bar h1 span { color: var(--cyan); }
-    .page-title-bar .subtitle {
+    .leaderboard-meta {
       font-size: 13px;
       color: var(--text-secondary);
       display: flex;
@@ -194,27 +202,26 @@
       gap: 8px;
       flex-wrap: wrap;
     }
-    .page-title-bar .subtitle .dot {
+    .leaderboard-meta .dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
       background: var(--green);
       display: inline-block;
       animation: pulse-dot 2s infinite;
+      flex-shrink: 0;
     }
     @keyframes pulse-dot {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.4; }
     }
-    .page-title-bar .subtitle .sep {
-      color: var(--text-dim);
-      margin: 0 4px;
-    }
+    .leaderboard-meta .sep { color: var(--text-dim); }
 
     /* ===== MAIN LAYOUT ===== */
     .main-layout {
       display: flex;
       min-height: calc(100vh - 200px);
+      position: relative;
     }
 
     /* ===== SIDEBAR ===== */
@@ -252,12 +259,8 @@
       transition: left 0.3s, color 0.2s;
       font-size: 12px;
     }
-    .sidebar-toggle:hover {
-      color: var(--cyan);
-    }
-    .sidebar.collapsed + .sidebar-toggle {
-      left: 0;
-    }
+    .sidebar-toggle:hover { color: var(--cyan); }
+    .sidebar.collapsed + .sidebar-toggle { left: 0; }
     .sidebar-section-title {
       font-size: 11px;
       font-weight: 700;
@@ -284,9 +287,7 @@
       transition: background 0.15s;
       margin-bottom: 2px;
     }
-    .filter-option:hover {
-      background: rgba(0, 229, 255, 0.05);
-    }
+    .filter-option:hover { background: rgba(0, 229, 255, 0.05); }
     .filter-radio {
       width: 16px;
       height: 16px;
@@ -298,9 +299,7 @@
       flex-shrink: 0;
       transition: border-color 0.2s;
     }
-    .filter-option.active .filter-radio {
-      border-color: var(--cyan);
-    }
+    .filter-option.active .filter-radio { border-color: var(--cyan); }
     .filter-option.active .filter-radio::after {
       content: '';
       width: 8px;
@@ -357,7 +356,6 @@
     .leaderboard-table th.col-score { width: 140px; }
     .leaderboard-table th.col-change { width: 100px; }
     .leaderboard-table th.col-wins { width: 100px; text-align: center; }
-    .leaderboard-table th.col-winrate { width: 100px; text-align: center; }
     .leaderboard-table th.col-battles { width: 100px; text-align: center; }
 
     .leaderboard-table td {
@@ -365,21 +363,11 @@
       border-bottom: 1px solid rgba(26, 42, 58, 0.5);
       vertical-align: middle;
     }
-    .leaderboard-table tr {
-      transition: background 0.15s;
-    }
-    .leaderboard-table tbody tr:hover {
-      background: rgba(0, 229, 255, 0.03);
-    }
-    .leaderboard-table tbody tr.rank-1 {
-      background: rgba(255, 215, 0, 0.04);
-    }
-    .leaderboard-table tbody tr.rank-2 {
-      background: rgba(192, 192, 192, 0.03);
-    }
-    .leaderboard-table tbody tr.rank-3 {
-      background: rgba(205, 127, 50, 0.03);
-    }
+    .leaderboard-table tr { transition: background 0.15s; }
+    .leaderboard-table tbody tr:hover { background: rgba(0, 229, 255, 0.03); }
+    .leaderboard-table tbody tr.rank-1 { background: rgba(255, 215, 0, 0.04); }
+    .leaderboard-table tbody tr.rank-2 { background: rgba(192, 192, 192, 0.03); }
+    .leaderboard-table tbody tr.rank-3 { background: rgba(205, 127, 50, 0.03); }
 
     /* Rank cell */
     .rank-cell {
@@ -393,18 +381,10 @@
     .rank-2 .rank-cell { color: #c0c0c0; }
     .rank-3 .rank-cell { color: #cd7f32; }
 
-    /* Medal icons */
-    .rank-medal {
-      font-size: 18px;
-      margin-right: 2px;
-    }
+    .rank-medal { font-size: 18px; margin-right: 2px; }
 
     /* Model cell */
-    .model-cell {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .model-cell { display: flex; align-items: center; gap: 12px; }
     .model-logo {
       width: 36px;
       height: 36px;
@@ -413,28 +393,12 @@
       background: rgba(255,255,255,0.04);
       flex-shrink: 0;
     }
-    .model-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .model-name {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text-primary);
-    }
-    .model-company {
-      font-size: 12px;
-      color: var(--text-dim);
-      font-weight: 400;
-    }
+    .model-info { display: flex; flex-direction: column; gap: 2px; }
+    .model-name { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+    .model-company { font-size: 12px; color: var(--text-dim); font-weight: 400; }
 
     /* Score cell */
-    .score-cell {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-    }
+    .score-cell { display: flex; align-items: baseline; gap: 6px; }
     .score-value {
       font-family: 'Space Grotesk', monospace;
       font-weight: 700;
@@ -461,35 +425,6 @@
       color: var(--text-secondary);
     }
 
-    /* Win rate bar */
-    .winrate-cell {
-      text-align: center;
-    }
-    .winrate-bar-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      justify-content: center;
-    }
-    .winrate-bar-bg {
-      width: 60px;
-      height: 6px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .winrate-bar-fill {
-      height: 100%;
-      border-radius: 3px;
-      transition: width 0.5s;
-    }
-    .winrate-text {
-      font-family: 'Space Grotesk', monospace;
-      font-size: 13px;
-      font-weight: 600;
-      min-width: 42px;
-    }
-
     /* ===== FOOTER ===== */
     footer {
       border-top: 1px solid var(--border);
@@ -500,34 +435,18 @@
       flex-wrap: wrap;
       gap: 16px;
     }
-    footer p {
-      color: var(--text-dim);
-      font-size: 13px;
-    }
-    footer a {
-      color: var(--cyan-dim);
-      text-decoration: none;
-    }
-    footer a:hover {
-      color: var(--cyan);
-      text-decoration: underline;
-    }
-    footer nav {
-      display: flex;
-      gap: 24px;
-    }
-    footer nav a {
-      color: var(--text-dim);
-      font-size: 13px;
-      font-weight: 500;
-    }
+    footer p { color: var(--text-dim); font-size: 13px; }
+    footer a { color: var(--cyan-dim); text-decoration: none; }
+    footer a:hover { color: var(--cyan); text-decoration: underline; }
+    footer nav { display: flex; gap: 24px; }
+    footer nav a { color: var(--text-dim); font-size: 13px; font-weight: 500; }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .sidebar { display: none; }
       .sidebar-toggle { display: none; }
-      .site-header { padding: 12px 16px; }
-      .page-title-bar { padding: 20px 16px; }
+      .header { padding: 12px 16px; }
+      .leaderboard-bar { padding: 12px 16px; }
       .leaderboard-table td, .leaderboard-table th { padding: 10px 8px; }
       .model-logo { width: 28px; height: 28px; }
       footer { padding: 20px 16px; }
@@ -544,18 +463,27 @@
     </div>
   </div>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <a href="index.html" class="header-brand">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="24" cy="24" r="22" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.3"/>
-        <circle cx="24" cy="24" r="16" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.6"/>
-        <path d="M24 8 L24 16 M24 32 L24 40 M8 24 L16 24 M32 24 L40 24" stroke="#00e5ff" stroke-width="2" opacity="0.4"/>
-        <circle cx="24" cy="24" r="4" fill="#00e5ff"/>
-        <path d="M20 18 L24 14 L28 18 M20 30 L24 34 L28 30" stroke="#00e5ff" stroke-width="1.5" fill="none"/>
+  <!-- HEADER â identical to index.html -->
+  <header class="header">
+    <a href="index.html" class="header-left">
+      <svg class="logo-mark" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer arena ring -->
+        <circle cx="26" cy="26" r="24" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.3"/>
+        <circle cx="26" cy="26" r="20" stroke="#00e5ff" stroke-width="1" fill="none" opacity="0.15"/>
+        <!-- Small arena "seats" dots around ring -->
+        <circle cx="26" cy="3" r="1.5" fill="#00e5ff" opacity="0.5"/>
+        <circle cx="45" cy="14" r="1.5" fill="#00e5ff" opacity="0.5"/>
+        <circle cx="49" cy="26" r="1.5" fill="#00e5ff" opacity="0.5"/>
+        <circle cx="45" cy="38" r="1.5" fill="#00e5ff" opacity="0.5"/>
+        <circle cx="26" cy="49" r="1.5" fill="#00e5ff" opacity="0.5"/>
+        <circle cx="7" cy="38" r="1.5" fill="#00e5ff" opacity="0.5"/>
+        <circle cx="3" cy="26" r="1.5" fill="#00e5ff" opacity="0.5"/>
+        <circle cx="7" cy="14" r="1.5" fill="#00e5ff" opacity="0.5"/>
+        <!-- Shield in center -->
+        <path d="M26 12 L36 18 L36 30 C36 36 26 42 26 42 C26 42 16 36 16 30 L16 18 Z" fill="rgba(0,229,255,0.1)" stroke="#00e5ff" stroke-width="2" stroke-linejoin="round"/>
       </svg>
-      <div>
-        <div class="title">The <span>Safety</span> Arena</div>
+      <div class="logo-text">
+        <div class="brand">The <span>Safety</span> Arena</div>
         <div class="sub">Powered by <a href="https://trainingrun.ai">trainingrun.ai</a></div>
       </div>
     </a>
@@ -566,10 +494,10 @@
     </nav>
   </header>
 
-  <!-- PAGE TITLE BAR -->
-  <div class="page-title-bar">
-    <h1>The <span>Safety</span> Arena &mdash; Leaderboard</h1>
-    <div class="subtitle">
+  <!-- LEADERBOARD META BAR -->
+  <div class="leaderboard-bar">
+    <h1>Leaderboard</h1>
+    <div class="leaderboard-meta">
       <span class="dot"></span>
       <span>Win rate scoring &middot; Human-voted safety battles</span>
       <span class="sep">|</span>
@@ -704,7 +632,6 @@
 
           totalVotes += (b.total_votes || 0);
 
-          // Determine winner by votes
           if (b.votes_a > b.votes_b) {
             stats[aName].wins++;
             stats[bName].losses++;
@@ -736,19 +663,16 @@
 
         rankings.sort(function(a, b) { return b.score - a.score; });
 
+        // Store global rank on each entry â used even when filtering
+        rankings.forEach(function(r, i) { r.globalRank = i + 1; });
+
         ALL_RANKINGS = rankings;
 
-        // Update counts
         document.getElementById('vote-count-text').textContent = totalVotes + ' votes cast';
         document.getElementById('model-count-text').textContent = rankings.length + ' models ranked';
 
-        // Build lab filters
         buildLabFilters(rankings);
-
-        // Render
         renderLeaderboard();
-
-        // Render ticker
         renderTicker(rankings);
       });
     }
@@ -757,15 +681,12 @@
     function buildLabFilters(rankings) {
       var labs = {};
       rankings.forEach(function(r) {
-        if (r.lab && !labs[r.lab]) {
-          labs[r.lab] = true;
-        }
+        if (r.lab && !labs[r.lab]) labs[r.lab] = true;
       });
       var labNames = Object.keys(labs).sort();
       var container = document.getElementById('lab-filters');
       document.getElementById('lab-count').textContent = '(' + labNames.length + ')';
 
-      // Keep the "All Labs" option, clear the rest
       var allOption = container.querySelector('[data-lab="all"]');
       container.innerHTML = '';
       container.appendChild(allOption);
@@ -778,12 +699,10 @@
 
         var logo = COMPANY_LOGOS[lab];
         var logoHtml = logo ? '<img src="' + logo + '" class="filter-logo" alt="' + lab + '">' : '';
-
         div.innerHTML = '<div class="filter-radio"></div>' + logoHtml + '<span class="filter-label">' + lab + '</span>';
         container.appendChild(div);
       });
 
-      // Update active state
       if (CURRENT_FILTER === 'all') {
         allOption.classList.add('active');
       } else {
@@ -794,7 +713,6 @@
     // ===== FILTER BY LAB =====
     function filterByLab(lab) {
       CURRENT_FILTER = lab;
-      // Update radio buttons
       document.querySelectorAll('.filter-option').forEach(function(el) {
         el.classList.toggle('active', el.getAttribute('data-lab') === lab);
       });
@@ -815,28 +733,23 @@
       }
 
       var html = '';
-      filtered.forEach(function(r, i) {
-        var rank = i + 1;
+      filtered.forEach(function(r) {
+        // Always use the global rank, not the filtered position
+        var rank = r.globalRank;
         var rankClass = rank <= 3 ? ' rank-' + rank : '';
         var logo = COMPANY_LOGOS[r.lab] || '';
         var color = COMPANY_COLORS[r.lab] || '#888';
 
-        // Medal emoji for top 3
         var medal = '';
         if (rank === 1) medal = '<span class="rank-medal">&#129351;</span>';
         if (rank === 2) medal = '<span class="rank-medal">&#129352;</span>';
         if (rank === 3) medal = '<span class="rank-medal">&#129353;</span>';
 
-        // Score color
         var scoreColor = r.score >= 80 ? 'var(--green)' : r.score >= 60 ? 'var(--cyan)' : 'var(--orange)';
 
-        // Change arrow
         var changeClass = r.change > 0 ? 'up' : r.change < 0 ? 'down' : 'neutral';
         var changeText = r.change === 0 ? '+0.00' : (r.change > 0 ? '+' : '') + r.change.toFixed(2);
         var changeArrow = r.change > 0 ? '&#9650; ' : r.change < 0 ? '&#9660; ' : '';
-
-        // Win rate bar color
-        var barColor = r.score >= 80 ? 'var(--green)' : r.score >= 60 ? 'var(--cyan)' : r.score >= 40 ? 'var(--orange)' : 'var(--red)';
 
         html += '<tr class="' + rankClass.trim() + '">';
         html += '<td class="rank-cell">' + medal + rank + '</td>';
