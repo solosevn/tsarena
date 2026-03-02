@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaderboard â The Safety Arena</title>
+  <title>Leaderboard &mdash; The Safety Arena</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
@@ -568,10 +568,10 @@
 
   <!-- PAGE TITLE BAR -->
   <div class="page-title-bar">
-    <h1>The <span>Safety</span> Arena â Leaderboard</h1>
+    <h1>The <span>Safety</span> Arena &mdash; Leaderboard</h1>
     <div class="subtitle">
       <span class="dot"></span>
-      <span>Win rate scoring Â· Human-voted safety battles</span>
+      <span>Win rate scoring &middot; Human-voted safety battles</span>
       <span class="sep">|</span>
       <span id="vote-count-text">Loading...</span>
       <span class="sep">|</span>
@@ -642,10 +642,11 @@
     var COMPANY_LOGOS = {};
     var COMPANY_COLORS = {};
     var MODEL_TO_COMPANY = {};
+    var MODEL_DB = {};
     var ALL_RANKINGS = [];
     var CURRENT_FILTER = 'all';
 
-    // ===== FETCH MODELS.JSON =====
+    // ===== FETCH MODELS.JSON (logos/colors) =====
     function fetchModelsJson() {
       return fetch('models.json?v=' + Date.now())
         .then(function(r) { return r.json(); })
@@ -662,9 +663,23 @@
         });
     }
 
+    // ===== FETCH MODELS FROM SUPABASE (uuid->name mapping) =====
+    function fetchModelsDB() {
+      return fetch(SUPABASE_URL + '/rest/v1/models?select=id,name,lab', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(models) {
+        if (!models || !models.length) return;
+        models.forEach(function(m) {
+          MODEL_DB[m.id] = { name: m.name, lab: m.lab };
+        });
+      });
+    }
+
     // ===== FETCH BATTLES =====
     function fetchLeaderboard() {
-      fetch(SUPABASE_URL + '/rest/v1/battles?select=model_a,model_b,winner,model_a_lab,model_b_lab&limit=5000', {
+      fetch(SUPABASE_URL + '/rest/v1/battles?select=model_a_id,model_b_id,votes_a,votes_b,votes_tie,total_votes&limit=5000', {
         headers: {
           'apikey': SUPABASE_KEY,
           'Authorization': 'Bearer ' + SUPABASE_KEY
@@ -675,21 +690,30 @@
         if (!battles || !battles.length) return;
 
         var stats = {};
+        var totalVotes = 0;
         battles.forEach(function(b) {
-          var a = b.model_a;
-          var bm = b.model_b;
-          if (!stats[a]) stats[a] = { wins: 0, losses: 0, ties: 0, lab: b.model_a_lab || MODEL_TO_COMPANY[a] || '' };
-          if (!stats[bm]) stats[bm] = { wins: 0, losses: 0, ties: 0, lab: b.model_b_lab || MODEL_TO_COMPANY[bm] || '' };
+          var aId = b.model_a_id;
+          var bId = b.model_b_id;
+          var aInfo = MODEL_DB[aId] || { name: aId, lab: '' };
+          var bInfo = MODEL_DB[bId] || { name: bId, lab: '' };
+          var aName = aInfo.name;
+          var bName = bInfo.name;
 
-          if (b.winner === 'a') {
-            stats[a].wins++;
-            stats[bm].losses++;
-          } else if (b.winner === 'b') {
-            stats[bm].wins++;
-            stats[a].losses++;
+          if (!stats[aName]) stats[aName] = { wins: 0, losses: 0, ties: 0, lab: aInfo.lab || '' };
+          if (!stats[bName]) stats[bName] = { wins: 0, losses: 0, ties: 0, lab: bInfo.lab || '' };
+
+          totalVotes += (b.total_votes || 0);
+
+          // Determine winner by votes
+          if (b.votes_a > b.votes_b) {
+            stats[aName].wins++;
+            stats[bName].losses++;
+          } else if (b.votes_b > b.votes_a) {
+            stats[bName].wins++;
+            stats[aName].losses++;
           } else {
-            stats[a].ties++;
-            stats[bm].ties++;
+            stats[aName].ties++;
+            stats[bName].ties++;
           }
         });
 
@@ -715,7 +739,7 @@
         ALL_RANKINGS = rankings;
 
         // Update counts
-        document.getElementById('vote-count-text').textContent = battles.length + ' votes cast';
+        document.getElementById('vote-count-text').textContent = totalVotes + ' votes cast';
         document.getElementById('model-count-text').textContent = rankings.length + ' models ranked';
 
         // Build lab filters
@@ -863,7 +887,7 @@
     }
 
     // ===== INIT =====
-    fetchModelsJson().then(function() {
+    Promise.all([fetchModelsJson(), fetchModelsDB()]).then(function() {
       fetchLeaderboard();
       setInterval(fetchLeaderboard, 10000);
     });
