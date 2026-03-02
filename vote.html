@@ -1964,6 +1964,11 @@ async function handleOAuthSignIn(provider) {
     document.getElementById('voteExplanation').classList.remove('show');
         document.getElementById('voteExplanation').style.display = '';
         document.getElementById('submitVoteBtn').style.display = '';
+        // Reset Turnstile so a fresh token is ready for the next vote
+        if (typeof turnstile !== 'undefined') { try { turnstile.reset(); } catch(e) {} }
+        // Clear any previous vote error messages
+        const voteErrorEl = document.getElementById('voteError');
+        if (voteErrorEl) { voteErrorEl.style.display = 'none'; voteErrorEl.textContent = ''; }
     document.getElementById('explanationText').value = '';
     document.getElementById('resultReveal').classList.remove('show');
     document.getElementById('responseA').classList.remove('selected');
