@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard â The Safety Arena</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #060d1a;
+      --bg-card: #0c1829;
+      --bg-card-hover: #111f35;
+      --cyan: #00e5ff;
+      --cyan-dim: #00acc1;
+      --cyan-glow: rgba(0, 229, 255, 0.15);
+      --orange: #ff6d00;
+      --red: #ff1744;
+      --green: #00e676;
+      --text-primary: #e8eaed;
+      --text-secondary: #90a4ae;
+      --text-dim: #546e7a;
+      --border: #1a2a3a;
+      --sidebar-width: 240px;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ===== TICKER BAR (same as index.html) ===== */
+    .ticker-wrap {
+      width: 100%;
+      overflow: hidden;
+      height: 70px;
+      background: linear-gradient(180deg, rgba(0,229,255,0.06) 0%, transparent 100%);
+      border-bottom: 1px solid rgba(0,229,255,0.1);
+      position: relative;
+    }
+    .ticker-label {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      background: linear-gradient(90deg, var(--bg-dark) 70%, transparent 100%);
+      z-index: 2;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+    .ticker-track {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      animation: tickerScroll 60s linear infinite;
+      width: max-content;
+      padding-left: 180px;
+    }
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 28px;
+      white-space: nowrap;
+      height: 100%;
+    }
+    .ticker-rank {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+    .ticker-rank.gold { color: #ffd700; }
+    .ticker-rank.silver { color: #c0c0c0; }
+    .ticker-rank.bronze { color: #cd7f32; }
+    .ticker-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .ticker-model-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+    .ticker-model-info .model {
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .ticker-model-info .company {
+      color: var(--text-dim);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+    }
+    .ticker-score {
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .ticker-score.high { color: var(--green); }
+    .ticker-score.mid { color: var(--cyan); }
+    .ticker-score.low { color: var(--orange); }
+
+    /* ===== HEADER ===== */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(6, 13, 26, 0.95);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+    .header-brand svg {
+      width: 40px;
+      height: 40px;
+    }
+    .header-brand .title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .header-brand .title span { color: var(--cyan); }
+    .header-brand .sub {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .header-brand .sub a {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .header-nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .header-nav a:hover { color: var(--cyan); }
+
+    /* ===== PAGE TITLE BAR ===== */
+    .page-title-bar {
+      padding: 28px 32px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-title-bar h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .page-title-bar h1 span { color: var(--cyan); }
+    .page-title-bar .subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .page-title-bar .subtitle .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      display: inline-block;
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .page-title-bar .subtitle .sep {
+      color: var(--text-dim);
+      margin: 0 4px;
+    }
+
+    /* ===== MAIN LAYOUT ===== */
+    .main-layout {
+      display: flex;
+      min-height: calc(100vh - 200px);
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: var(--sidebar-width);
+      border-right: 1px solid var(--border);
+      padding: 20px 16px;
+      flex-shrink: 0;
+      transition: width 0.3s, padding 0.3s, opacity 0.3s;
+      overflow: hidden;
+    }
+    .sidebar.collapsed {
+      width: 0;
+      padding: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .sidebar-toggle {
+      position: absolute;
+      left: var(--sidebar-width);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 48px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: none;
+      border-radius: 0 6px 6px 0;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: left 0.3s, color 0.2s;
+      font-size: 12px;
+    }
+    .sidebar-toggle:hover {
+      color: var(--cyan);
+    }
+    .sidebar.collapsed + .sidebar-toggle {
+      left: 0;
+    }
+    .sidebar-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sidebar-section-title .count {
+      font-size: 10px;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-bottom: 2px;
+    }
+    .filter-option:hover {
+      background: rgba(0, 229, 255, 0.05);
+    }
+    .filter-radio {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--text-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+    .filter-option.active .filter-radio {
+      border-color: var(--cyan);
+    }
+    .filter-option.active .filter-radio::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+    }
+    .filter-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+    .filter-option.active .filter-label {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .filter-logo {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      object-fit: contain;
+    }
+
+    /* ===== LEADERBOARD TABLE ===== */
+    .leaderboard-content {
+      flex: 1;
+      padding: 0;
+      position: relative;
+      overflow-x: auto;
+    }
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .leaderboard-table thead {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .leaderboard-table th {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: left;
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .leaderboard-table th.col-rank { width: 60px; text-align: center; }
+    .leaderboard-table th.col-model { min-width: 280px; }
+    .leaderboard-table th.col-score { width: 140px; }
+    .leaderboard-table th.col-change { width: 100px; }
+    .leaderboard-table th.col-wins { width: 100px; text-align: center; }
+    .leaderboard-table th.col-winrate { width: 100px; text-align: center; }
+    .leaderboard-table th.col-battles { width: 100px; text-align: center; }
+
+    .leaderboard-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(26, 42, 58, 0.5);
+      vertical-align: middle;
+    }
+    .leaderboard-table tr {
+      transition: background 0.15s;
+    }
+    .leaderboard-table tbody tr:hover {
+      background: rgba(0, 229, 255, 0.03);
+    }
+    .leaderboard-table tbody tr.rank-1 {
+      background: rgba(255, 215, 0, 0.04);
+    }
+    .leaderboard-table tbody tr.rank-2 {
+      background: rgba(192, 192, 192, 0.03);
+    }
+    .leaderboard-table tbody tr.rank-3 {
+      background: rgba(205, 127, 50, 0.03);
+    }
+
+    /* Rank cell */
+    .rank-cell {
+      text-align: center;
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text-dim);
+    }
+    .rank-1 .rank-cell { color: #ffd700; }
+    .rank-2 .rank-cell { color: #c0c0c0; }
+    .rank-3 .rank-cell { color: #cd7f32; }
+
+    /* Medal icons */
+    .rank-medal {
+      font-size: 18px;
+      margin-right: 2px;
+    }
+
+    /* Model cell */
+    .model-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .model-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      object-fit: contain;
+      background: rgba(255,255,255,0.04);
+      flex-shrink: 0;
+    }
+    .model-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .model-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+    .model-company {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+
+    /* Score cell */
+    .score-cell {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .score-value {
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text-primary);
+    }
+
+    /* Change cell */
+    .change-cell {
+      font-family: 'Space Grotesk', monospace;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .change-cell.up { color: var(--green); }
+    .change-cell.down { color: var(--red); }
+    .change-cell.neutral { color: var(--text-dim); }
+
+    /* Stats cells */
+    .stat-cell {
+      text-align: center;
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* Win rate bar */
+    .winrate-cell {
+      text-align: center;
+    }
+    .winrate-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+    .winrate-bar-bg {
+      width: 60px;
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .winrate-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.5s;
+    }
+    .winrate-text {
+      font-family: 'Space Grotesk', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      min-width: 42px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    footer p {
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+    footer a {
+      color: var(--cyan-dim);
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: var(--cyan);
+      text-decoration: underline;
+    }
+    footer nav {
+      display: flex;
+      gap: 24px;
+    }
+    footer nav a {
+      color: var(--text-dim);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .sidebar-toggle { display: none; }
+      .site-header { padding: 12px 16px; }
+      .page-title-bar { padding: 20px 16px; }
+      .leaderboard-table td, .leaderboard-table th { padding: 10px 8px; }
+      .model-logo { width: 28px; height: 28px; }
+      footer { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TICKER BAR -->
+  <div class="ticker-wrap">
+    <div class="ticker-label">Arena Leaderboard</div>
+    <div class="ticker-track" id="ticker-track">
+      <div class="ticker-item"><span class="ticker-model-info"><span class="model" style="color:var(--text-dim)">Loading leaderboard...</span></span></div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <a href="index.html" class="header-brand">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="22" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.3"/>
+        <circle cx="24" cy="24" r="16" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.6"/>
+        <path d="M24 8 L24 16 M24 32 L24 40 M8 24 L16 24 M32 24 L40 24" stroke="#00e5ff" stroke-width="2" opacity="0.4"/>
+        <circle cx="24" cy="24" r="4" fill="#00e5ff"/>
+        <path d="M20 18 L24 14 L28 18 M20 30 L24 34 L28 30" stroke="#00e5ff" stroke-width="1.5" fill="none"/>
+      </svg>
+      <div>
+        <div class="title">The <span>Safety</span> Arena</div>
+        <div class="sub">Powered by <a href="https://trainingrun.ai">trainingrun.ai</a></div>
+      </div>
+    </a>
+    <nav class="header-nav">
+      <a href="charter.html">Charter</a>
+      <a href="integrity.html">Integrity</a>
+      <a href="prompts.html">Our Prompts</a>
+    </nav>
+  </header>
+
+  <!-- PAGE TITLE BAR -->
+  <div class="page-title-bar">
+    <h1>The <span>Safety</span> Arena â Leaderboard</h1>
+    <div class="subtitle">
+      <span class="dot"></span>
+      <span>Win rate scoring Â· Human-voted safety battles</span>
+      <span class="sep">|</span>
+      <span id="vote-count-text">Loading...</span>
+      <span class="sep">|</span>
+      <span id="model-count-text">Loading...</span>
+      <span class="sep">|</span>
+      <span>Updated live</span>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="main-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section-title">
+        Filter by Lab
+        <span class="count" id="lab-count"></span>
+      </div>
+      <div id="lab-filters">
+        <div class="filter-option active" data-lab="all" onclick="filterByLab('all')">
+          <div class="filter-radio"></div>
+          <span class="filter-label">All Labs</span>
+        </div>
+        <!-- Lab options populated by JS -->
+      </div>
+    </aside>
+
+    <!-- TOGGLE BUTTON -->
+    <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()">&#8249;</button>
+
+    <!-- LEADERBOARD TABLE -->
+    <div class="leaderboard-content">
+      <table class="leaderboard-table">
+        <thead>
+          <tr>
+            <th class="col-rank">#</th>
+            <th class="col-model">Model</th>
+            <th class="col-score">Score</th>
+            <th class="col-change">Change</th>
+            <th class="col-wins">Wins</th>
+            <th class="col-battles">Battles</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body">
+          <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-dim);">Loading leaderboard data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 The Safety Arena &bull; <a href="https://trainingrun.ai">trainingrun.ai</a> | David | <a href="https://x.com/aitrainingrun">@aitrainingrun</a></p>
+    <nav>
+      <a href="charter.html">Charter</a>
+      <a href="prompts.html">Our Prompts</a>
+      <a href="integrity.html">Integrity</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+  </footer>
+
+  <script>
+    // ===== CONFIG =====
+    var SUPABASE_URL = 'https://nvitztmlczdohicskrks.supabase.co';
+    var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52aXR6dG1sY3pkb2hpY3NrcmtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMzY3NDQsImV4cCI6MjA4NzcxMjc0NH0.g8SgL67sDyDvDQko8QFhTPj5Bkt88MdtIcgHpOy2f48';
+    var COMPANY_LOGOS = {};
+    var COMPANY_COLORS = {};
+    var MODEL_TO_COMPANY = {};
+    var ALL_RANKINGS = [];
+    var CURRENT_FILTER = 'all';
+
+    // ===== FETCH MODELS.JSON =====
+    function fetchModelsJson() {
+      return fetch('models.json?v=' + Date.now())
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var companies = data.companies || {};
+          var models = data.models || {};
+          Object.keys(companies).forEach(function(c) {
+            COMPANY_LOGOS[c] = companies[c].logo;
+            COMPANY_COLORS[c] = companies[c].color;
+          });
+          Object.keys(models).forEach(function(m) {
+            MODEL_TO_COMPANY[m] = models[m];
+          });
+        });
+    }
+
+    // ===== FETCH BATTLES =====
+    function fetchLeaderboard() {
+      fetch(SUPABASE_URL + '/rest/v1/battles?select=model_a,model_b,winner,model_a_lab,model_b_lab&limit=5000', {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY
+        }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(battles) {
+        if (!battles || !battles.length) return;
+
+        var stats = {};
+        battles.forEach(function(b) {
+          var a = b.model_a;
+          var bm = b.model_b;
+          if (!stats[a]) stats[a] = { wins: 0, losses: 0, ties: 0, lab: b.model_a_lab || MODEL_TO_COMPANY[a] || '' };
+          if (!stats[bm]) stats[bm] = { wins: 0, losses: 0, ties: 0, lab: b.model_b_lab || MODEL_TO_COMPANY[bm] || '' };
+
+          if (b.winner === 'a') {
+            stats[a].wins++;
+            stats[bm].losses++;
+          } else if (b.winner === 'b') {
+            stats[bm].wins++;
+            stats[a].losses++;
+          } else {
+            stats[a].ties++;
+            stats[bm].ties++;
+          }
+        });
+
+        var rankings = [];
+        Object.keys(stats).forEach(function(model) {
+          var s = stats[model];
+          var total = s.wins + s.losses + s.ties;
+          var winRate = total > 0 ? (s.wins / total) * 100 : 0;
+          rankings.push({
+            model: model,
+            lab: s.lab,
+            score: Math.round(winRate * 100) / 100,
+            wins: s.wins,
+            losses: s.losses,
+            ties: s.ties,
+            battles: total,
+            change: 0
+          });
+        });
+
+        rankings.sort(function(a, b) { return b.score - a.score; });
+
+        ALL_RANKINGS = rankings;
+
+        // Update counts
+        document.getElementById('vote-count-text').textContent = battles.length + ' votes cast';
+        document.getElementById('model-count-text').textContent = rankings.length + ' models ranked';
+
+        // Build lab filters
+        buildLabFilters(rankings);
+
+        // Render
+        renderLeaderboard();
+
+        // Render ticker
+        renderTicker(rankings);
+      });
+    }
+
+    // ===== BUILD LAB FILTERS =====
+    function buildLabFilters(rankings) {
+      var labs = {};
+      rankings.forEach(function(r) {
+        if (r.lab && !labs[r.lab]) {
+          labs[r.lab] = true;
+        }
+      });
+      var labNames = Object.keys(labs).sort();
+      var container = document.getElementById('lab-filters');
+      document.getElementById('lab-count').textContent = '(' + labNames.length + ')';
+
+      // Keep the "All Labs" option, clear the rest
+      var allOption = container.querySelector('[data-lab="all"]');
+      container.innerHTML = '';
+      container.appendChild(allOption);
+
+      labNames.forEach(function(lab) {
+        var div = document.createElement('div');
+        div.className = 'filter-option' + (CURRENT_FILTER === lab ? ' active' : '');
+        div.setAttribute('data-lab', lab);
+        div.onclick = function() { filterByLab(lab); };
+
+        var logo = COMPANY_LOGOS[lab];
+        var logoHtml = logo ? '<img src="' + logo + '" class="filter-logo" alt="' + lab + '">' : '';
+
+        div.innerHTML = '<div class="filter-radio"></div>' + logoHtml + '<span class="filter-label">' + lab + '</span>';
+        container.appendChild(div);
+      });
+
+      // Update active state
+      if (CURRENT_FILTER === 'all') {
+        allOption.classList.add('active');
+      } else {
+        allOption.classList.remove('active');
+      }
+    }
+
+    // ===== FILTER BY LAB =====
+    function filterByLab(lab) {
+      CURRENT_FILTER = lab;
+      // Update radio buttons
+      document.querySelectorAll('.filter-option').forEach(function(el) {
+        el.classList.toggle('active', el.getAttribute('data-lab') === lab);
+      });
+      renderLeaderboard();
+    }
+
+    // ===== RENDER LEADERBOARD =====
+    function renderLeaderboard() {
+      var filtered = ALL_RANKINGS;
+      if (CURRENT_FILTER !== 'all') {
+        filtered = ALL_RANKINGS.filter(function(r) { return r.lab === CURRENT_FILTER; });
+      }
+
+      var tbody = document.getElementById('leaderboard-body');
+      if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-dim);">No models found</td></tr>';
+        return;
+      }
+
+      var html = '';
+      filtered.forEach(function(r, i) {
+        var rank = i + 1;
+        var rankClass = rank <= 3 ? ' rank-' + rank : '';
+        var logo = COMPANY_LOGOS[r.lab] || '';
+        var color = COMPANY_COLORS[r.lab] || '#888';
+
+        // Medal emoji for top 3
+        var medal = '';
+        if (rank === 1) medal = '<span class="rank-medal">&#129351;</span>';
+        if (rank === 2) medal = '<span class="rank-medal">&#129352;</span>';
+        if (rank === 3) medal = '<span class="rank-medal">&#129353;</span>';
+
+        // Score color
+        var scoreColor = r.score >= 80 ? 'var(--green)' : r.score >= 60 ? 'var(--cyan)' : 'var(--orange)';
+
+        // Change arrow
+        var changeClass = r.change > 0 ? 'up' : r.change < 0 ? 'down' : 'neutral';
+        var changeText = r.change === 0 ? '+0.00' : (r.change > 0 ? '+' : '') + r.change.toFixed(2);
+        var changeArrow = r.change > 0 ? '&#9650; ' : r.change < 0 ? '&#9660; ' : '';
+
+        // Win rate bar color
+        var barColor = r.score >= 80 ? 'var(--green)' : r.score >= 60 ? 'var(--cyan)' : r.score >= 40 ? 'var(--orange)' : 'var(--red)';
+
+        html += '<tr class="' + rankClass.trim() + '">';
+        html += '<td class="rank-cell">' + medal + rank + '</td>';
+        html += '<td><div class="model-cell">';
+        if (logo) html += '<img src="' + logo + '" class="model-logo" alt="' + r.lab + '" onerror="this.style.display=\'none\'">';
+        html += '<div class="model-info"><span class="model-name">' + r.model + '</span>';
+        html += '<span class="model-company" style="color:' + color + '">' + r.lab + ' &middot; Proprietary</span>';
+        html += '</div></div></td>';
+        html += '<td><div class="score-cell"><span class="score-value" style="color:' + scoreColor + '">' + r.score.toFixed(1) + '</span></div></td>';
+        html += '<td class="change-cell ' + changeClass + '">' + changeArrow + changeText + '</td>';
+        html += '<td class="stat-cell">' + r.wins + '</td>';
+        html += '<td class="stat-cell">' + r.battles + '</td>';
+        html += '</tr>';
+      });
+
+      tbody.innerHTML = html;
+    }
+
+    // ===== RENDER TICKER =====
+    function renderTicker(rankings) {
+      var top10 = rankings.slice(0, 10);
+      var items = '';
+      for (var pass = 0; pass < 2; pass++) {
+        top10.forEach(function(r, i) {
+          var rank = i + 1;
+          var logo = COMPANY_LOGOS[r.lab] || '';
+          var rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
+          var scoreClass = r.score >= 80 ? 'high' : r.score >= 60 ? 'mid' : 'low';
+          var medal = rank === 1 ? '&#129351;' : rank === 2 ? '&#129352;' : rank === 3 ? '&#129353;' : '';
+
+          items += '<div class="ticker-item">';
+          items += '<span class="ticker-rank ' + rankClass + '">' + (medal || '#' + rank) + '</span>';
+          if (logo) items += '<img src="' + logo + '" class="ticker-logo" alt="">';
+          items += '<span class="ticker-model-info"><span class="model">' + r.model + '</span><span class="company">' + r.lab + '</span></span>';
+          items += '<span class="ticker-score ' + scoreClass + '">' + r.score.toFixed(1) + '%</span>';
+          items += '</div>';
+        });
+      }
+      document.getElementById('ticker-track').innerHTML = items;
+    }
+
+    // ===== TOGGLE SIDEBAR =====
+    function toggleSidebar() {
+      var sidebar = document.getElementById('sidebar');
+      var toggle = document.getElementById('sidebar-toggle');
+      sidebar.classList.toggle('collapsed');
+      toggle.innerHTML = sidebar.classList.contains('collapsed') ? '&#8250;' : '&#8249;';
+    }
+
+    // ===== INIT =====
+    fetchModelsJson().then(function() {
+      fetchLeaderboard();
+      setInterval(fetchLeaderboard, 10000);
+    });
+  </script>
+
+</body>
+</html>
