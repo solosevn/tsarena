@@ -80,13 +80,13 @@
       height: 100%;
     }
     .ticker-rank {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-dim);
+      font-size: 13px;
+      font-weight: 400;
+      color: #e8e8f0;
     }
-    .ticker-rank.gold { color: #ffd700; }
-    .ticker-rank.silver { color: #c0c0c0; }
-    .ticker-rank.bronze { color: #cd7f32; }
+    .ticker-rank.gold { color: #ffd700; font-size: 16px; }
+    .ticker-rank.silver { color: #c0c0c0; font-size: 16px; }
+    .ticker-rank.bronze { color: #cd7f32; font-size: 16px; }
     .ticker-logo {
       width: 32px;
       height: 32px;
@@ -266,11 +266,12 @@
     .sidebar-toggle:hover { color: var(--cyan); }
     .sidebar.collapsed + .sidebar-toggle { left: 0; }
     .sidebar-section-title {
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 700;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: #00e5ff;
+      text-shadow: 0 0 8px rgba(0,229,255,0.4), 0 0 16px rgba(0,229,255,0.2);
       margin-bottom: 14px;
       display: flex;
       align-items: center;
@@ -385,7 +386,7 @@
     .rank-2 .rank-cell { color: #c0c0c0; }
     .rank-3 .rank-cell { color: #cd7f32; }
 
-    .rank-medal { font-size: 18px; margin-right: 2px; }
+    .rank-medal { font-size: 24px; margin-right: 4px; filter: drop-shadow(0 0 4px rgba(255,215,0,0.5)); }
 
     /* Model cell */
     .model-cell { display: flex; align-items: center; gap: 12px; }
@@ -699,7 +700,11 @@
       container.innerHTML = '';
       container.appendChild(allOption);
 
-      labNames.forEach(function(lab) {
+      var TOP_LABS = ['Google', 'xAI', 'Anthropic', 'DeepSeek', 'OpenAI', 'Meta'];
+      var topLabNames = TOP_LABS.filter(function(l) { return labNames.indexOf(l) >= 0; });
+      var otherLabNames = labNames.filter(function(l) { return TOP_LABS.indexOf(l) < 0; });
+
+      function addLabOption(lab) {
         var div = document.createElement('div');
         div.className = 'filter-option' + (CURRENT_FILTER === lab ? ' active' : '');
         div.setAttribute('data-lab', lab);
@@ -709,14 +714,18 @@
         var logoHtml = logo ? '<img src="' + logo + '" class="filter-logo" alt="' + lab + '">' : '';
         div.innerHTML = '<div class="filter-radio"></div>' + logoHtml + '<span class="filter-label">' + lab + '</span>';
         container.appendChild(div);
-      });
-
-      if (CURRENT_FILTER === 'all') {
-        allOption.classList.add('active');
-      } else {
-        allOption.classList.remove('active');
       }
-    }
+
+      topLabNames.forEach(addLabOption);
+
+      if (topLabNames.length > 0 && otherLabNames.length > 0) {
+        var sep = document.createElement('div');
+        sep.style.cssText = 'height:1px;background:var(--border);margin:8px 0;';
+        container.appendChild(sep);
+      }
+
+      otherLabNames.forEach(addLabOption);
+    }    }
 
     // ===== FILTER BY LAB =====
     function filterByLab(lab) {
@@ -760,7 +769,7 @@
         var changeArrow = r.change > 0 ? '&#9650; ' : r.change < 0 ? '&#9660; ' : '';
 
         html += '<tr class="' + rankClass.trim() + '">';
-        html += '<td class="rank-cell">' + medal + rank + '</td>';
+        html += '<td class="rank-cell">' + (medal || rank) + '</td>';
         html += '<td><div class="model-cell">';
         if (logo) html += '<img src="' + logo + '" class="model-logo" alt="' + r.lab + '" onerror="this.style.display=\'none\'">';
         html += '<div class="model-info"><span class="model-name">' + r.model + '</span>';
