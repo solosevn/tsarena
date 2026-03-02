@@ -36,7 +36,7 @@
   .ticker-wrap {
     width: 100%;
     overflow: hidden;
-    height: 36px;
+    height: 70px;
     background: linear-gradient(90deg, rgba(0,229,255,0.08), rgba(0,229,255,0.03), rgba(0,229,255,0.08));
     border-bottom: 1px solid var(--border);
     display: flex;
@@ -62,7 +62,16 @@
   }
   .ticker-label.trs { color: var(--cyan); }
   .ticker-label.arena { color: var(--orange); }
-  .ticker-logo { width: 20px; height: 20px; border-radius: 3px; object-fit: contain; flex-shrink: 0; vertical-align: middle; }
+  .ticker-logo { width: 32px; height: 32px; border-radius: 6px; object-fit: contain; flex-shrink: 0; }
+  .ticker-model-info { display: flex; flex-direction: column; line-height: 1.3; }
+  .ticker-model-info .model { color: var(--text-primary); font-weight: 700; font-size: 14px; }
+  .ticker-model-info .company { color: var(--text-dim); font-size: 11px; font-weight: 400; letter-spacing: 0.3px; }
+  /* Mechanical counter */
+  .mech-counter { display: inline-flex; align-items: center; gap: 0; margin-right: 16px; flex-direction: column; }
+  .mech-digits { display: flex; gap: 2px; }
+  .mech-digit { background: linear-gradient(180deg, #1a1a2e 0%, #0d0d1a 49.5%, #0a0a15 50.5%, #141428 100%); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; width: 28px; height: 38px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', monospace; font-size: 22px; font-weight: 700; color: #e8eaed; text-shadow: 0 0 8px rgba(0,212,255,0.4); position: relative; overflow: hidden; box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 4px rgba(0,0,0,0.5); }
+  .mech-digit::after { content: ''; position: absolute; top: 49%; left: 0; right: 0; height: 1px; background: rgba(0,0,0,0.6); box-shadow: 0 1px 0 rgba(255,255,255,0.04); }
+  .mech-counter-label { font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-top: 4px; text-align: center; }
 
   .ticker-track {
     display: flex;
@@ -79,8 +88,8 @@
   .ticker-item {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 0 24px;
+    gap: 10px;
+    padding: 0 28px;
     font-size: 12px;
     font-weight: 500;
     color: var(--text-secondary);
@@ -695,12 +704,20 @@
   <p class="subtitle subtitle-full">Real humans. Blind battles. No corporate influence. The world's first independent safety leaderboard where your vote decides which AI models deserve your trust and your money.</p>
   <p class="subtitle subtitle-mobile">Real humans. Blind battles. No corporate influence. Your vote decides which AI deserves your trust.</p>
   <div class="hero-cta">
+    <div class="mech-counter" id="mech-vote-counter">
+      <div class="mech-digits" id="mech-digits">
+        <div class="mech-digit">0</div>
+        <div class="mech-digit">0</div>
+        <div class="mech-digit">0</div>
+      </div>
+      <div class="mech-counter-label">Votes Cast</div>
+    </div>
     <a href="vote.html" class="btn-primary">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26z"/></svg>
       Enter the Arena
     </a>
     <a href="leaderboard.html" class="btn-secondary" style="cursor:pointer;border-color:rgba(0,212,255,0.3);color:#00d4ff;">View Leaderboard</a>
-    <span style="font-size:14px;color:rgba(255,255,255,0.5);margin-left:12px;"><span id="live-vote-count">370</span> votes cast</span>
+    
   </div>
 </section>
 
@@ -796,45 +813,58 @@
 
 
 <script>
-// Live Arena Leaderboard + Vote Counter
+// Live Arena Leaderboard + Mechanical Vote Counter
 (function() {
-  const SUPABASE_URL = 'https://nvitztmlczdohicskrks.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52aXR6dG1sY3pkb2hpY3NrcmtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMzY3NDQsImV4cCI6MjA4NzcxMjc0NH0.g8SgL67sDyDvDQko8QFhTPj5Bkt88MdtIcgHpOy2f48';
-  const medals = ['\u{1F947}','\u{1F948}','\u{1F949}'];
+  var SB_URL = 'https://nvitztmlczdohicskrks.supabase.co';
+  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52aXR6dG1sY3pkb2hpY3NrcmtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMzY3NDQsImV4cCI6MjA4NzcxMjc0NH0.g8SgL67sDyDvDQko8QFhTPj5Bkt88MdtIcgHpOy2f48';
+  var medals = ['\u{1F947}','\u{1F948}','\u{1F949}'];
+  var modelsData = null;
+
+  async function loadModelsJson() {
+    try {
+      var r = await fetch('/models.json?v=' + Date.now());
+      modelsData = await r.json();
+    } catch(e) { console.warn('models.json failed', e); }
+  }
+
+  function getCompanyInfo(modelName) {
+    if (!modelsData) return { company: '', logo: '', color: '' };
+    var companyName = modelsData.models[modelName] || '';
+    var co = modelsData.companies[companyName] || {};
+    return { company: companyName, logo: co.logo || '', color: co.color || '' };
+  }
+
+  function updateMechCounter(num) {
+    var el = document.getElementById('mech-digits');
+    if (!el) return;
+    var str = String(num);
+    var html = '';
+    for (var i = 0; i < str.length; i++) {
+      html += '<div class="mech-digit">' + str[i] + '</div>';
+    }
+    el.innerHTML = html;
+  }
 
   async function fetchLeaderboard() {
     try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_leaderboard', {
-        method: 'POST',
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }
+      var res = await fetch(SB_URL + '/rest/v1/battles?total_votes=gt.0&select=model_a_id,model_b_id,votes_a,votes_b,votes_tie,total_votes,model_a:models!battles_model_a_id_fkey(name),model_b:models!battles_model_b_id_fkey(name)', {
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
       });
-      if (!res.ok) return fetchLeaderboardFallback();
-      const data = await res.json();
-      renderTicker(data);
-    } catch(e) { fetchLeaderboardFallback(); }
-  }
-
-  async function fetchLeaderboardFallback() {
-    try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/battles?total_votes=gt.0&select=model_a_id,model_b_id,votes_a,votes_b,votes_tie,total_votes,model_a:models!battles_model_a_id_fkey(name),model_b:models!battles_model_b_id_fkey(name)', {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-      });
-      const battles = await res.json();
+      var battles = await res.json();
       if (!Array.isArray(battles)) return;
-      const stats = {};
+      var stats = {};
+      var totalVotes = 0;
       battles.forEach(function(b) {
+        totalVotes += (b.total_votes || 0);
         var a = b.model_a && b.model_a.name ? b.model_a.name : null;
-        var bName = b.model_b && b.model_b.name ? b.model_b.name : null;
+        var bN = b.model_b && b.model_b.name ? b.model_b.name : null;
         if (a) { if (!stats[a]) stats[a] = {w:0,t:0}; if (b.votes_a > b.votes_b) stats[a].w++; stats[a].t++; }
-        if (bName) { if (!stats[bName]) stats[bName] = {w:0,t:0}; if (b.votes_b > b.votes_a) stats[bName].w++; stats[bName].t++; }
+        if (bN) { if (!stats[bN]) stats[bN] = {w:0,t:0}; if (b.votes_b > b.votes_a) stats[bN].w++; stats[bN].t++; }
       });
       var lb = Object.keys(stats).map(function(n){ return {name:n, win_rate: Math.round(stats[n].w/stats[n].t*1000)/10, battles: stats[n].t}; });
       lb.sort(function(a,b){ return b.win_rate - a.win_rate; });
       renderTicker(lb.slice(0, 10));
-      // Update vote counter
-      var totalVotes = battles.reduce(function(s,b){ return s + (b.total_votes||0); }, 0);
-      var counter = document.getElementById('live-vote-count');
-      if (counter) counter.textContent = totalVotes.toLocaleString();
+      updateMechCounter(totalVotes);
     } catch(e) { console.warn('Leaderboard fetch failed', e); }
   }
 
@@ -843,15 +873,24 @@
     if (!track || !data || !data.length) return;
     var html = '';
     for (var i = 0; i < data.length; i++) {
-      var rank = i < 3 ? '<span style="font-size:18px;text-shadow:0 0 12px rgba(255,215,0,0.75),0 0 4px rgba(255,215,0,0.5)">' + medals[i] + '</span>' : '#' + (i+1);
-      var name = data[i].name || data[i].model_name || 'Unknown';
+      var rank = i < 3 ? '<span style="font-size:20px;text-shadow:0 0 12px rgba(255,215,0,0.75)">' + medals[i] + '</span>' : '#' + (i+1);
+      var name = data[i].name || 'Unknown';
       var rate = data[i].win_rate !== undefined ? data[i].win_rate + '%' : '';
-      html += '<div class="ticker-item"><span class="rank">' + rank + '</span> <span class="model">' + name + '</span>' + (rate ? ' <span class="score" style="color:#00d4ff;font-size:12px;margin-left:4px;">' + rate + '</span>' : '') + '</div>';
+      var info = getCompanyInfo(name);
+      var logoHtml = info.logo ? '<img class="ticker-logo" src="' + info.logo + '" alt="" onerror="this.style.display=\'none\'">' : '';
+      html += '<div class="ticker-item">' +
+        '<span class="rank">' + rank + '</span>' +
+        logoHtml +
+        '<span class="ticker-model-info"><span class="model">' + name + '</span>' +
+        (info.company ? '<span class="company">' + info.company + '</span>' : '') +
+        '</span>' +
+        (rate ? '<span class="score" style="color:#00d4ff;font-weight:700;font-family:\'Space Grotesk\',monospace;font-size:13px;">' + rate + '</span>' : '') +
+        '</div>';
     }
     track.innerHTML = html + html;
   }
 
-  fetchLeaderboard();
+  loadModelsJson().then(fetchLeaderboard);
   setInterval(fetchLeaderboard, 60000);
 })();
 </script>
