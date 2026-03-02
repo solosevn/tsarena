@@ -333,8 +333,7 @@
       flex: 1;
       padding: 0;
       position: relative;
-      overflow-x: auto;
-    }
+      overflow-x: clip;    }
     .leaderboard-table {
       width: 100%;
       border-collapse: collapse;
@@ -343,6 +342,7 @@
       position: sticky;
       top: 0;
       z-index: 5;
+      background: var(--bg-primary);
     }
     .leaderboard-table th {
       padding: 12px 16px;
@@ -553,10 +553,10 @@
         <thead>
           <tr>
             <th class="col-rank">#</th>
-            <th class="col-model">Model</th>
+            <th class="col-model">Model / Company</th>
             <th class="col-score">Score</th>
             <th class="col-change">Change</th>
-            <th class="col-wins">Wins</th>
+            <th class="col-wins">Record</th>
             <th class="col-battles">Battles</th>
           </tr>
         </thead>
@@ -770,7 +770,7 @@
         if (rank === 2) medal = '<span class="rank-medal">&#129352;</span>';
         if (rank === 3) medal = '<span class="rank-medal">&#129353;</span>';
 
-        var scoreColor = r.score >= 80 ? 'var(--green)' : r.score >= 60 ? 'var(--cyan)' : 'var(--orange)';
+        var scoreColor = rank <= 3 ? 'var(--cyan)' : '#ffffff';
 
         var changeClass = r.change > 0 ? 'up' : r.change < 0 ? 'down' : 'neutral';
         var changeText = r.change === 0 ? '+0.00' : (r.change > 0 ? '+' : '') + r.change.toFixed(2);
@@ -785,7 +785,7 @@
         html += '</div></div></td>';
         html += '<td><div class="score-cell"><span class="score-value" style="color:' + scoreColor + '">' + r.score.toFixed(1) + '</span></div></td>';
         html += '<td class="change-cell ' + changeClass + '">' + changeArrow + changeText + '</td>';
-        html += '<td class="stat-cell">' + r.wins + '</td>';
+        html += '<td class="stat-cell">' + r.wins + '-' + (r.battles - r.wins) + '</td>';
         html += '<td class="stat-cell">' + r.battles + '</td>';
         html += '</tr>';
       });
