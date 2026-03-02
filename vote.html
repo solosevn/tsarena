@@ -1962,6 +1962,8 @@ async function handleOAuthSignIn(provider) {
     // Reset UI
     disableVoteButtons();
     document.getElementById('voteExplanation').classList.remove('show');
+        document.getElementById('voteExplanation').style.display = '';
+        document.getElementById('submitVoteBtn').style.display = '';
     document.getElementById('explanationText').value = '';
     document.getElementById('resultReveal').classList.remove('show');
     document.getElementById('responseA').classList.remove('selected');
