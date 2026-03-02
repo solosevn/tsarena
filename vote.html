@@ -1628,6 +1628,7 @@
       let COMPANY_LOGOS = {};
       let COMPANY_COLORS = {};
       let MODEL_TO_COMPANY = {};
+      let MODEL_STATS = {};
       
       (async function loadModelMapping() {
         try {
@@ -1643,6 +1644,28 @@
           console.error('Failed to load models.json:', e);
         }
       })();
+
+  // Pre-fetch model stats for reveal cards
+  (async function() {
+    try {
+      const { data } = await supabase.from('battles').select('model_a:models!battles_model_a_id_fkey(name), model_b:models!battles_model_b_id_fkey(name), votes_a, votes_b').eq('is_public', true);
+      if (!data) return;
+      const s = {};
+      data.forEach(function(b) {
+        var a = b.model_a ? b.model_a.name : null;
+        var bn = b.model_b ? b.model_b.name : null;
+        if (!a || !bn) return;
+        if (!s[a]) s[a] = {w:0,l:0};
+        if (!s[bn]) s[bn] = {w:0,l:0};
+        if (b.votes_a > b.votes_b) { s[a].w++; s[bn].l++; }
+        else if (b.votes_b > b.votes_a) { s[bn].w++; s[a].l++; }
+      });
+      Object.keys(s).forEach(function(n) {
+        var t = s[n].w + s[n].l;
+        MODEL_STATS[n] = { score: (t > 0 ? (s[n].w/t)*100 : 0).toFixed(1), record: s[n].w + '-' + s[n].l };
+      });
+    } catch(e) { console.error('Stats error:', e); }
+  })();
 
   const fpPromise = FingerprintJS.load();
 
@@ -2408,8 +2431,8 @@ async function getNextBattleFromDB() {
             </div>
           </div>
           <div class="reveal-stats">
-            <div><div class="reveal-stat-val">${currentBattle.model_a?.elo_rating || '--'}</div><div class="reveal-stat-lbl">Elo Rating</div></div>
-            <div><div class="reveal-stat-val">${currentBattle.model_a?.total_battles || '--'}</div><div class="reveal-stat-lbl">Total Battles</div></div>
+            <div><div class="reveal-stat-val">${MODEL_STATS[winName]?.score || '--'}</div><div class="reveal-stat-lbl">Score</div></div>
+            <div><div class="reveal-stat-val">${MODEL_STATS[winName]?.record || '--'}</div><div class="reveal-stat-lbl">Vote Record</div></div>
           </div>
         </div>
         <div class="reveal-loser">
