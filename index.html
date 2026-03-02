@@ -709,6 +709,9 @@
         <div class="mech-digit">0</div>
         <div class="mech-digit">0</div>
         <div class="mech-digit">0</div>
+        <div class="mech-digit">0</div>
+        <div class="mech-digit">0</div>
+        <div class="mech-digit">0</div>
       </div>
       <div class="mech-counter-label">Votes Cast</div>
     </div>
@@ -837,7 +840,7 @@
   function updateMechCounter(num) {
     var el = document.getElementById('mech-digits');
     if (!el) return;
-    var str = String(num);
+    var str = String(num).padStart(6, '0');
     var html = '';
     for (var i = 0; i < str.length; i++) {
       html += '<div class="mech-digit">' + str[i] + '</div>';
