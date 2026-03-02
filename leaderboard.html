@@ -184,7 +184,7 @@
 
     /* ===== LEADERBOARD META BAR ===== */
     .leaderboard-bar {
-      padding: 16px 40px;
+      padding: 20px 40px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -456,7 +456,15 @@
       .model-logo { width: 28px; height: 28px; }
       footer { padding: 20px 16px; }
     }
-  </style>
+  
+    /* Mech Counter - scaled for stats bar */
+    .mech-counter { display: flex; flex-direction: column; align-items: center; }
+    .mech-digits { display: flex; gap: 2px; }
+    .mech-digit { background: linear-gradient(180deg, #1a1a2e 0%, #0d0d1a 49.5%, #0a0a15 50.5%, #141428 100%); border: 1px solid rgba(255,255,255,0.12); border-radius: 3px; width: 18px; height: 24px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', monospace; font-size: 14px; font-weight: 700; color: #e8eaed; text-shadow: 0 0 8px rgba(0,212,255,0.4); position: relative; overflow: hidden; box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 4px rgba(0,0,0,0.5); }
+    .mech-digit::after { content: ''; position: absolute; top: 49%; left: 0; right: 0; height: 1px; background: rgba(0,0,0,0.6); box-shadow: 0 1px 0 rgba(255,255,255,0.04); }
+    .mech-counter-label { font-size: 8px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); margin-top: 3px; text-align: center; }
+
+    </style>
 </head>
 <body>
 
@@ -510,9 +518,9 @@
       <span class="dot"></span>
       <span>Win rate scoring &middot; Human-voted safety battles</span>
       <span class="sep">|</span>
-      <span id="vote-count-text">Loading...</span>
+      <div class="mech-counter" id="vote-counter-wrap"><div class="mech-digits" id="vote-digits"><div class="mech-digit">0</div><div class="mech-digit">0</div><div class="mech-digit">0</div><div class="mech-digit">0</div><div class="mech-digit">0</div><div class="mech-digit">0</div></div><div class="mech-counter-label">Votes Cast</div></div>
       <span class="sep">|</span>
-      <span id="model-count-text">Loading...</span>
+      <div class="mech-counter" id="model-counter-wrap"><div class="mech-digits" id="model-digits"><div class="mech-digit">0</div><div class="mech-digit">0</div><div class="mech-digit">0</div><div class="mech-digit">0</div></div><div class="mech-counter-label">Models Ranked</div></div>
       <span class="sep">|</span>
       <span>Updated live</span>
     </div>
@@ -677,8 +685,8 @@
 
         ALL_RANKINGS = rankings;
 
-        document.getElementById('vote-count-text').textContent = totalVotes + ' votes cast';
-        document.getElementById('model-count-text').textContent = rankings.length + ' models ranked';
+        var vd = String(totalVotes).padStart(6,'0').split(''); document.querySelectorAll('#vote-digits .mech-digit').forEach(function(el,i){el.textContent=vd[i];});
+        var md = String(rankings.length).padStart(4,'0').split(''); document.querySelectorAll('#model-digits .mech-digit').forEach(function(el,i){el.textContent=md[i];});
 
         buildLabFilters(rankings);
         renderLeaderboard();
