@@ -647,29 +647,10 @@
 <body>
 
 <!-- TICKER 2: ARENA LEADERS -->
-<div <div class="ticker-wrap arena-ticker">
+<div class="ticker-wrap arena-ticker">
   <div class="ticker-label arena">ARENA LEADERBOARD</div>
-  <div class="ticker-track">
-    <div class="ticker-item"><span class="rank"><span style="font-size:18px;text-shadow:0 0 12px rgba(255,215,0,0.75),0 0 4px rgba(255,215,0,0.5)">&#x1F947;</span></span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank"><span style="font-size:18px;text-shadow:0 0 10px rgba(200,200,220,0.65),0 0 4px rgba(200,200,220,0.4)">&#x1F948;</span></span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank"><span style="font-size:18px;text-shadow:0 0 10px rgba(210,140,70,0.65),0 0 4px rgba(210,140,70,0.4)">&#x1F949;</span></span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#4</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#9</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#10</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">&#x1F947;</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">&#x1F948;</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">&#x1F949;</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#4</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#5</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#6</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#7</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#8</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#9</span> <span class="model">Coming Soon</span></div>
-    <div class="ticker-item"><span class="rank">#10</span> <span class="model">Coming Soon</span></div>
+  <div class="ticker-track" id="arena-ticker-track">
+    <div class="ticker-item"><span class="rank">#1</span> <span class="model">Loading...</span></div>
   </div>
 </div>
 
@@ -718,7 +699,8 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26z"/></svg>
       Enter the Arena
     </a>
-    <span class="btn-secondary btn-coming-soon">Leaderboard Coming Soon</span>
+    <a href="leaderboard.html" class="btn-secondary" style="cursor:pointer;border-color:rgba(0,212,255,0.3);color:#00d4ff;">View Leaderboard</a>
+    <span style="font-size:14px;color:rgba(255,255,255,0.5);margin-left:12px;"><span id="live-vote-count">370</span> votes cast</span>
   </div>
 </section>
 
@@ -813,5 +795,65 @@
 </footer>
 
 
+<script>
+// Live Arena Leaderboard + Vote Counter
+(function() {
+  const SUPABASE_URL = 'https://nvitztmlczdohicskrks.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52aXR6dG1sY3pkb2hpY3NrcmtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMzY3NDQsImV4cCI6MjA4NzcxMjc0NH0.g8SgL67sDyDvDQko8QFhTPj5Bkt88MdtIcgHpOy2f48';
+  const medals = ['\u{1F947}','\u{1F948}','\u{1F949}'];
+
+  async function fetchLeaderboard() {
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/get_leaderboard', {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }
+      });
+      if (!res.ok) return fetchLeaderboardFallback();
+      const data = await res.json();
+      renderTicker(data);
+    } catch(e) { fetchLeaderboardFallback(); }
+  }
+
+  async function fetchLeaderboardFallback() {
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/battles?total_votes=gt.0&select=model_a_id,model_b_id,votes_a,votes_b,votes_tie,total_votes,model_a:models!battles_model_a_id_fkey(name),model_b:models!battles_model_b_id_fkey(name)', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      const battles = await res.json();
+      if (!Array.isArray(battles)) return;
+      const stats = {};
+      battles.forEach(function(b) {
+        var a = b.model_a && b.model_a.name ? b.model_a.name : null;
+        var bName = b.model_b && b.model_b.name ? b.model_b.name : null;
+        if (a) { if (!stats[a]) stats[a] = {w:0,t:0}; if (b.votes_a > b.votes_b) stats[a].w++; stats[a].t++; }
+        if (bName) { if (!stats[bName]) stats[bName] = {w:0,t:0}; if (b.votes_b > b.votes_a) stats[bName].w++; stats[bName].t++; }
+      });
+      var lb = Object.keys(stats).map(function(n){ return {name:n, win_rate: Math.round(stats[n].w/stats[n].t*1000)/10, battles: stats[n].t}; });
+      lb.sort(function(a,b){ return b.win_rate - a.win_rate; });
+      renderTicker(lb.slice(0, 10));
+      // Update vote counter
+      var totalVotes = battles.reduce(function(s,b){ return s + (b.total_votes||0); }, 0);
+      var counter = document.getElementById('live-vote-count');
+      if (counter) counter.textContent = totalVotes.toLocaleString();
+    } catch(e) { console.warn('Leaderboard fetch failed', e); }
+  }
+
+  function renderTicker(data) {
+    var track = document.getElementById('arena-ticker-track');
+    if (!track || !data || !data.length) return;
+    var html = '';
+    for (var i = 0; i < data.length; i++) {
+      var rank = i < 3 ? '<span style="font-size:18px;text-shadow:0 0 12px rgba(255,215,0,0.75),0 0 4px rgba(255,215,0,0.5)">' + medals[i] + '</span>' : '#' + (i+1);
+      var name = data[i].name || data[i].model_name || 'Unknown';
+      var rate = data[i].win_rate !== undefined ? data[i].win_rate + '%' : '';
+      html += '<div class="ticker-item"><span class="rank">' + rank + '</span> <span class="model">' + name + '</span>' + (rate ? ' <span class="score" style="color:#00d4ff;font-size:12px;margin-left:4px;">' + rate + '</span>' : '') + '</div>';
+    }
+    track.innerHTML = html + html;
+  }
+
+  fetchLeaderboard();
+  setInterval(fetchLeaderboard, 60000);
+})();
+</script>
 </body>
 </html>
