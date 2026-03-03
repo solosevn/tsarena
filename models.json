@@ -1,8 +1,10 @@
 {
   "_meta": {
     "description": "TSArena model-to-company mapping. Single source of truth for logos, colors, and branding.",
-    "updated": "2026-03-01",
-    "usage": "Fetched by vote.html and any future TSArena pages. Edit this file to add models or update branding."
+    "updated": "2026-03-03",
+    "usage": "Fetched by vote.html and any future TSArena pages. Edit this file to add models or update branding.",
+    "total_companies": 27,
+    "total_models": 70
   },
   "companies": {
     "OpenAI": {
@@ -26,7 +28,7 @@
       "website": "https://ai.meta.com"
     },
     "xAI": {
-      "logo": "https://avatars.githubusercontent.com/u/130314967?s=128",
+      "logo": "https://avatars.githubusercontent.com/u/141821688?s=128",
       "color": "#ffffff",
       "website": "https://x.ai"
     },
@@ -104,58 +106,113 @@
       "logo": "https://avatars.githubusercontent.com/u/48590610?s=128",
       "color": "#2563eb",
       "website": "https://zhipuai.cn"
+    },
+    "Moonshot AI": {
+      "logo": "https://avatars.githubusercontent.com/u/129152888?s=128",
+      "color": "#8b5cf6",
+      "website": "https://moonshot.ai"
+    },
+    "MiniMax": {
+      "logo": "https://avatars.githubusercontent.com/u/93573998?s=128",
+      "color": "#06b6d4",
+      "website": "https://minimaxi.com"
+    },
+    "StepFun": {
+      "logo": "https://avatars.githubusercontent.com/u/178004800?s=128",
+      "color": "#f59e0b",
+      "website": "https://stepfun.com"
+    },
+    "Xiaomi": {
+      "logo": "https://avatars.githubusercontent.com/u/1309360?s=128",
+      "color": "#ff6900",
+      "website": "https://xiaomi.com"
+    },
+    "Upstage": {
+      "logo": "https://avatars.githubusercontent.com/u/13376165?s=128",
+      "color": "#3b82f6",
+      "website": "https://upstage.ai"
+    },
+    "Arcee AI": {
+      "logo": "https://avatars.githubusercontent.com/u/126496414?s=128",
+      "color": "#a855f7",
+      "website": "https://arcee.ai"
+    },
+    "Baidu": {
+      "logo": "https://avatars.githubusercontent.com/u/23534030?s=128",
+      "color": "#2319dc",
+      "website": "https://cloud.baidu.com"
     }
   },
   "models": {
-    "Yi Lightning": "01.AI",
     "Jamba 2": "AI21 Labs",
-    "Qwen3 72B": "Alibaba",
     "Qwen2.5 Max": "Alibaba",
     "Qwen3 Instruct": "Alibaba",
-    "Nova Pro": "Amazon",
+    "Qwen3.5 397B A17B": "Alibaba",
+    "Qwen2.5-Coder 32B": "Alibaba",
     "Nova Lite": "Amazon",
-    "Claude Opus 4.6": "Anthropic",
+    "Nova Pro": "Amazon",
     "Claude Haiku 4.5": "Anthropic",
+    "Claude Opus 4": "Anthropic",
+    "Claude Opus 4.6": "Anthropic",
     "Claude Sonnet 4": "Anthropic",
     "Claude Sonnet 4.5": "Anthropic",
-    "Claude Opus 4": "Anthropic",
-    "Command A Reasoning": "Cohere",
-    "Command R+": "Cohere",
+    "Claude Sonnet 4.6": "Anthropic",
     "Command A": "Cohere",
+    "Command R+": "Cohere",
     "DeepSeek R1": "DeepSeek",
     "DeepSeek V3": "DeepSeek",
     "DeepSeek V3.2": "DeepSeek",
+    "DeepSeek V3.2 Speciale": "DeepSeek",
+    "DeepSeek R1 Distill 32B": "DeepSeek",
+    "Gemini 2.0 Flash": "Google",
     "Gemini 2.5 Flash": "Google",
     "Gemini 2.5 Pro": "Google",
-    "Gemini 3 Pro": "Google",
     "Gemini 3 Flash": "Google",
-    "Gemini 2.0 Flash": "Google",
+    "Gemini 3 Pro": "Google",
+    "Gemini 3.1 Pro Preview": "Google",
     "Gemma 3 27B": "Google",
     "Pi 3.0": "Inflection",
     "Llama 3.3 70B": "Meta",
-    "Llama 4 Behemoth": "Meta",
-    "Llama 4 Scout": "Meta",
     "Llama 4 Maverick": "Meta",
-    "Phi-4 Mini": "Microsoft",
+    "Llama 4 Scout": "Meta",
     "Phi-4": "Microsoft",
-    "Mistral Large 3": "Mistral",
+    "Phi-4 Reasoning Plus": "Microsoft",
     "Codestral": "Mistral",
-    "Mistral Small 3": "Mistral",
+    "Codestral 2": "Mistral",
+    "Devstral": "Mistral",
+    "Mistral Large 3": "Mistral",
     "Mistral Medium 3": "Mistral",
+    "Mistral Small 3": "Mistral",
+    "Magistral Medium": "Mistral",
     "Hermes 3 405B": "Nous Research",
-    "GPT-5.2": "OpenAI",
-    "GPT-5 mini": "OpenAI",
-    "GPT-5": "OpenAI",
+    "Hermes 4 405B": "Nous Research",
     "GPT-4.1": "OpenAI",
+    "GPT-4o": "OpenAI",
+    "GPT-5": "OpenAI",
+    "GPT-5 mini": "OpenAI",
+    "GPT-5.2": "OpenAI",
+    "GPT-5.3 Codex": "OpenAI",
+    "GPT-oss-120B": "OpenAI",
     "o3": "OpenAI",
     "o4-mini": "OpenAI",
-    "GPT-4o": "OpenAI",
-    "Sonar Huge": "Perplexity",
-    "Reka Core": "Reka",
     "Palmyra X5": "Writer",
-    "Grok 4.1": "xAI",
+    "GLM-4 Plus": "Zhipu AI",
+    "GLM-4.7": "Zhipu AI",
+    "GLM-5": "Zhipu AI",
     "Grok 3": "xAI",
     "Grok 4.0": "xAI",
-    "GLM-4 Plus": "Zhipu AI"
+    "Grok 4.1": "xAI",
+    "Yi 1.5 34B": "01.AI",
+    "Kimi K2.5": "Moonshot AI",
+    "Kimi K2 Thinking": "Moonshot AI",
+    "MiniMax M2.5": "MiniMax",
+    "MiniMax M2.1": "MiniMax",
+    "Step-3.5-Flash": "StepFun",
+    "MiMo-V2-Flash": "Xiaomi",
+    "Nemotron Ultra 253B": "NVIDIA",
+    "Nemotron 3 Nano": "NVIDIA",
+    "Solar Pro 3": "Upstage",
+    "Trinity Large": "Arcee AI",
+    "ERNIE 4.5": "Baidu"
   }
 }
