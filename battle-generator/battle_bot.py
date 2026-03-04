@@ -106,17 +106,16 @@ async def cmd_start(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     name = update.effective_user.first_name
     await update.message.reply_text(
-        f"ð Hey {name}!\n\n"
-        f"Your Telegram user ID is: `{uid}`\n"
-        f"Add `TELEGRAM_USER_ID={uid}` to your .env to lock the bot to you only.\n\n"
+        f"Hey {name}!\n\n"
+        f"Your Telegram user ID is: {uid}\n"
+        f"Add TELEGRAM_USER_ID={uid} to your .env to lock the bot to you only.\n\n"
         f"Commands:\n"
-        f"/run \\[count\\] â Start battle generation \\(default {DEFAULT_COUNT}\\)\n"
-        f"/run zero â Prioritize zero\\-battle models\n"
-        f"/stop â Cancel active run\n"
-        f"/status â Current run status\n"
-        f"/history â Last 10 runs\n"
-        f"/config â Show current settings",
-        parse_mode=ParseMode.MARKDOWN_V2,
+        f"/run [count] - Start battle generation (default {DEFAULT_COUNT})\n"
+        f"/run zero - Prioritize zero-battle models\n"
+        f"/stop - Cancel active run\n"
+        f"/status - Current run status\n"
+        f"/history - Last 10 runs\n"
+        f"/config - Show current settings"
     )
 
 
