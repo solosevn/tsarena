@@ -850,48 +850,70 @@
   }
 
   async function fetchLeaderboard() {
-    try {
-      var res = await fetch(SB_URL + '/rest/v1/battles?total_votes=gt.0&select=model_a_id,model_b_id,votes_a,votes_b,votes_tie,total_votes,model_a:models!battles_model_a_id_fkey(name),model_b:models!battles_model_b_id_fkey(name)', {
-        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
-      });
-      var battles = await res.json();
-      if (!Array.isArray(battles)) return;
+    fetch(SB_URL + '/rest/v1/battles?select=model_a_id,model_b_id,votes_a,votes_b,votes_tie,total_votes,model_a:models!battles_model_a_id_fkey(name),model_b:models!battles_model_b_id_fkey(name)&limit=5000', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(battles) {
+      if (!battles || !battles.length) return;
       var stats = {};
       var totalVotes = 0;
       battles.forEach(function(b) {
+        var aName = b.model_a ? b.model_a.name : null;
+        var bName = b.model_b ? b.model_b.name : null;
+        if (!aName || !bName) return;
+        if (!stats[aName]) stats[aName] = { wins:0, losses:0, ties:0 };
+        if (!stats[bName]) stats[bName] = { wins:0, losses:0, ties:0 };
         totalVotes += (b.total_votes || 0);
-        var a = b.model_a && b.model_a.name ? b.model_a.name : null;
-        var bN = b.model_b && b.model_b.name ? b.model_b.name : null;
-        if (a) { if (!stats[a]) stats[a] = {w:0,t:0}; if (b.votes_a > b.votes_b) stats[a].w++; stats[a].t++; }
-        if (bN) { if (!stats[bN]) stats[bN] = {w:0,t:0}; if (b.votes_b > b.votes_a) stats[bN].w++; stats[bN].t++; }
+        if (b.votes_a > b.votes_b) {
+          stats[aName].wins++;
+          stats[bName].losses++;
+        } else if (b.votes_b > b.votes_a) {
+          stats[bName].wins++;
+          stats[aName].losses++;
+        } else {
+          stats[aName].ties++;
+          stats[bName].ties++;
+        }
       });
-      var lb = Object.keys(stats).map(function(n){ return {name:n, win_rate: Math.round(stats[n].w/stats[n].t*1000)/10, battles: stats[n].t}; });
-      lb.sort(function(a,b){ return b.win_rate - a.win_rate; });
-      renderTicker(lb.slice(0, 10));
+      var rankings = [];
+      Object.keys(stats).forEach(function(model) {
+        var s = stats[model];
+        var total = s.wins + s.losses + s.ties;
+        var winRate = total > 0 ? (s.wins / total) * 100 : 0;
+        rankings.push({
+          model: model,
+          score: Math.round(winRate * 100) / 100,
+          wins: s.wins,
+          losses: s.losses,
+          battles: total
+        });
+      });
+      rankings.sort(function(a, b) { return b.score - a.score; });
       updateMechCounter(totalVotes);
-    } catch(e) { console.warn('Leaderboard fetch failed', e); }
+      renderTicker(rankings);
+    });
   }
 
-  function renderTicker(data) {
-    var track = document.getElementById('arena-ticker-track');
-    if (!track || !data || !data.length) return;
+  function renderTicker(rankings) {
+    var top10 = rankings.slice(0, 10);
     var html = '';
-    for (var i = 0; i < data.length; i++) {
-      var rank = i < 3 ? '<span style="font-size:20px;text-shadow:0 0 12px rgba(255,215,0,0.75)">' + medals[i] + '</span>' : '#' + (i+1);
-      var name = data[i].name || 'Unknown';
-      var rate = data[i].win_rate !== undefined ? data[i].win_rate + '%' : '';
-      var info = getCompanyInfo(name);
-      var logoHtml = info.logo ? '<img class="ticker-logo" src="' + info.logo + '" alt="" onerror="this.style.display=\'none\'">' : '';
-      html += '<div class="ticker-item">' +
-        '<span class="rank">' + rank + '</span>' +
-        logoHtml +
-        '<span class="ticker-model-info"><span class="model">' + name + '</span>' +
-        (info.company ? '<span class="company">' + info.company + '</span>' : '') +
-        '</span>' +
-        (rate ? '<span class="score" style="color:#00d4ff;font-weight:700;font-family:\'Space Grotesk\',monospace;font-size:13px;">' + rate + '</span>' : '') +
-        '</div>';
+    for (var pass = 0; pass < 2; pass++) {
+      top10.forEach(function(r, i) {
+        var rank = i + 1;
+        var info = getCompanyInfo(r.model);
+        var medal = rank === 1 ? '\u{1F947}' : rank === 2 ? '\u{1F948}' : rank === 3 ? '\u{1F949}' : '';
+        var rankLabel = medal || '#' + rank;
+        var scoreClass = r.score >= 80 ? 'high' : r.score >= 60 ? 'mid' : 'low';
+        html += '<div class="ticker-item">';
+        html += '<span class="rank ' + (rank<=3 ? ['','gold','silver','bronze'][rank] : '') + '">' + rankLabel + '</span> ';
+        if (info.logo) html += '<img src="' + info.logo + '" class="ticker-logo" alt="">';
+        html += '<span class="ticker-model-info"><span class="model">' + r.model + '</span><span class="company">' + info.company + '</span></span>';
+        html += '<span class="score ' + scoreClass + '">' + r.score.toFixed(1) + '%</span>';
+        html += '</div>';
+      });
     }
-    track.innerHTML = html + html;
+    document.getElementById('ticker-track').innerHTML = html;
   }
 
   loadModelsJson().then(fetchLeaderboard);
