@@ -1,0 +1,72 @@
+name: Generate Battles
+
+on:
+  # Weekly cron — Sunday at 11 PM EST (Monday 4 AM UTC)
+  schedule:
+    - cron: '0 4 * * 1'
+
+  # Manual trigger — run anytime from GitHub UI or CLI
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'Number of battles to generate'
+        required: false
+        default: '100'
+      dry_run:
+        description: 'Dry run (no API calls)'
+        required: false
+        type: boolean
+        default: false
+      zero_battle_models:
+        description: 'Prioritize models with 0 battles'
+        required: false
+        type: boolean
+        default: false
+      models:
+        description: 'Comma-separated model names (leave empty for random)'
+        required: false
+        default: ''
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: pip install httpx python-dotenv
+
+      - name: Run battle generator
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          cd battle-generator
+
+          # Build command with optional flags
+          CMD="python generate_battles.py"
+          CMD="$CMD --count ${{ github.event.inputs.count || '100' }}"
+
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            CMD="$CMD --dry-run"
+          fi
+
+          if [ "${{ github.event.inputs.zero_battle_models }}" = "true" ]; then
+            CMD="$CMD --zero-battle-models"
+          fi
+
+          if [ -n "${{ github.event.inputs.models }}" ]; then
+            CMD="$CMD --models \"${{ github.event.inputs.models }}\""
+          fi
+
+          echo "Running: $CMD"
+          eval $CMD
