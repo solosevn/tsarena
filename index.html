@@ -904,12 +904,12 @@
         var info = getCompanyInfo(r.model);
         var medal = rank === 1 ? '\u{1F947}' : rank === 2 ? '\u{1F948}' : rank === 3 ? '\u{1F949}' : '';
         var rankLabel = medal || '#' + rank;
-        var scoreClass = r.score >= 80 ? 'high' : r.score >= 60 ? 'mid' : 'low';
+        var scoreStyle = rank <= 3 ? 'color:var(--cyan)' : 'color:#e8eaed';
         html += '<div class="ticker-item">';
         html += '<span class="rank ' + (rank<=3 ? ['','gold','silver','bronze'][rank] : '') + '">' + rankLabel + '</span> ';
         if (info.logo) html += '<img src="' + info.logo + '" class="ticker-logo" alt="">';
-        html += '<span class="ticker-model-info"><span class="model">' + r.model + '</span><span class="company">' + info.company + '</span></span>';
-        html += '<span class="score ' + scoreClass + '">' + r.score.toFixed(1) + '%</span>';
+        html += '<span class="ticker-model-info"><span class="model">' + r.model + '</span><span class="company" style="color:' + info.color + '">' + info.company + '</span></span>';
+        html += '<span class="score" style="' + scoreStyle + '">' + r.score.toFixed(1) + '%</span>';
         html += '</div>';
       });
     }
