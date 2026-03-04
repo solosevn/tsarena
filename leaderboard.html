@@ -720,7 +720,8 @@
 
         var logo = COMPANY_LOGOS[lab];
         var logoHtml = logo ? '<img src="' + logo + '" class="filter-logo" alt="' + lab + '">' : '';
-        div.innerHTML = '<div class="filter-radio"></div>' + logoHtml + '<span class="filter-label">' + lab + '</span>';
+        var labColor = COMPANY_COLORS[lab] || '';
+    div.innerHTML = '<div class="filter-radio"></div>' + logoHtml + '<span class="filter-label" style="color:' + labColor + '">' + lab + '</span>';
         container.appendChild(div);
       }
 
@@ -802,14 +803,15 @@
           var rank = i + 1;
           var logo = COMPANY_LOGOS[r.lab] || '';
           var rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
-          var scoreClass = r.score >= 80 ? 'high' : r.score >= 60 ? 'mid' : 'low';
+          var companyColor = COMPANY_COLORS[r.lab] || '';
+      var scoreStyle = rank <= 3 ? 'color:var(--cyan)' : 'color:var(--text-primary)';
           var medal = rank === 1 ? '&#129351;' : rank === 2 ? '&#129352;' : rank === 3 ? '&#129353;' : '';
 
           items += '<div class="ticker-item">';
           items += '<span class="ticker-rank ' + rankClass + '">' + (medal || '#' + rank) + '</span>';
           if (logo) items += '<img src="' + logo + '" class="ticker-logo" alt="">';
-          items += '<span class="ticker-model-info"><span class="model">' + r.model + '</span><span class="company">' + r.lab + '</span></span>';
-          items += '<span class="ticker-score ' + scoreClass + '">' + r.score.toFixed(1) + '%</span>';
+          items += '<span class="ticker-model-info"><span class="model">' + r.model + '</span><span class="company" style="color:' + companyColor + '">' + r.lab + '</span></span>';
+          items += '<span class="ticker-score" style="' + scoreStyle + '">' + r.score.toFixed(1) + '%</span>';
           items += '</div>';
         });
       }
