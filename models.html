@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Models — The Safety Arena</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #060d1a; color: #e8eaed; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+    .header { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; border-bottom: 1px solid #1a2a3a; background: #060d1a; position: sticky; top: 0; z-index: 100; }
+    .header-left { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .logo-mark { width: 40px; height: 40px; }
+    .site-name { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.3px; }
+    .site-name span { color: #00e5ff; }
+    .site-sub { font-size: 0.65rem; color: #90a4ae; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 1px; }
+    nav { display: flex; gap: 28px; align-items: center; }
+    nav a { color: #90a4ae; text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: #e8eaed; }
+    nav a.active { color: #00e5ff; }
+    .page { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+    .page-header { margin-bottom: 40px; }
+    .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+    .page-header h1 span { color: #00e5ff; }
+    .page-header p { color: #90a4ae; font-size: 1rem; line-height: 1.6; max-width: 600px; }
+    .stats-bar { display: flex; gap: 20px; margin-bottom: 40px; flex-wrap: wrap; }
+    .stat-chip { background: #0c1829; border: 1px solid #1a2a3a; border-radius: 10px; padding: 16px 24px; display: flex; flex-direction: column; gap: 4px; min-width: 130px; }
+    .stat-num { font-size: 1.8rem; font-weight: 700; color: #00e5ff; }
+    .stat-label { font-size: 0.78rem; color: #90a4ae; text-transform: uppercase; letter-spacing: 0.8px; }
+    .filter-bar { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; align-items: center; }
+    .filter-bar input { flex: 1; min-width: 200px; background: #0c1829; border: 1px solid #1a2a3a; border-radius: 8px; color: #e8eaed; padding: 10px 16px; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+    .filter-bar input:focus { border-color: #00e5ff; }
+    .filter-bar input::placeholder { color: #90a4ae; }
+    .filter-btn { background: #0c1829; border: 1px solid #1a2a3a; border-radius: 8px; color: #90a4ae; padding: 10px 16px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover, .filter-btn.active { border-color: #00e5ff; color: #00e5ff; }
+    .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .company-card { background: #0c1829; border: 1px solid #1a2a3a; border-radius: 14px; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
+    .company-card:hover { border-color: #2a3a4a; transform: translateY(-2px); }
+    .company-header { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-bottom: 1px solid #1a2a3a; }
+    .company-logo { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; background: #131f30; padding: 2px; }
+    .company-name-block { flex: 1; }
+    .company-name { font-size: 1rem; font-weight: 600; }
+    .company-count { font-size: 0.78rem; color: #90a4ae; margin-top: 2px; }
+    .company-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .model-list { padding: 14px 20px; display: flex; flex-direction: column; gap: 6px; }
+    .model-row { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; transition: background 0.15s; }
+    .model-row:hover { background: #131f30; }
+    .model-name { font-size: 0.88rem; color: #e8eaed; flex: 1; }
+    .badge { font-size: 0.68rem; padding: 2px 8px; border-radius: 20px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; }
+    .badge-open { background: rgba(0,229,255,0.12); color: #00e5ff; border: 1px solid rgba(0,229,255,0.25); }
+    .badge-closed { background: rgba(144,164,174,0.1); color: #90a4ae; border: 1px solid rgba(144,164,174,0.2); }
+    .empty-state { text-align: center; color: #90a4ae; padding: 60px 24px; grid-column: 1/-1; }
+    .page-footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid #1a2a3a; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .page-footer p { font-size: 0.82rem; color: #90a4ae; }
+    .page-footer a { color: #00e5ff; text-decoration: none; }
+    .page-footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<header class="header">
+  <div class="header-left" onclick="location.href='index.html'">
+    <svg class="logo-mark" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="26" cy="26" r="24" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.3"/>
+      <circle cx="26" cy="26" r="20" stroke="#00e5ff" stroke-width="1" fill="none" opacity="0.15"/>
+      <circle cx="26" cy="3" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="45" cy="14" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="49" cy="26" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="45" cy="38" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="26" cy="49" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="7" cy="38" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="3" cy="26" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <circle cx="7" cy="14" r="1.5" fill="#00e5ff" opacity="0.5"/>
+      <path d="M26 10 L38 17 L38 28 C38 35 32 41 26 43 C20 41 14 35 14 28 L14 17 Z" stroke="#00e5ff" stroke-width="1.5" fill="rgba(0,229,255,0.06)"/>
+      <path d="M20 26 L24 30 L32 22" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <div class="site-name">The <span>Safety</span> Arena</div>
+      <div class="site-sub">Powered by TrainingRun.AI</div>
+    </div>
+  </div>
+  <nav>
+    <a href="charter.html">Charter</a>
+    <a href="integrity.html">Integrity</a>
+    <a href="prompts.html">Our Prompts</a>
+    <a href="models.html" class="active">Our Models</a>
+  </nav>
+</header>
+<main class="page">
+  <div class="page-header">
+    <h1>Our <span>Models</span></h1>
+    <p>Every AI model competing in The Safety Arena — who built them, and how many are in the arena. Full transparency, no hidden players.</p>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-chip"><span class="stat-num" id="statModels">—</span><span class="stat-label">Models</span></div>
+    <div class="stat-chip"><span class="stat-num" id="statCompanies">—</span><span class="stat-label">Companies</span></div>
+    <div class="stat-chip"><span class="stat-num" id="statOpen">—</span><span class="stat-label">Open Source</span></div>
+    <div class="stat-chip"><span class="stat-num" id="statClosed">—</span><span class="stat-label">Closed Source</span></div>
+  </div>
+  <div class="filter-bar">
+    <input type="text" id="searchInput" placeholder="Search models or companies…" oninput="filterModels()">
+    <button class="filter-btn active" id="btnAll" onclick="setFilter('all')">All</button>
+    <button class="filter-btn" id="btnOpen" onclick="setFilter('open')">Open Source</button>
+    <button class="filter-btn" id="btnClosed" onclick="setFilter('closed')">Closed Source</button>
+  </div>
+  <div class="company-grid" id="companyGrid">
+    <p style="color:#90a4ae;padding:40px">Loading models…</p>
+  </div>
+  <div class="page-footer">
+    <p>Data from <a href="/models.json">models.json</a> — updated as new models join the arena.</p>
+    <p><a href="leaderboard.html">View Leaderboard →</a></p>
+  </div>
+</main>
+<script>
+  const OPEN_SOURCE_MODELS = new Set(['Gemma 3 27B','Llama 3.3 70B','Llama 4 Maverick','Llama 4 Scout','Phi-4','Phi-4 Reasoning Plus','DeepSeek R1','DeepSeek R1 Distill 32B','DeepSeek V3','DeepSeek V3.2','DeepSeek V3.2 Speciale','Qwen2.5 Max','Qwen3 Instruct','Qwen3.5 397B A17B','Qwen2.5-Coder 32B','Codestral','Codestral 2','Devstral','Mistral Large 3','Mistral Medium 3','Mistral Small 3.2','Step 2']);
+  let allCompanies = {}, allModels = {}, currentFilter = 'all';
+  function isOpen(m) { return OPEN_SOURCE_MODELS.has(m); }
+  function setFilter(f) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn' + f[0].toUpperCase() + f.slice(1)).classList.add('active');
+    render();
+  }
+  function filterModels() { render(); }
+  function render() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const grid = document.getElementById('companyGrid');
+    const grouped = {};
+    Object.entries(allModels).forEach(([model, company]) => {
+      const open = isOpen(model);
+      if (currentFilter === 'open' && !open) return;
+      if (currentFilter === 'closed' && open) return;
+      if (q && !model.toLowerCase().includes(q) && !company.toLowerCase().includes(q)) return;
+      if (!grouped[company]) grouped[company] = [];
+      grouped[company].push({ name: model, open });
+    });
+    const entries = Object.entries(grouped).sort((a,b) => b[1].length - a[1].length);
+    if (!entries.length) { grid.innerHTML = '<div class="empty-state"><p>No models match your search.</p></div>'; return; }
+    grid.innerHTML = entries.map(([company, models]) => {
+      const info = allCompanies[company] || {};
+      const color = info.color || '#90a4ae';
+      const logo = info.logo || '';
+      const rows = models.sort((a,b) => a.name.localeCompare(b.name)).map(m =>
+        '<div class="model-row"><span class="model-name">' + m.name + '</span><span class="badge ' + (m.open ? 'badge-open' : 'badge-closed') + '">' + (m.open ? 'Open' : 'Closed') + '</span></div>'
+      ).join('');
+      return '<div class="company-card"><div class="company-header">' +
+        (logo ? '<img class="company-logo" src="' + logo + '" alt="' + company + '" onerror="this.style.display='none'">' : '') +
+        '<div class="company-name-block"><div class="company-name">' + company + '</div><div class="company-count">' + models.length + ' model' + (models.length !== 1 ? 's' : '') + '</div></div>' +
+        '<div class="company-dot" style="background:' + color + '"></div>' +
+        '</div><div class="model-list">' + rows + '</div></div>';
+    }).join('');
+  }
+  async function init() {
+    try {
+      const data = await fetch('/models.json').then(r => r.json());
+      allCompanies = data.companies || {};
+      allModels = data.models || {};
+      const total = Object.keys(allModels).length;
+      const openCount = Object.keys(allModels).filter(m => isOpen(m)).length;
+      document.getElementById('statModels').textContent = total;
+      document.getElementById('statCompanies').textContent = Object.keys(allCompanies).length;
+      document.getElementById('statOpen').textContent = openCount;
+      document.getElementById('statClosed').textContent = total - openCount;
+      render();
+    } catch(e) {
+      document.getElementById('companyGrid').innerHTML = '<div class="empty-state"><p>Failed to load models.</p></div>';
+    }
+  }
+  init();
+</script>
+</body>
+</html>
