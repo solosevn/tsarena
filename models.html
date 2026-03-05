@@ -142,7 +142,7 @@
         '<div class="model-row"><span class="model-name">' + m.name + '</span><span class="badge ' + (m.open ? 'badge-open' : 'badge-closed') + '">' + (m.open ? 'Open' : 'Closed') + '</span></div>'
       ).join('');
       return '<div class="company-card"><div class="company-header">' +
-        (logo ? '<img class="company-logo" src="' + logo + '" alt="' + company + '" onerror="this.style.display='none'">' : '') +
+        (logo ? '<img class="company-logo" src="' + logo + '" alt="' + company + '" onerror="this.style.display=\'none\'">' : '') +
         '<div class="company-name-block"><div class="company-name">' + company + '</div><div class="company-count">' + models.length + ' model' + (models.length !== 1 ? 's' : '') + '</div></div>' +
         '<div class="company-dot" style="background:' + color + '"></div>' +
         '</div><div class="model-list">' + rows + '</div></div>';
